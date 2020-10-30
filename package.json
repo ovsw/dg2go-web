@@ -1,0 +1,25 @@
+{
+  "name": "dg2go-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".eleventy.js",
+  "scripts": {
+    "start": "npx eleventy --serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@11ty/eleventy": "^0.11.1",
+    "@sanity/block-content-to-markdown": "0.0.5",
+    "@sanity/client": "^2.0.1",
+    "dotenv": "^8.2.0",
+    "markdown-it": "^11.0.1",
+    "markdown-it-anchor": "^6.0.0",
+    "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "groq": "^2.0.1"
+  }
+}
