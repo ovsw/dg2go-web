@@ -15,11 +15,11 @@ intro:
 
   {% for item in menu %}
   <div className="menuList">
-    <h2>{{item.date}} </h2>
+    <h2>{{item.shortDate}} </h2>
     <div>
     <p>
       <strong>{{item.name}}</strong>: 
-      <a href="https://dg2go.foxycart.com/cart?name={{item.date}}&price=10&lunch={{item.dishNameURI}}">Order for lunch</a> | <a href="https://dg2go.foxycart.com/cart?name={{item.date}}&price=10&dinner={{item.dishNameURI}}">Order for dinner</a>
+      <a href="https://dg2go.foxycart.com/cart?name={{item.dishNameURI}}&price=10&pickup-date={{item.longDate}}&meal=lunch">Order for lunch</a> | <a href="https://dg2go.foxycart.com/cart?name={{item.dishNameURI}}&price=10&pickup-date={{item.longDate}}&meal=dinner">Order for dinner</a>
     </p>
     <p>
       {{ item.description}}

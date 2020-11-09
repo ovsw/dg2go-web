@@ -7,11 +7,13 @@ const overlayDrafts = require('../utils/overlayDrafts')
 const hasToken = !!client.config().token
 
 function generateMenuItem (menuItem) {
-  const formattedDate = moment(new Date(menuItem.date)).format('ddd Do MMM ')
+  const shortDate = moment(new Date(menuItem.date)).format('ddd Do MMM ')
+  const longDate = moment(new Date(menuItem.date)).format('ddd Do MMM YYYY')
   return {
     ...menuItem,
     dishNameURI: encodeURI(menuItem.name),
-    date: formattedDate
+    shortDate: shortDate,
+    longDate: longDate
   }
 }
 
