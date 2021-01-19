@@ -13,10 +13,9 @@
   <body>
 
     {% include "partials/site-head.html" %}
-    <script type="text/javascript">
+    {# <script type="text/javascript">
       console.log({{metadata | dump | safe}});
-    </script>
-    <h1>{{metadata.title}}</h1>
+    </script> #}
     <main tabindex="-1" id="main-content">
       {% block content %}{% endblock %}
     </main>
