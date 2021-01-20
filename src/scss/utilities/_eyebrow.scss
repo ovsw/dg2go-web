@@ -1,0 +1,21 @@
+
+$eyebrow-colors: (
+  'green': 'primary',
+  'blue': 'secondary',
+  'cyan': 'quaternary',
+  'red': 'accent',
+  'yellow': 'tertiary'
+);
+
+.eyebrow {
+  text-transform: uppercase;
+  @extend .font-headline;
+  letter-spacing: 5px;
+  font-size: get-size('350');
+
+  @each $name, $color in $eyebrow-colors {
+    &.eyebrow--#{$name} {
+      color: get-color($color);
+    }
+  }
+}

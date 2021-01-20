@@ -1,0 +1,29 @@
+.tag {
+  border-radius: 50px;
+  color: get-color('light');
+  padding: 5px 10px;
+  
+  &.food  {
+    background-color: get-color('accent');
+  }
+  &.park {
+    background-color: get-color('primary');
+  }
+  &.event {
+    background-color: get-color('secondary');
+  }
+  &.closures {
+    background-color: get-color('dark');
+  }
+  &.promo {
+    background-color: get-color('tertiary');
+    color: get-color('dark');
+  }
+  &.music {
+    background-color: get-color('secondary');
+  }
+  &.free {
+    background-color: get-color('tertiary');
+    color: get-color('dark');
+  }
+}

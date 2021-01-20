@@ -1,0 +1,43 @@
+
+{% macro contentSections(sections) %}
+
+  {% set bigHeaderCounter = 0 %}
+  {% set qaSectionCounter = 0 %}
+
+
+  {% for section in sections %}
+
+    {% if section._type == 'bigHeading' %}
+      {% set bigHeaderCounter = bigHeaderCounter + 1 %}
+      {% set bigHeaderNumberedString %}
+        {{bigHeaderCounter}}. {{section.title}} 
+      {% endset %}
+      {% include "sections/big-heading-section.html" %}
+    {% endif %}
+
+    {% if section._type == 'ctaSection' %}
+      {% include "sections/cta-section.html" %}
+    {% endif %}
+    {% if section._type == 'magSection' %}
+      {% include "sections/mag-section.html" %}
+    {% endif %}
+    {% if section._type == 'tableSection' %}
+      {% include "sections/table-section.html" %}
+    {% endif %}
+    {% if section._type == 'cardSection' %}
+      {% include "sections/card-section.html" %}
+    {% endif %}
+    {% if section._type == 'faqSection' %}
+      {% set qaSectionCounter = qaSectionCounter + 1 %}
+      {% include "sections/faq-section.html" %}
+    {% endif %}
+    {% if section._type == 'menuSection' %}
+      {% include "sections/menu-section.html" %}
+    {% endif %}
+    {% if section._type == 'reusedSection' %}
+      {% include "sections/reusable-section.html" %}
+    {% endif %}
+
+  {% endfor %}
+
+{% endmacro %}

@@ -1,0 +1,32 @@
+<section class="tableSection">
+  <div class="[ wrapper ]">
+
+    <div role="region" aria-labelledby="{{section.title | slug}}" tabindex="0">
+        <table class="picnicComparisonTable tableSection__{{section.sectionTable.rows[0].cells | length}}columns ">
+        <caption id="{{section.title | slug}}">{{section.title}}</caption>
+
+        <thead>
+          <tr>
+            {% for cell in section.sectionTable.rows[0].cells %}
+            <th>{{cell | safe}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for row in section.sectionTable.rows %}
+            {% if loop.index != 1 %}
+              <tr>
+              {% for cell in row.cells %}
+                <td>{{cell | safe}}</td>
+              {% endfor %}
+              </tr>
+              {% endif %}
+          {% endfor %}
+        </tbody>
+        
+      </table>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,128 @@
+
+$btn-colors-dark: (
+  'green': 'primary',
+  'blue': 'secondary',
+  'red': 'accent',
+  'cyan': 'quaternary',
+  'black': 'dark'
+);
+$btn-colors-light:(
+  'yellow': 'tertiary', 
+  'white': 'light'
+);
+$btn-colors-all: (
+  'green': 'primary',
+  'blue': 'secondary',
+  'red': 'accent',
+  'cyan': 'quaternary',
+  'black': 'dark',
+  'yellow': 'tertiary', 
+  'white': 'light'
+);
+
+.button {
+  @extend .radius;
+
+  display: inline-block;
+  padding: 1.125rem 1.5rem 0.9rem 1.5rem;
+  
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+
+  // border: 2px solid;
+  
+  @include apply-utility('font', 'sans');
+  @include apply-utility('weight', 'bold');
+  
+  
+  // background: get-color('primary');
+  // color: get-color('light');
+
+  // Make sure hover state trumps all variants with a good ol’ important
+
+  &--colored-bg {
+    @each $name, $bg-color in $btn-colors-dark {
+      &.button--color-#{$name} { 
+        background: get-color($bg-color);
+        color: get-color('light-glare');
+      }
+    }
+    @each $name, $bg-color in $btn-colors-light {
+      &.button--color-#{$name} { 
+        background: get-color($bg-color);
+        color: get-color('dark');
+      }
+    }
+    
+    @each $name, $bg-color in $btn-colors-dark {
+      &.button--color-#{$name}:hover {
+        background: get-color('#{$bg-color}-shade');
+      }
+    }
+    @each $name, $bg-color in $btn-colors-light {
+      &.button--color-#{$name}:hover  { 
+        background: get-color('#{$bg-color}-shade');
+        color: get-color('dark');
+      }
+    }
+  }
+
+  &--colored-text {
+    @each $name, $text-color in $btn-colors-dark {
+      &.button--color-#{$name} { 
+        background: get-color('light-glare');
+        color: get-color($text-color);
+      }
+    }
+    @each $name, $text-color in $btn-colors-light {
+      &.button--color-#{$name} { 
+        background: get-color('dark');
+        color: get-color($text-color);
+      }
+    }
+    
+    @each $name, $text-color in $btn-colors-dark {
+      &.button--color-#{$name}:hover { 
+        background: get-color($text-color);
+        color: get-color(light);
+      }
+    }
+    @each $name, $text-color in $btn-colors-light {
+      &.button--color-#{$name}:hover { 
+        background: get-color($text-color);
+        color: get-color('dark');
+      }
+    }
+  }
+
+
+  &--ghost {
+    @each $name, $btn-color in $btn-colors-all {
+      &.button--color-#{$name} { 
+        background: transparent;
+        color: get-color($btn-color);
+        border: 3px solid;
+      }
+    }
+    @each $name, $btn-color in $btn-colors-all {
+      &.button--color-#{$name}:hover {
+        background: get-color($btn-color);
+        color: get-color('light-glare');
+        border-color: get-color($btn-color)!important;
+      }
+    }
+  }
+
+
+  // Add a ghost modifier
+  &[data-variant='ghost'] {
+    background: transparent;
+    color: get-color('primary');
+  }
+
+  &--small {
+    font-size: get-size('350');
+    padding: 12px 18px 9px 18px;
+  }
+}

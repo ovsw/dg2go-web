@@ -1,0 +1,45 @@
+  {% from 'components/card.html' import card as singleCard %}
+
+
+{% set cardBottomContent %}
+  <ul>
+    <li>Visit The Kid's Kingdom</li>
+    <li>Enjoy our thrilling midway rides and games</li>
+    <li>Dig into our famous food</li>
+    <li>Cool off at our Water Park</li>
+  </ul>
+  
+{% endset%}
+
+<style>  
+  .hero {
+    background-image: url('{% croppedUrlFor siteHome.content.hero.image, "400", "400" %}')
+  }
+  @media screen and (min-width: 1600px) {
+    .hero {
+      background-image: url('{% croppedUrlFor siteHome.content.hero.image, "1600", "774" %}')
+    }
+  }
+</style>
+
+<div class="hero">
+      
+  <div class="wrapper ">
+
+      <div class="hero__content">
+        {{singleCard(
+          variant="green", 
+          size="large", 
+          headingContent= siteHome.content.hero.title,
+          subHeadingContent= siteHome.content.hero.subTitle,
+          topHeadingLvl=1,
+          contentBottom= siteHome.content.hero.text | blocksToMarkdown | markdownify | safe,
+          buttonText= siteHome.content.hero.button.text,
+          buttonLink= siteHome.content.hero.button.url
+          )
+        }}
+      </div>
+      <!-- /.hero__content -->
+
+  </div>
+</div>

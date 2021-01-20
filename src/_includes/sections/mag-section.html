@@ -1,0 +1,58 @@
+{% extends "sections/common/panels-section.html" %}
+
+{% block sectionImage %}
+
+  {% if section.video %}
+    <button
+    class="glightbox" 
+    data-href="{{section.video}}"
+    data-draggable="false"
+    data-videos-width="100vw"
+    data-type="video"
+    >
+    <span class="magSection__playIcon">
+      {% include "partials/svg/icon-play.svg" %}
+      <span class="visually-hidden">play</span>
+    </span>
+  {% endif %}
+
+  <img src="{% croppedUrlFor section.image, '700', '300' %}" 
+  srcset="{% croppedUrlFor section.image, '400', '300' %} 400w,
+  {% croppedUrlFor section.image, '928', '300' %}  928w,
+  {% croppedUrlFor section.image, '1000', '600' %}  1000w,
+  {% croppedUrlFor section.image, '1600', '800' %}  1600w,
+  {% croppedUrlFor section.image, '2500', '1600' %}  2500w"
+  {# sizes="(min-width: 800px) 928px, 100vw" #}
+  alt="{{ section.image.alt}}"
+  >
+
+  {% if section.video %}
+    </button>
+  {% endif %}
+{% endblock %}
+
+{% block sectionCopy %}
+  {% if section.eyebrow %}
+        <p class="[ eyebrow eyebrow--{{buttonColor}} ]">{{section.eyebrow}}</p>
+      {% endif %}
+
+      <h2>{{section.title | safe}}</h2>
+
+      {% if section.subtitle %}
+        <div class="magSection__subHeadingWrapper">
+          <h3 class="[ subtitle ]">{{section.subtitle | safe}}</h3> 
+        </div>
+      {% endif %}
+
+      {# RTE CONTENT #}
+      <div class="magSection__rteWrapper [ flow ]">
+        {{section.text | blocksToMarkdown | markdownify | safe}} 
+      </div>
+
+      {# BUTTONS #}
+      {% if section.button1.text %}
+      <div class="magSection__buttonWrapper">      
+          <a href="{{section.button1.url}}" class="[ button ] [ button--{{buttonStyle}} button--color-{{buttonColor}} ]">{{section.button1.text}}</a>
+      </div>
+      {% endif %}
+{% endblock %}

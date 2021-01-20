@@ -1,0 +1,17 @@
+.columns-3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  @include media-query('lg') {
+    flex-direction: row;
+  }
+
+  > * {
+    padding-bottom: calc(var(--grid-space) * 2);
+    @include media-query('lg') {
+      flex: 0 0 33.33%;
+      padding: 0 calc(var(--grid-space));
+    }
+  }
+}

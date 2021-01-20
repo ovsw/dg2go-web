@@ -1,0 +1,32 @@
+$headline-colors: (
+  'dark', 
+  'light-glare', 
+  'accent', 
+  'accent-glare', 
+  'primary', 
+  'primary-glare', 
+  'secondary', 
+  'secondary-glare', 
+  'tertiary', 
+  'quaternary'
+);
+
+.headline {
+  font-size: get-size('700');
+  max-width: 18ch;
+
+  @include media-query('md') {
+    font-size: get-size('800');
+  }
+
+  @include media-query('lg') {
+    font-size: get-size('900');
+  }
+
+  // For each color, create an exception
+  @each $headline-color in $headline-colors {
+    &[data-color='#{$headline-color}'] {
+        color: get-color($headline-color);
+    }
+  }
+}

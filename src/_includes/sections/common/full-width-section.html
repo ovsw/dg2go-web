@@ -1,0 +1,65 @@
+  {# default to green bordered secttion, with green bg button (light text ) #}
+  {% set theme = 'dark' %}
+  {% set themeColor = 'green' %}
+  {% set buttonStyle = 'colored-bg' %}
+  {% set buttonColor = 'green' %}
+  
+  {# SET VARS TO RENDER CTA SECTION BASED ON SELECTED THEME #}
+
+  {# set theme #}
+  {% if 'yellowTheme' in section.theme %}
+    {% set theme = 'light' %}
+  {% endif %}
+
+  {# set theme color from available ones #}
+  {% set ctaThemesColors = [
+    {'name': 'greenTheme', 'color': 'green' },
+    {'name': 'blueTheme', 'color': 'blue' },
+    {'name': 'redTheme', 'color': 'red' },
+    {'name': 'yellowTheme', 'color': 'yellow' }
+  ]%}
+  {# identify the theme color and set it in themeColor var #}
+  {% for item in ctaThemesColors %}
+    {% if item.name in section.theme %}
+      {% set themeColor = item.color %}
+    {% endif %}
+  {% endfor %}
+
+  {# set button color from available ones #}
+  {% set ctaButtonColors = [
+    {'name': 'greenBtn', 'color': 'green' },
+    {'name': 'blueBtn', 'color': 'blue' },
+    {'name': 'redBtn', 'color': 'red' },
+    {'name': 'yellowBtn', 'color': 'yellow' },
+    {'name': 'whiteBtn', 'color': 'white' }
+  ]%}
+  {# identify the theme color and set it in themeColor var #}
+  {% for item in ctaButtonColors %}
+    {% if item.name in section.theme %}
+      {% set buttonColor = item.color %}
+    {% endif %}
+  {% endfor %}
+
+  <section class="[ ctaSection ]" data-theme-color="{{themeColor}}" data-theme="{{theme}}">
+    
+    {% responsiveImage section.image, 
+      "500, 1200, 1600", 
+      "(min-width: 40em) 70vw, 100vw",
+      "[ bgImage bgImage--gray bgImage--withOverlay ]",
+      imageAlt
+    %}
+    {# <img class="[ bgImage bgImage--gray bgImage--withOverlay ]" src="/images/bg/Pappy-Freds-Pizzeria.jpg" alt="MISSING ALT" /> #}
+    
+    <div class="[ ctaSection__color-overlay ] [ pinned ]"></div>
+    
+    <div class="[ wrapper ]">
+        
+      <div class="[ ctaSection__content ] [ pannel ]">
+        {% block content %}
+
+          <h1>MISSING CONTENT</h1>
+          
+        {% endblock %}
+      </div>
+    </div>
+  </section>

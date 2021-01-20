@@ -1,0 +1,42 @@
+.dg2goBanner {
+  
+  & a {
+    position: relative!important;
+    background: get-color('accent') url('/images/banners/dg2go-banner-12-20.png') no-repeat bottom left;
+    margin: 0;
+    color: get-color('light-glare')!important;
+    
+    padding-top: 0.9375rem !important;
+    padding-right: 0.625rem !important;
+    padding-left: 160px!important;
+    padding-bottom: 0!important;
+    text-align: center;
+    min-height: 160px;
+
+    font-size: get-size('300')!important;
+    font-style: italic;
+
+    
+  }
+
+  &__bigText {
+    display: block;
+    font-style: italic;
+    font-size: get-size('600');
+    text-transform: uppercase;
+    font-weight: 800;
+    line-height: 1;
+  }
+  
+  &__cta {
+    margin-top: 0.9375rem;
+    display: block;
+    margin-left: -70px;
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: get-size('700');
+    // position: absolute!important;
+    // bottom: 10px;
+    // left: 120px;
+  }
+}

@@ -1,0 +1,38 @@
+{% macro pageHeader(
+    title,
+    image
+   ) %}
+
+ {% if image %}
+<style>
+  .page-header {
+    background-image: url('{% croppedUrlFor image, "400", "400" %}');
+  }
+
+  @media screen and (min-width: 400px) {
+      .page-header {
+        background-image: url('{% croppedUrlFor image, "800", "400" %}');
+      }
+  }
+  @media screen and (min-width: 800px) {
+      .page-header {
+        background-image: url('{% croppedUrlFor image, "1200", "400" %}');
+      }
+  }
+    @media screen and (min-width: 1200px) {
+      .page-header {
+        background-image: url('{% croppedUrlFor image, "1600", "400" %}');
+      }
+  }
+</style>
+{% endif %}
+
+
+
+<div class="[ page-header ]">
+  <div class="page-header__content [ wrapper pannel ]" >
+    <h1 >{{title}}</h1>
+  </div>
+</div>
+
+{% endmacro %}

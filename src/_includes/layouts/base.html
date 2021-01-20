@@ -1,3 +1,5 @@
+{% set assetHash = global.random() %}
+{% set lang = global.getCurrentLanguage(page.url) %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,20 +7,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{ metadata.title }}</title>
+
+    {# General critical styles #}
+    <style>{% include "css/critical.css" %}</style>
+
+    {# Add facility for pages to delare an array of critical styles #}
+    {% if pageCriticalStyles %}
+      {% for item in pageCriticalStyles %}
+        <style>{% include item %}</style>
+      {% endfor %}
+    {% endif %}
+
+    {# General stylesheets #}
+    {# <script>
+      (function(d) {
+        var config = {
+          kitId: 'pxo6uwl',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+    </script> #}
+    <link rel="stylesheet" media="print" href="/fonts/fonts.css?{{ assetHash }}" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" onload="this.media='all'" />
+
+
+    {# Add facility for pages to declare an array of stylesheet paths #}
+    {% if pageStylesheets %}
+      {% for item in pageStylesheets %}
+        <link rel="stylesheet" media="print" href="{{ item }}?{{ assetHash }}" onload="this.media='all'" />
+      {% endfor %}
+    {% endif %}
+
     <!-- FOXYCART -->
     <script data-cfasync="false" src="https://cdn.foxycart.com/dg2go/loader.js" async defer></script>
     <!-- /FOXYCART -->
+
   </head>
 
   <body>
+    <div class="site-wrap">
 
-    {% include "partials/site-head.html" %}
-    {# <script type="text/javascript">
-      console.log({{metadata | dump | safe}});
-    </script> #}
-    <main tabindex="-1" id="main-content">
-      {% block content %}{% endblock %}
-    </main>
+      {% include "partials/site-head.html" %}
+
+      {# <script type="text/javascript">
+        console.log({{metadata | dump | safe}});
+      </script> #}
+      {# <h1>{{metadata.title}} </h1> #}
+      <main tabindex="-1" id="main-content">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+
+    {% include "partials/site-footer.html" %}
     
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js" defer></script>
+
+    <script type="text/javascript">
+
+      window.onload = (event) => {
+        console.log('page is fully loaded');
+
+        var options = {
+          touchNavigation: true,
+          loop: true,
+          autoplayVideos: true,
+          autofocusVideos: true
+        }
+
+        const lightbox = GLightbox({ ...options });
+      };
+    </script>
+
   </body>
 </html>

@@ -1,20 +1,55 @@
-{# <a class="[ skip-link ] [ button ]" href="#main-content">Skip to content</a> #}
-<header role="banner" class="site-head">
+<a class="[ skip-link ] [ button ]" href="#main-content">Skip to content</a>
+{# <div class="mq">
+  <div class="mqTiny">Tiny</div>
+  <div class="mqSm">Small</div>
+  <div class="mqMd">Medium</div>
+  <div class="mqLg">Large</div>
+</div> #}
+
+<header role="banner" class="[ site-head ]">
   <div class="wrapper">
-    <div class="site-head__inner">
-      <a href="/" aria-label="Issue 33 - home" class="site-head__brand">
-        {# {% include "partials/brand.svg" %} #}
-      </a>
-      {# <nav class="[ nav ] [ site-head__nav ] [ font-sans ]" aria-label="Primary">
-        <ul class="nav__list">
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/work">Work</a>
-          </li>
+
+    <div class="site-head__inner" x-data="{ mainMenuisOpen: false }">
+
+      {# LEFT COLUMN - BRAND #}
+      <div class="[ site-head__left-column ] [ site-head__brand ]">
+        <a href="/">
+          <img src="/images/logos/DG2GO-logo-transparent.png" alt="DelGrosso's DG2GO logo" />
+        </a>
+      </div>
+      <!-- end [ site-head__left-column ] [ site-head__brand ] -->
+
+      {# MIDDLE COLUMN #}
+      <div class="[ site-head__middle-column ]">
+
+        {# <div class="[ status-bar ]">
+          <a href="/">operating schedule</a>
+          
+        </div> #}
+        <!-- /.site-head__status-bar -->
+
+        {# MAIN NAV #}
+        {% include 'partials/nav.html' %}
+
+      </div>
+      <!-- /.site-head__middle-column -->
+
+      {# RIGHRT COLUMN #}
+      {# switches order on mobile to top #}
+      <div class="[ site-head__right-column ]">
+
+
+        <div class="site-head__phone">
+          <a href="tel:814-684-3538"><span class="visually-hidden">call us</span> <span>814-684-3538</span></a>
+        </div>
+        <!-- /.site-head__phone -->
+
+        <ul class="site-head__social">
+          {% include 'partials/social-icons.html' %}
         </ul>
-      </nav> #}
+      </div>
+      {# END RIGHT COLUMN #}
+
     </div>
   </div>
 </header>

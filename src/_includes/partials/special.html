@@ -1,0 +1,41 @@
+{% extends "sections/common/centered-section.html" %}
+
+
+{% block content %}
+
+  <h2>{{special.content.name}}</h2>
+  <h3 class="subtitle">{{special.content.shortDescription}}</h3>
+
+  <div class="[ flow text-400 ]">
+    {{special.content.description | blocksToMarkdown | markdownify | safe }}
+  </div>
+
+  <ul class="mealsMenu [ flow ]" style="margin-top: 3rem;">
+    {% for item in special.content.dishes %}
+    <li>
+      {# <h3>{{- item.date | dateFilter -}}</h3> #}
+
+      <div class="mealsMenu__wrapper">
+        <div class="mealsMenu__itemName">
+          {{item.dish.name}}
+        </div>
+        <div class="mealsMenu__dots"></div>
+        <div class="mealsMenu__price color-accent">
+          {{- item.dish.price -}}
+        </div>
+      </div>
+
+      <div class="mealsMenu__desc">
+        <p><strong class="color-accent">Pickup Date:</strong> {{item.pickUpDate}}</p>
+        <p><strong  class="color-accent">Preorder Deadline:</strong> {{item.preOrderDeadline}}</p>
+        <br/>
+        {{ item.dish.description | blocksToMarkdown | markdownify | safe }}
+      </div>
+
+    </li>
+    {% endfor %}
+
+    <a class="[ button ] [ button--colored-bg button--color-red ]" href="{{special.content.storeUrl}}">Preorder <span class="visually-hidden">{{special.content.name}}</span> Online Now</span></a>
+  </ul>
+
+{% endblock %}

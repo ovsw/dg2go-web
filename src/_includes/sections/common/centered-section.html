@@ -1,0 +1,17 @@
+  {# default to green bordered secttion, with green bg button (light text ) #}
+  {% set theme = 'dark' %}
+  {% set themeColor = 'green' %}
+  {% set buttonStyle = 'colored-bg' %}
+  {% set buttonColor = 'green' %}
+  
+  <section class="faqSection [ grid-margin ]">
+    <div class="[ wrapper grid-padding ]">
+      <div class="[ pannel frame-thick ]">
+          {% block content %}
+
+            <h1>MISSING CONTENT</h1>
+            
+          {% endblock %}
+      </div>
+    </div>
+  </section>

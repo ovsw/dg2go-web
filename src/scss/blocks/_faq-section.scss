@@ -1,0 +1,33 @@
+.faqSection {
+  
+
+  h3 {
+    margin-top: get-size('800');
+    margin-bottom: get-size('600');
+  }
+
+  dt {
+    display: block;
+  }
+
+  dt button {
+    cursor: pointer;
+    background: get-color('primary');
+    border: none;
+    color: get-color('light-glare');
+    padding: get-size('400') get-size('600');
+    padding-top: calc(#{get-size('400')} * 1.3);
+
+    display: block!important;
+    width: 100%;
+    text-align: left;
+
+    span {
+      float: right;
+    }
+  }
+}
+
+.faqSection__heading {
+  margin-bottom: get-size('700');
+}

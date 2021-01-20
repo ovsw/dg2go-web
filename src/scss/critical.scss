@@ -1,0 +1,173 @@
+// First up: config and functions
+@import './config';
+
+// Next: pull in gorko for design tokens
+@import '../../node_modules/gorko/gorko.scss';
+
+@import 'reset';
+
+// Global styles start
+:root {
+  --flow-space: 1.875rem;
+  --grid-space: 0.9375rem;
+}
+
+body {
+  background: get-color('light');
+  color: get-color('dark');
+  line-height: 1.5;
+  font-size: get-size('500');
+
+  @include apply-utility('font', 'base');
+  padding-top: 85px;
+  
+  @include media-query('lg') {
+    padding-top: 137px;
+  }
+}
+
+a:not([class]) {
+  color: currentColor;
+  text-decoration-color: get-color('primary');
+}
+
+:focus {
+  outline: 2px dashed get-color('primary');
+  outline-offset: 0.25rem;
+}
+
+main:focus {
+  outline: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 900;
+
+  @include apply-utility('font', 'headline');
+  @include apply-utility('leading', 'flat');
+  font-variant-numeric: lining-nums;
+}
+
+h1, h2 {
+  font-size: get-size('600');
+  @include media-query('md') {
+    font-size: get-size('700');
+    text-transform: uppercase;
+  }
+}
+
+// High contrast selection because it can help visually-impaired
+// folks read the text easier
+::selection {
+  color: get-color('light-glare');
+
+  // We set this as an RGBA because that’s how you get a solid color, by using 0.99
+  // alpha value. Browsers are wild.
+  background: rgba(get-color('dark'), 0.99);
+}
+
+// Scrollbar styles
+::-webkit-scrollbar {
+  height: 1rem;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border: 1px solid get-color('dark');
+  border-radius: 0.25rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: get-color('dark');
+  border-radius: 0.25rem;
+}
+
+// Import blocks
+@import 'blocks/button';
+@import 'blocks/card';
+@import 'blocks/card-section';
+@import 'blocks/cta-section';
+@import 'blocks/dg-2-go-banner';
+@import 'blocks/mag-section';
+@import 'blocks/large-section';
+@import 'blocks/definition-group';
+@import 'blocks/hamburger-menu';
+@import 'blocks/nav';
+@import 'blocks/site-footer';
+@import 'blocks/site-head';
+@import 'blocks/skip-link';
+@import 'blocks/status-bar';
+@import 'blocks/tags-list';
+
+
+// Import utilities
+@import 'utilities/auto-grid';
+@import 'utilities/columns-3';
+@import 'utilities/eyebrow';
+@import 'utilities/flow';
+@import 'utilities/frame';
+@import 'utilities/grid-spacing';
+@import 'utilities/headline';
+@import 'utilities/pannel';
+@import 'utilities/pinned';
+@import 'utilities/radius';
+@import 'utilities/site-wrap';
+@import 'utilities/subtitle';
+@import 'utilities/visually-hidden';
+@import 'utilities/wrapper';
+
+
+// UTILITY Media Query Display Stiles
+.mq {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  color: white;
+  
+  & > div {
+    padding: 1rem;
+    display: none;
+  }
+
+  > .mqTiny {
+    display: block;
+    background: black;
+  }
+
+  @include media-query('sm') {
+    & > div.mqSm {
+      display: block;
+      background: red;
+    }
+    & > div.mqTiny {
+      display: none;
+    }
+    
+  }
+
+  @include media-query('md') {
+    & > div.mqMd {
+      display: block;
+      background: green;
+    }
+    & > div.mqTiny,
+    & > div.mqSm {
+      display: none;
+    }
+  }
+
+  @include media-query('lg') {
+    & > div.mqLg {
+      display: block;
+      background: blue;
+    }
+    & > div.mqTiny,
+    & > div.mqSm,
+    & > div.mqMd {
+      display: none;
+    }
+  }
+}

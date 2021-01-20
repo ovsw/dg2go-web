@@ -1,0 +1,80 @@
+.menuSection {
+
+  // padding: get-size('xl') 0;
+  
+  h2 {
+    margin-bottom: get-size('900');
+  }
+
+  h3 {
+    margin-top: get-size('800');
+    margin-bottom: get-size('600');
+  }
+
+  dt {
+    display: block;
+    font-size: get-size('600');
+    font-weight: bold;
+    color: get-color('primary');
+  }
+
+  * + dt {
+    margin-top: get-size('700');
+    margin-bottom: get-size('400');
+  }
+
+  &__wrapper {
+    max-width:60rem;
+    margin:0 auto;
+    @include media-query('lg') {
+      // column-count: 2;
+      // column-gap: get-size('900');
+    }
+
+    & h3:first-child {
+      margin-top: 0;
+    }
+  }
+
+  dd {
+    // font-size: get-size('350');
+  }
+  &__listItem {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__description {
+    font-size: get-size('350');
+  }
+
+  &__listItemName {
+    flex-shrink: 1;
+    flex-grow: 0;
+    padding-right: get-size('300');
+    font-weight: bold;
+    
+  }
+  
+  &__dots {
+    border-bottom: 2px dotted get-color('dark');
+    flex-grow: 1;
+    flex-shrink: 0;
+    transform: translateY(-0.625rem);
+  }
+  
+  &__price {
+    font-weight: bold;
+    color: get-color('accent');
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding-left: get-size('400');
+  }
+  &__dg2goLineWrapper {
+
+  }
+}
+
+.faqSection__heading {
+  margin-bottom: get-size('700');
+}

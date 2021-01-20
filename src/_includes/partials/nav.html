@@ -1,0 +1,30 @@
+        <nav class="[ nav ] [ site-head__nav ]" 
+          id="nav-list"
+          aria-label="Main Menu" 
+          x-bind:data-open="mainMenuisOpen" 
+          :aria-expanded="mainMenuisOpen" 
+        >
+          <ul class="nav__list">
+
+              {# nav is json object provided in data/nav.json #}
+              {% for mainNavItem in nav -%}
+                <li class="nav__item"><a href="/{{mainNavItem.url | slug }}/">{{mainNavItem.name}}</a></li>            
+              {%- endfor %}
+
+          </ul>
+        </nav>
+        {# END NAVIGATION #}
+        {# MOBILE MENU TOGGLE #}
+          <div class="hamburger-menu__container">
+              <button 
+                aria-controls="nav-list" 
+                aria-label="Main Menu toggle" 
+                :aria-expanded="mainMenuisOpen" 
+                class="hamburger-menu"  
+                @click.prevent="mainMenuisOpen = !mainMenuisOpen" 
+                x-bind:data-open="mainMenuisOpen" 
+                >
+                  <div></div>
+              </button>
+          </div>
+          {# END MOBILE MENU TOGGLE #}

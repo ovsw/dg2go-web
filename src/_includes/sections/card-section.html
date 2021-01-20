@@ -1,0 +1,42 @@
+{% from 'components/card.html' import card as singleCard %}
+
+{% set cardCount = section.cards | length %}
+  {% if (cardCount % 2 == 0) %}
+    {% set cardCountType = 'even' %}
+  {% else %}
+    {% set cardCountType = 'odd' %}
+  {% endif %}
+
+<section class="cardSection">
+  <div class="[ wrapper ]">
+
+    <h2>{{section.title}}</h2>
+
+    <div class="
+      cardSection__wrap 
+      cardSection__{{cardCount}} 
+      cardSection__{{cardCountType}} 
+      [ gap-top-xl ]">
+      {% for card in section.cards %}
+          {{singleCard(
+          variant=card.theme, 
+          headingContent=card.title,
+          subHeadingContent=card.subTitle,
+          topHeadingLvl=3,
+          contentBottom=card.text | blocksToMarkdown | markdownify | safe,
+          buttonText=card.button.text,
+          buttonLink=card.button.url
+          )
+          }}
+      {% endfor %}
+    </div>
+
+
+  </div>
+    {% responsiveImage section.image, 
+        "500, 1200, 1600", 
+        "(min-width: 40em) 70vw, 100vw",
+        "cardSection__image bgImage",
+        section.image.alt
+      %}
+</section>

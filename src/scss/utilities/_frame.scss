@@ -1,0 +1,8 @@
+.frame {
+  &-thick {
+    border: 5px solid get-color('primary');
+  }
+  &-thin {
+    border: 3px solid get-color('primary');
+  }
+}

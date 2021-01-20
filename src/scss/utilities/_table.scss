@@ -1,0 +1,127 @@
+.picnicComparisonTable {
+  // td {
+  //   width: calc(100% / 3);
+  // }
+
+  @include media-query('md') {
+    tr td:nth-child(1) {
+      width: 20%;
+    }
+  
+    tr td:nth-child(2), tr td:nth-child(3) {
+      width: 40%;
+    }
+  }
+}
+
+
+/* Standard Tables */
+
+.tableSection {
+
+  margin: var(--grid-space) 0;
+
+  table {
+    margin: 1em 0;
+    border-collapse: collapse;
+    border: 0.1em solid #d6d6d6;
+    
+    @include media-query('lg') {
+      width: 100%;
+    }
+  }
+
+  caption {
+    text-align: left;
+    font-style: italic;
+    padding: var(--grid-space);
+  }
+
+  th,
+  td {
+    padding: 0.25em 0.5em 0.25em 1em;
+    // vertical-align: text-top;
+    text-align: center;
+    text-indent: -0.5em;
+    padding: calc(var(--grid-space) * 2) var(--grid-space);
+    border-right: 2px solid rgba(0, 0, 0, 0.05);
+  }
+
+  th {
+    vertical-align: bottom;
+    padding: calc(var(--grid-space) * 2) var(--grid-space)  ;
+    background-color: get-color('primary');
+    color: #fff;
+  }
+
+  tr:nth-child(even) th[scope="row"] {
+    background-color: #f2f2f2;
+  }
+
+  tr:nth-child(odd) th[scope="row"] {
+    background-color: #fff;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  // tr:nth-child(odd) {
+  //   background-color: rgba(255, 255, 255, 0.05);
+  // }
+
+  // tr td:nth-child(1) {
+  //   min-width: 15em;
+  //   max-width: 90vw;
+  // }
+
+  // tr td:nth-child(2) {
+  //   font-style: italic;
+  //   min-width: 5em;
+  //   max-width: 90vw;
+  // }
+
+  // tr *:nth-child(3) {
+  //   text-align: right;
+  // }
+
+  /* Responsive Tables */
+
+  [role="region"][aria-labelledby][tabindex] {
+    overflow: auto;
+    border: 0.1em solid #d6d6d6;
+  }
+
+  [role="region"][aria-labelledby][tabindex]:focus {
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.5);
+    // outline: 0.1em solid rgba(0, 0, 0, 0.1);
+  }
+
+  [role="region"][aria-labelledby][tabindex] table {
+    margin: 0;
+    border: none;
+  }
+
+  /* Scrolling Visual Cue */
+
+  [role="region"][aria-labelledby][tabindex] {
+    background: linear-gradient(to right, #fff 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to right, rgba(255, 255, 255, 0), #fff 70%) 0 100%,
+      radial-gradient(
+        farthest-side at 0% 50%,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)
+      ),
+      radial-gradient(
+          farthest-side at 100% 50%,
+          rgba(0, 0, 0, 0.2),
+          rgba(0, 0, 0, 0)
+        )
+        0 100%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+    background-position: 0 0, 100%, 0 0, 100%;
+    background-attachment: local, local, scroll, scroll;
+  }
+}

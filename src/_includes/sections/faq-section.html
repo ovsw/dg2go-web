@@ -1,0 +1,47 @@
+{% extends "sections/common/centered-section.html" %}
+
+{% block content %}
+ 
+  <h2 class="faqSection__heading">{{section.title}}</h2>
+
+  <div class="faqsWrapper" x-data="{selected:null} ">
+    {% set faqIndex = 0 %}      
+    {% for item in section.faqItems %}
+
+      {% if item._type == "faqItem" %}
+        {% set faqIndex = faqIndex + 1 %}
+        {# if first item in section (no first heading section), #}
+        {# or if first item in dl, open dl #}
+        {% if (loop.index == 1) %}<dl class="[ flow ]">{% endif %}
+        {% if (faqIndex == 1) %}<dl class="[ flow ]">{% endif %}
+
+        <dt>
+          <button id="accordion{{qaSectionCounter}}-header-{{faqIndex}}"
+            x-bind:aria-expanded="selected === {{faqIndex}} ? true : false"
+            aria-controls="accordion{{qaSectionCounter}}-panel-{{faqIndex}}" 
+            @click="selected !== {{faqIndex}} ? selected = {{faqIndex}} : selected = null"
+          >
+            {{item.question}}
+            <span>+</span>
+          </button>
+        </dt>
+        <dd 
+          id="accordion{{qaSectionCounter}}-panel-{{faqIndex}}"
+          aria-labelledby="accordion{{qaSectionCounter}}-header-{{faqIndex}}"
+          x-show="selected == {{faqIndex}}"
+        >
+          {{item.answer | blocksToMarkdown |markdownify | safe}}
+        </dd>
+        {# if last item in section, close dl #}
+        {% if (loop.index == section.faqItems | length) %}</dl>{% endif %}
+      {% else %}
+        {# if not first item in section, close dl #}
+        {% if (loop.index != 1) %}</dl>{% endif %}
+        <h3>{{item.value}}</h3>
+        {# if not first item in section, open next dl #}
+        {% if (loop.index != 1) %}<dl class="[ flow ]">{% endif %}
+      {% endif %}
+
+    {% endfor %}
+  </div>
+{% endblock %}

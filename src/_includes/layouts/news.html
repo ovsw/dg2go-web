@@ -1,0 +1,51 @@
+{% extends "layouts/base.html" %} 
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/grid-card.html' import gridCard %}
+{% from 'components/page-header.html' import pageHeader %}
+
+{% block content %}
+
+  {{pageHeader(title=title)}}
+
+  
+
+  <div class=" [ wrapper auto-grid news-grid ]">
+
+  {% set tagValues = {
+    'event': '<span class="tag event">event</span>',
+    'food': '<span class="tag food">food</span>',
+    'park': '<span class="tag park">park</span>',
+    'closures': '<span class="tag closures">closures</span>',
+    'hiring': '<span class="tag hiring">hiring</span>',
+    'promo': '<span class="tag promo">promo</span>'
+  }%}
+
+  {% for newsItem in siteNews %}
+
+    {% if (newsToList in newsItem.content.tags) or (newsToList == 'all') %}
+   
+   
+    {% set tags = [] %}
+
+    {% for tagName, tagValue in tagValues %}
+      {% if tagName in newsItem.content.tags %}
+        {% set tags = (tags.push(tagValue),tags) %}
+      {% endif %}
+    {% endfor %}
+
+    {{ gridCard(
+      titile=newsItem.content.title,
+      eyebrow=tags | join('<span class="visually-hidden">, </span> '),
+      image=newsItem.content.mainImage,
+      subtitle= newsItem.content.date | dateFilter,
+      alt=newsItem.content.mainImage.alt,
+      buttonText='read more <span class="visually-hidden">on news article'+ newsItem.content.name + '</span>',
+      buttonLink=newsItem.content.slug.current,
+      titleHeadingLvl=3
+    )}}
+ {% endif %}
+  {% endfor %}
+  </div>
+
+{% endblock %}

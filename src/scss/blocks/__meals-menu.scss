@@ -1,0 +1,28 @@
+.mealsMenu {
+
+  &__wrapper {
+    display: flex;
+  }
+  &__dots {
+    border-bottom: 2px dotted get-color('dark');
+    flex-grow: 1;
+    flex-shrink: 1;
+    transform: translateY(-0.625rem);
+    margin: 0 1rem;
+  }
+  &__desc {
+    font-size: get-size('350');
+    color: get-color('muted');
+    margin-top: get-size('300');
+  }
+
+  &__buttons {
+    & a {
+      display: inline-block;
+      margin-top: get-size('300');
+    }
+    @include media-query('md') {
+      margin-top: get-size('400');
+    }
+  }
+}

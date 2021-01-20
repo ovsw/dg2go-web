@@ -1,0 +1,19 @@
+.hero {
+  position: relative;
+  background-position: center center;
+  background-size: cover;
+  min-height: 400px;
+  padding: get-size('800') 0;
+
+
+  @include media-query('md') {
+    padding: get-size('xl') 0;
+  }
+ 
+  &__content {
+
+    @include media-query('md') {
+      margin-top: 0;
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{% extends "layouts/base.html" %} 
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/grid-card.html' import gridCard %}
+{% from 'components/page-header.html' import pageHeader %}
+{% from 'components/content-sections.html' import contentSections %}
+
+{# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}
+
+{% block content %}
+
+  {{pageHeader(title=title, image=roadEvents.content.image)}}
+
+  
+
+  <div class=" [ wrapper auto-grid news-grid ]">
+
+  {% set tagValues = {
+    'food': '<span class="tag food">food</span>',
+    'music': '<span class="tag music">music</span>',
+    'free': '<span class="tag free">free entry</span>',
+    'hiring': '<span class="tag hiring">hiring</span>'
+  }%}
+
+  {% for event in roadEvents.content.eventsList %}
+
+    {# {% set tags = [] %}
+
+    {% for tagName, tagValue in tagValues %}
+      {% if tagName in event.content.tags %}
+        {% set tags = (tags.push(tagValue),tags) %}
+      {% endif %}
+    {% endfor %} #}
+
+      {# eyebrow=tags | join('<span class="visually-hidden">, </span> '), #}
+
+    {% set eventSubTitle %}
+      <strong>When:</strong> {{event.content.date | dateFilterYear}}, {{event.content.time}} <br />
+      <strong>Where:</strong> {{event.content.location}}
+    {% endset %}
+
+    {% set eventDescription %}
+      {{event.content.menu | blocksToMarkdown | markdownify | safe}}
+    {% endset %}
+    
+    {{ gridCard(
+      titile=event.content.name,
+      image=event.content.image,
+      subtitle=eventSubTitle,
+      description = eventDescription,
+      alt=event.content.image.alt,
+      titleHeadingLvl=3,
+      buttonText='Order online <span class="visually-hidden"> for '+ event.content.name + '</span>',
+      buttonLink=event.content.storeUrl
+    )}}
+  {% endfor %}
+  </div>
+
+{% endblock %}

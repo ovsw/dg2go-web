@@ -1,0 +1,43 @@
+.large-section {
+  position: relative;
+  padding: get-size('xl') 0 ;
+  margin-top: calc(var(--grid-space) * -1);
+
+  .wrapper > h2 {
+    margin-top: get-size('800');
+    font-size: get-size('800');
+    text-transform: uppercase;
+
+    @include media-query('md') {
+      text-align: center;
+    }
+  }
+  .wrapper > .subtitle {
+    @include media-query('md') {
+      text-align: center;
+    }
+  }
+
+  &__content {
+    margin-top: get-size('900')!important;
+    @include media-query('md') {
+      margin-top: get-size('xl')!important;
+      padding-bottom: get-size('xl')!important;
+    }
+    @include media-query('lg') {
+      padding: 0 5rem;
+    }
+    @media screen and (min-width: 100rem) {
+      padding: 0 10rem;
+    }
+  }
+
+  &__image {
+    opacity: 24%;
+    z-index: -1;
+
+    img {
+      object-fit: cover;
+    }
+  }
+}

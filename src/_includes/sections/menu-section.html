@@ -1,0 +1,50 @@
+{% extends "sections/common/centered-section.html" %}
+
+{% block content %}
+  
+  <div class="menuSection">
+
+    <div class="menuSection__wrapper">
+    <h2 class="menuSection__heading">{{section.title}}</h2>
+    {% set menuIndex = 0 %}      
+    {% for menuItem in section.menuItems %}
+
+      {% if menuItem._type == "menuItem" %}
+
+        {% set faqIndex = faqIndex + 1 %}
+        {# if first item in section (no first heading section), #}
+        {# or if first item in dl, open dl #}
+        {% if (loop.index == 1) %}<dl class="[ flow ]">{% endif %}
+        {% if (faqIndex == 1) %}<dl class="[ flow ]">{% endif %}
+
+        <dt>{{menuItem.name}}</dt>
+
+        <dd class="[ flow flow-space-400 ]">
+        <div class="menuSection__description">
+          {{menuItem.description | blocksToMarkdown |markdownify | safe}}
+        </div>
+          {# loop through list items #}
+          
+          {% for item in menuItem.lineItems %}
+            <p class="menuSection__listItem"><span class="menuSection__listItemName">{{item.name}}</span> <span class="menuSection__dots"></span> <span class="menuSection__price">{{item.price}}</span></p>
+          {% endfor %}
+        </dd>
+
+        {# if last item in section, close dl #}
+        {% if (loop.index == section.faqItems | length) %}</dl>{% endif %}
+      
+      {% else %}
+
+        {# if not first item in section, close dl #}
+        {% if (loop.index != 1) %}</dl>{% endif %}
+        <h3>{{menuItem.value}}</h3>
+        {# if not first item in section, open next dl #}
+        {% if (loop.index != 1) %}<dl class="[ flow ]">{% endif %}
+
+      {% endif %}
+
+    {% endfor %}
+    </div>
+
+  </div>
+{% endblock %}

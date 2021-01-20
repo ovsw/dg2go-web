@@ -1,0 +1,27 @@
+{% extends "layouts/base.html" %}
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/page-header.html' import pageHeader %}
+{% from 'components/content-sections.html' import contentSections %}
+
+{% block content %}
+
+{# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}
+
+{{pageHeader(title=title, image=specialsMenu.content.image)}}
+
+{{contentSections(specialsMenu.content.topSections)}}
+
+
+{% set meals = specialsMenu.content.specials %}
+{# {% include "partials/meals-menu.html" %} #}
+
+<div class="specials">
+
+{% for special in specialsMenu.content.specials %}
+  {% include "partials/special.html" %}
+{% endfor %}
+
+</div>
+
+{% endblock %}

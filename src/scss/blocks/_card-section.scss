@@ -1,0 +1,31 @@
+.cardSection {
+  position: relative;
+  padding: get-size('2xl') 0;
+  text-align: center;
+
+  &__wrap{
+      text-align: left;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      > div {
+        padding: 0 var(--grid-space) var(--grid-space) var(--grid-space) ;
+        display: flex;
+        align-items: stretch;
+        
+        
+          max-width: 500px;
+        
+      }
+  }
+
+  &__image {
+    opacity: 24%;
+    z-index: -1;
+
+    img {
+      object-fit: cover;
+    }
+  }
+}

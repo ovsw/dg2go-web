@@ -1,0 +1,30 @@
+{% extends "sections/common/full-width-section.html" %}
+
+  {% block content %}
+  
+        <div class="ctaSection__leftColumn [ flow ]">
+          <h2>{{section.title | safe}}</h2>
+
+          {% if section.subtitle %}
+            <div class="ctaSection__subHeadingWrapper">
+              <h3 class='subtitle'>{{section.subtitle | safe}}</h3>
+            </div>
+          {% endif %}
+
+          {# RTE CONTENT #}
+          {% if section.text  != '' %}
+            <div class="ctaSection__rteWrapper [ flow ]">
+              {{section.text | blocksToMarkdown | markdownify | safe}} 
+            </div>
+          {% endif %}
+        </div>
+
+        {# BUTTONS #}
+        {% if section.button1.text %}
+        <div class="ctaSection__rightColumn">      
+            <a href="{{section.button1.url}}" class="[ button ] [ button--{{buttonStyle}} button--color-{{buttonColor}} ]">{{section.button1.text}}</a>
+        </div>
+        {% endif %}
+
+
+  {% endblock %}

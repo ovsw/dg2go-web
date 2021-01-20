@@ -1,0 +1,40 @@
+{% extends "sections/common/panels-section.html" %}
+
+{% set section= {theme: 'greenTheme-frame-greenBtn'} %}
+
+{% block sectionImage %}
+    <img src="{% croppedUrlFor menuImage, '700', '300' %}" 
+    srcset="{% croppedUrlFor menuImage, '400', '300' %} 400w,
+    {% croppedUrlFor menuImage, '928', '300' %}  928w,
+    {% croppedUrlFor menuImage, '1000', '600' %}  1000w,
+    {% croppedUrlFor menuImage, '1600', '800' %}  1600w,
+    {% croppedUrlFor menuImage, '2500', '1600' %}  2500w"
+    {# sizes="(min-width: 800px) 928px, 100vw" #}
+    alt="{{ menuImage.alt}}"
+    >
+{% endblock %}
+
+{% block sectionCopy %}
+  
+  <div class="menuSection">
+
+    <div class="menuSection__wrapper">
+    <h2 class="menuSection__heading">{{menuTitle}}</h2>
+    
+      <ul class="[ flow flow-spance-800 ]">
+
+      {% for menuItem in menuData %}
+        <li class="menuSection__dg2goLineWrapper">
+          <div class="menuSection__listItem">
+            <span class="menuSection__listItemName">{{menuItem.name}} </span> <span class="menuSection__dots"></span>
+            <span class="menuSection__price">{{menuItem.price}}</span>
+          </div>
+          <p class="menuSection__description">{{menuItem.description | safe}}</p>
+        </li>
+      {% endfor %}
+
+      </ul>
+    </div>
+
+  </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/page-header.html' import pageHeader %}
+{% from 'components/content-sections.html' import contentSections %}
+
+{% block content %}
+
+{# <script>console.log('debug', {{pizzaShopMenu.content | dump | safe}})</script> #}
+
+{{pageHeader(title=title, image=pizzaShopMenu.content.image)}}
+
+{{contentSections(pizzaShopMenu.content.topSections)}}
+
+{# {% for item in pizzaShopMenu.content.originalPizzaMenu %}
+  {{item.name}}
+{% endfor %} #}
+
+
+{% set menuTitle = "Original Pizza" %}
+{% set menuData = pizzaShopMenu.content.originalPizzaMenu %}
+{% set menuImage = pizzaShopMenu.content.originalPizzaMenuImage %}
+{% include "partials/pizza-shop-menu.html" %}
+
+{% set menuTitle = "Deep Dish Pizza" %}
+{% set menuData = pizzaShopMenu.content.deepDishPizzaMenu %}
+{% set menuImage = pizzaShopMenu.content.deepDishPizzaMenuImage %}
+{% include "partials/pizza-shop-menu.html" %}
+
+{% set menuTitle = "Marianna's Junior Hoagies Menu" %}
+{% set menuData = pizzaShopMenu.content.juniorHoagieMenu %}
+{% set menuImage = pizzaShopMenu.content.juniorHoagieMenuImage %}
+{% include "partials/pizza-shop-menu.html" %}
+
+{% set menuTitle = "Frozen Pasta Menu" %}
+{% set menuData = pizzaShopMenu.content.frozenPastaMenu %}
+{% set menuImage = pizzaShopMenu.content.frozenPastaMenuImage %}
+{% include "partials/pizza-shop-menu.html" %}
+
+{% endblock %}

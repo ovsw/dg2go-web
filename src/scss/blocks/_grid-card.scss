@@ -1,0 +1,50 @@
+.gridCard {
+  background-color: get-color('light-glare');
+  border-radius: 0  40px 40px 0;
+  overflow: hidden;
+
+  &__body {
+    padding: get-size('600');
+
+    & ul {
+      margin-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-size: get-size('500');
+  }
+
+  &__subtitle{
+    color: get-color('muted');
+    font-size: get-size('350');
+    display: block;
+  }
+
+  &__eyebrow {
+    font-size: get-size('300');
+    letter-spacing: 1px;
+    & .red {
+      background-color: get-color('accent');
+    }
+    & .green {
+      background-color: get-color('primary');
+    }
+    & .blue {
+      background-color: get-color('secondary');
+    }
+  }
+
+  &__image {
+    cursor: pointer;
+  }
+  &__description {
+    font-size: get-size('400');
+  }
+
+  &__buttonWrapper a {
+    color: get-color('muted');
+    font-size: get-size('350');
+  }
+
+}

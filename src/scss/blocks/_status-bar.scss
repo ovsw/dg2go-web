@@ -1,0 +1,16 @@
+.status-bar {
+  display: none;
+  padding-top: 4px;
+  padding-right: 10px;
+  font-size: get-size('400');
+  text-align: right;
+
+  a {
+    color: get-color('primary');
+  }
+
+
+  @include media-query('lg') {
+    display: block;
+  }
+}

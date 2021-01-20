@@ -1,0 +1,10 @@
+.bigHeadingSection {
+  text-align: center;
+  background: get-color('primary');
+  color: get-color('light-glare');
+
+  padding: var(--grid-space);
+ & > div {
+   padding: calc(var(--grid-space) * 3 ) var(--grid-space) ;
+ }
+}

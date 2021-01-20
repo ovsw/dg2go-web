@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Pizza Shop",
+    "url": "/pizza-shop-menu/",
+    "children": []
+  },{
+    "name": "Meals",
+    "url": "/meals-menu/",
+    "children": []
+  },{
+    "name": "On the Road",
+    "url": "/on-the-road/",
+    "children": []
+  },{
+    "name": "Specials",
+    "url": "/specials-menu/",
+    "children": []
+  },{
+    "name": "Contact",
+    "url": "/contact/",
+    "children": []
+  }
+]
