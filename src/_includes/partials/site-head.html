@@ -39,14 +39,21 @@
       <div class="[ site-head__right-column ]">
 
 
-        <div class="site-head__phone">
-          <a href="tel:814-684-3538"><span class="visually-hidden">call us</span> <span>814-684-3538</span></a>
-        </div>
-        <!-- /.site-head__phone -->
+        <div>
+          <span class="site-head__phone">
+            <a href="tel:814-684-3538">
+              {% include "partials/svg/icon-phone-square-alt-solid.svg" %}
+              <span class="visually-hidden">call us</span>
+               <span>814-684-3538</span>
+              </a>
+          </span>
+          <!-- /.site-head__phone -->
 
-        <ul class="site-head__social">
-          {% include 'partials/social-icons.html' %}
-        </ul>
+          <ul class="site-head__social">
+            {% include 'partials/social-icons.html' %}
+          </ul>
+        </div>
+        
       </div>
       {# END RIGHT COLUMN #}
 

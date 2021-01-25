@@ -17,12 +17,13 @@ body {
   color: get-color('dark');
   line-height: 1.5;
   font-size: get-size('500');
-
-  @include apply-utility('font', 'base');
   padding-top: 85px;
   
+  @include apply-utility('font', 'base');
+  
+  
   @include media-query('lg') {
-    padding-top: 137px;
+    padding-top: 5.9375rem;
   }
 }
 

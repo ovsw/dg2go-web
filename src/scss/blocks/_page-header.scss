@@ -2,9 +2,11 @@
   background-size: cover;
   padding-top: 50px;
   padding-bottom: 50px;
+  margin-bottom: var(--grid-space);
 
   @include media-query('md') {
     padding-bottom: 0;
+    padding-top: get-size('4xl');
   }
 
   &__content {
@@ -13,17 +15,15 @@
     text-align: center;
 
     @include media-query('md') {
-      margin-top: 50px;
       margin-bottom: 0px;
       border-radius: 10px 10px 0 0;
     }
 
     @include media-query('lg') {
-      margin-top: 300px;
     }
     
     h1 {
-      font-size: get-size('700');
+      font-size: get-size('600');
       
       @include media-query('md') {
         font-size: get-size('800');

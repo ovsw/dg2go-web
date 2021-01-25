@@ -8,7 +8,11 @@
 
               {# nav is json object provided in data/nav.json #}
               {% for mainNavItem in nav -%}
-                <li class="nav__item"><a href="/{{mainNavItem.url | slug }}/">{{mainNavItem.name}}</a></li>            
+                <li class="nav__item">
+                  <a href="/{{mainNavItem.url | slug }}/" {{ helpers.getLinkActiveState(mainNavItem.url, page.url) | safe }}>
+                    {{mainNavItem.name}}
+                 </a>
+                </li>            
               {%- endfor %}
 
           </ul>
