@@ -8,14 +8,10 @@
 
 {# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}
 
-{{pageHeader(title=title, image=mealsMenu.content.image)}}
+{{pageHeader(title=special.content.name, image=special.content.image)}}
 
-{{contentSections(mealsMenu.content.topSections)}}
-
-
-{% set meals = mealsMenu.content.mealSchedule %}
-{% include "partials/meals-menu.html" %}
-
-{{contentSections(mealsMenu.content.bottomSections)}}
+<div class="specials">
+  {% include "partials/special.html" %}
+</div>
 
 {% endblock %}

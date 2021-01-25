@@ -3,6 +3,7 @@
 
 {% from 'components/page-header.html' import pageHeader %}
 {% from 'components/content-sections.html' import contentSections %}
+{% from 'components/grid-card.html' import gridCard %}
 
 {% block content %}
 
@@ -13,15 +14,34 @@
 {{contentSections(specialsMenu.content.topSections)}}
 
 
-{% set meals = specialsMenu.content.specials %}
-{# {% include "partials/meals-menu.html" %} #}
+<div class=" [ wrapper auto-grid news-grid ]">
 
-<div class="specials">
+  {% set tagValues = {
+    'food': '<span class="tag food">food</span>',
+    'music': '<span class="tag music">music</span>',
+    'free': '<span class="tag free">free entry</span>',
+    'hiring': '<span class="tag hiring">hiring</span>'
+  }%}
 
-{% for special in specialsMenu.content.specials %}
-  {% include "partials/special.html" %}
-{% endfor %}
+  {% for special in specialsMenu.content.specials %}
 
-</div>
+    {% set eventSubTitle %}
+      <strong>When:</strong> {{special.content.date | dateFilterYear}}, {{special.content.time}} <br />
+      <strong>Where:</strong> {{special.content.location}}
+    {% endset %}
+
+    
+    {{ gridCard(
+      titile=special.content.name,
+      image=special.content.image,
+      alt=special.content.image.alt,
+      
+      description = special.content.shortDescription,
+      titleHeadingLvl=3,
+      buttonText='See Details <span class="visually-hidden"> on the '+ special.content.name + '</span>',
+      buttonLink=special.content.slug.current
+    )}}
+  {% endfor %}
+  </div>
 
 {% endblock %}

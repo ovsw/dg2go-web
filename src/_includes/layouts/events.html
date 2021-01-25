@@ -11,7 +11,7 @@
 
   {{pageHeader(title=title, image=roadEvents.content.image)}}
 
-  
+  {{contentSections(roadEvents.content.topSections)}}
 
   <div class=" [ wrapper auto-grid news-grid ]">
 
@@ -55,5 +55,7 @@
     )}}
   {% endfor %}
   </div>
+
+  {{contentSections(roadEvents.content.bottomSections)}}
 
 {% endblock %}
