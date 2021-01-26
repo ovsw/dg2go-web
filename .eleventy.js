@@ -98,6 +98,40 @@ module.exports = config => {
             alt="${alt}" >`
     )
   })
+
+  config.addShortcode('heroResponsiveBgImage', (image) => {
+    const mobileUrl = urlFor(image)
+        .width(400)
+        .height(400)
+        .auto('format')
+    const desktopUrl = urlFor(image)
+        .width(1600)
+        .height(774)
+        .auto('format')
+
+    return (
+      `<style>.hero {background-image: url('${mobileUrl}')}
+      @media screen and (min-width: 1600px) {.hero {background-image: url('${desktopUrl}')}}</style>`
+    )
+  })
+
+  config.addShortcode('pageHeaderResponsiveBgImage', (image, mobileW=400, mobileH=400, deskW=1600, deskH=774) => {
+    const mobileUrl = urlFor(image)
+        .width(mobileW)
+        .height(mobileH)
+        .auto('format')
+    const desktopUrl = urlFor(image)
+        .width(deskW)
+        .height(deskH)
+        .auto('format')
+
+    return (
+      `<style>.page-header {background-image: url('${mobileUrl}')}
+      @media screen and (min-width: 1600px) {.page-header {background-image: url('${desktopUrl}')}}</style>`
+    )
+  })
+
+
   // ////////////////////////////////////
 
   // Nunjucks Filter for converting sring to kebab-case

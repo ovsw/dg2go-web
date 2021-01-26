@@ -11,16 +11,7 @@
   
 {% endset%}
 
-<style>  
-  .hero {
-    background-image: url('{% croppedUrlFor siteHome.content.hero.image, "400", "400" %}')
-  }
-  @media screen and (min-width: 1600px) {
-    .hero {
-      background-image: url('{% croppedUrlFor siteHome.content.hero.image, "1600", "774" %}')
-    }
-  }
-</style>
+{% heroResponsiveBgImage siteHome.content.hero.image %}
 
 <div class="hero">
       
