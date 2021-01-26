@@ -15,12 +15,12 @@
     @include media-query('lg') {
       padding-left: 0;
       display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      grid-template-columns: 1.5fr 1fr 1fr;
       grid-template-rows: min-content min-content;
       gap: var(--flow-space);
       grid-template-areas:
-      "logos social social phone"
-      "address nav1 nav2 nav3";
+      "logos social phone"
+      "address nav1 nav2";
     }
   }
   
@@ -106,6 +106,8 @@
     
     @include media-query('md') {
       margin-top: 0!important;
+      display: flex;
+      align-items: flex-end;
     }
 
     br {

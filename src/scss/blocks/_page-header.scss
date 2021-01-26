@@ -6,7 +6,7 @@
 
   @include media-query('md') {
     padding-bottom: 0;
-    padding-top: get-size('4xl');
+    padding-top: 22rem;
   }
 
   &__content {
