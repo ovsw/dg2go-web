@@ -2,22 +2,27 @@
   {
     "name": "Pizza Shop",
     "url": "/pizza-shop-menu/",
-    "children": []
+    "children": [],
+    "icon": "pizza"
   },{
     "name": "Meals",
     "url": "/meals-menu/",
-    "children": []
+    "children": [],
+    "icon": "restaurant"
   },{
     "name": "On the Road",
     "url": "/on-the-road/",
-    "children": []
+    "children": [],
+    "icon": "truck"
   },{
     "name": "Specials",
     "url": "/specials/",
-    "children": []
+    "children": [],
+    "icon": "dish"
   },{
     "name": "Contact",
     "url": "/contact/",
-    "children": []
+    "children": [],
+    "icon": "paper-plane"
   }
 ]

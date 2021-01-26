@@ -25,7 +25,8 @@ $main-menu-colors: (
   transform: translateX(100%);
   transition: .65s;
   border-top: $mobileMenuItemBorder;
-  
+  border-width: 2px;
+  border-color: get-color('primary');  
   
   &[data-open="true"]{
     transform: translateX(0);
@@ -41,6 +42,17 @@ $main-menu-colors: (
     overflow-y: visible;
     transition: none;
   }
+
+  &__wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: get-color('primary');
+
+    @include media-query('lg') {
+      background-color: transparent;
+    }
+  }
   
   &__list {
     width: 100%;
@@ -52,10 +64,12 @@ $main-menu-colors: (
       flex-direction: row;
     }
 
-    > li.nav__item {
-      border-bottom: $mobileMenuItemBorder;
+    & li.nav__item {
+      // border-bottom: $mobileMenuItemBorder;
       flex: 1;
       position: relative;
+      text-align: center;
+      padding: 0.5em 0;
       
       @include media-query('lg') {
         border: none;
@@ -64,14 +78,13 @@ $main-menu-colors: (
         margin-right: get-size('600');
       }
 
-      > a, > button {
-        width: 100%;
-        display: flex;
+      & a, & button {
+        display: inline-block;
         background: none;
         border: none;
         cursor: pointer;
         text-decoration: none;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         position: relative;
         // color: get-color('dark');
@@ -80,7 +93,17 @@ $main-menu-colors: (
         font-weight: 300;
         position: relative;
         overflow: hidden;
-        padding: 0.5em !important;
+        padding: 0.7em  0.5em 0.5em 0.5em !important;
+        color: get-color('light');
+        text-transform: uppercase;
+        font-size: get-size('500');
+        letter-spacing: 1px;
+        border: 1px solid get-color('light');
+        border-radius: 5px;
+
+        span {
+          margin-right: 0.25em;
+        }
         
         &::after {
           content:'';
@@ -100,15 +123,28 @@ $main-menu-colors: (
             transform: translateX(0);
           }
         }
+
+        // active main menu items mobile
+        &[aria-current='page'], 
+        &[data-state='active'] {
+          color: get-color('primary');
+          background-color: get-color('light');
+        }
         
         @media screen and (min-width: 960px) {
           white-space: nowrap;
         }
         
         @include media-query('lg') {
+          border: none;
+          width: 100%;
+          display: flex;
           padding: 0.5em 0 0.25em 0 !important;
           font-size: 1.1rem;
           padding: 0;
+          color: get-color('dark');
+          text-transform: capitalize;
+          font-weight: normal;
           
           width: auto;
           outline-offset: 0.25rem;
@@ -118,12 +154,12 @@ $main-menu-colors: (
             color: get-color('primary');
           }
 
-          // active main menu items  // , 
+          // active main menu items desktop
           &[aria-current='page'], 
           &[data-state='active'] {
             color: get-color('accent');
             font-weight: 800;
-
+            background-color: transparent;
             &:hover {
               transform: scale(1);
             }

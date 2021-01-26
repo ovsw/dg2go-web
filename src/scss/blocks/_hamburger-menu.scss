@@ -23,7 +23,7 @@
   width: 1.6rem;
   height: 3px;
   border-radius: 3px;
-  background-color: get-color('secondary');
+  background-color: get-color('primary');
   position: relative;
   z-index: 1001;
   transition: .5s;
@@ -35,7 +35,7 @@
   position: absolute;
   width: inherit;
   height: inherit;
-  background-color: get-color('secondary');
+  background-color: get-color('primary');
   border-radius: 3px;
   transition: .5s;
 }

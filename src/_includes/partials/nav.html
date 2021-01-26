@@ -4,18 +4,20 @@
           x-bind:data-open="mainMenuisOpen" 
           :aria-expanded="mainMenuisOpen" 
         >
+            <div class="nav__wrapper">
           <ul class="nav__list">
-
               {# nav is json object provided in data/nav.json #}
               {% for mainNavItem in nav -%}
                 <li class="nav__item">
                   <a href="/{{mainNavItem.url | slug }}/" {{ helpers.getLinkActiveState(mainNavItem.url, page.url) | safe }}>
+                    {% set iconPath = "partials/svg/icon-" + mainNavItem.icon + ".svg" %}
+                    <span>{% include iconPath %}</span>
                     {{mainNavItem.name}}
                  </a>
                 </li>            
               {%- endfor %}
-
           </ul>
+            </div>
         </nav>
         {# END NAVIGATION #}
         {# MOBILE MENU TOGGLE #}
