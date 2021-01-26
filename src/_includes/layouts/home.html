@@ -13,14 +13,6 @@
 
   {% for section in siteHome.content.sections %}
 
-  {% if section._type == 'bigHeading' %}
-    {% set bigHeaderCounter = bigHeaderCounter + 1 %}
-    {% set bigHeaderNumberedString %}
-      {{bigHeaderCounter}}. {{section.title}} 
-    {% endset %}
-    {% include "sections/big-heading-section.html" %}
-  {% endif %}
-
   {% if section._type == 'ctaSection' %}
     {% include "sections/cta-section.html" %}
   {% endif %}
@@ -37,94 +29,10 @@
     {% set qaSectionCounter = qaSectionCounter + 1 %}
     {% include "sections/faq-section.html" %}
   {% endif %}
-  {% if section._type == 'menuSection' %}
-    {% include "sections/menu-section.html" %}
-  {% endif %}
   {% if section._type == 'reusedSection' %}
     {% include "sections/reusable-section.html" %}
   {% endif %}
 
 {% endfor %}
 
-
-  {# <section class="[ large-section ]">
-
-      <div class="[ wrapper flow ]">
-        <h2>Card Section</h2>
-        <p class="[ subtitle ]">Lorem ipsum dolor sit amet consectetur adipisicing elit.  </p>
-
-        
-
-        <div class="large-section__content [ columns-3 ]">
-        <div>
-          {{card(
-            color="green", 
-            headingContent='Group Picnics',
-            topHeadingLvl=3,
-            contentBottom='<p>Planning the perfect group picnic is a job we take very seriously:<p>
-              <ul>
-                <li>Choose a menu to please everyone</li>
-                <li>Enjoy the Rides</li>
-                <li>Cool off at the Water Park</li>
-                <li>Enjoy Group-Rate Pricing</li>
-              </ul>
-            ',
-            buttonText="Plan Group Picnic",
-            buttonLink="#"
-            )
-          }}
-        </div>
-        <div>
-          {{card(
-            color="blue", 
-            headingContent='School Picnics',
-            topHeadingLvl=3,
-            contentBottom='<p>Each year at the end of May::<p>
-              <ul>
-                <li>Special "School\'s Out!" Fun Pass pricing at $5.5 each!</li>
-                <li>Seven dates available</li>
-                <li>School Picnic Lunches available through our catering service</li>
-              </ul>
-            ',
-            buttonText="Plan School Picnic",
-            buttonLink="#"
-            )
-          }}
-        </div>
-        <div>
-          {{card(
-            color="red", 
-            headingContent='Specialty Groups',
-            topHeadingLvl=3,
-            contentBottom='<p>Are you a Youth or Community Organization looking for a place to spend a day and have some fun?<p>
-              <ul>
-                <li>Company Picnics</li>
-                <li>Family Reunions</li>
-                <li>Birthday Parties</li>
-              </ul>
-            ',
-            buttonText="Plan Your Event",
-            buttonLink="#"
-            )
-          }}
-        </div>
-        </div>
-      </div>
-
-      
-      <img class="[ bgImage ]" src="/images/bg/Favorite-Shot-of-the-Water-Park.jpg" alt="MISSING ALT" />
-      
-  </section> #}
- 
-  {# <div class="wrapper">
-    <article>
-      <h1 class="headline" data-color="secondary-light">{{ title }}</h1>
-
-
-      
-{{ content | safe }}
-
-       
-    </article>
-  </div> #}
 {% endblock %}
