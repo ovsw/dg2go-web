@@ -127,6 +127,14 @@ $gorko-config: (
     'output': 'standard',
     'property': 'line-height',
   ),
+  'mx': (
+    'items': (
+      '0': '0',
+      'auto': '0 auto',
+    ),
+    'output': 'responsive',
+    'property': 'margin',
+  ),
   'measure': (
     'items': (
       'micro': '10ch',

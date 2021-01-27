@@ -8,8 +8,16 @@
 
 {# <script>console.log({{sitePage.content | dump | safe}})</script> #}
 
-{{pageHeader(title=sitePage.content.title, image=sitePage.content.mainImage)}}
+{{pageHeader(title=sitePage.content.title, image=sitePage.content.image)}}
 
-{{contentSections(sitePage.content.sections)}}
+{# {{contentSections(sitePage.content.sections)}} #}
+
+<section class="[ gap-top-600 gap-bottom-600 md:gap-top-xl md:gap-bototm-xl ]">
+  <div class="wrapper">
+    <div class="[ mx-auto lg:measure-long flow ]">
+      {{sitePage.content.body | blocksToMarkdown | markdownify | safe }}
+    </div>
+  </div>
+</section>
 
 {% endblock %}

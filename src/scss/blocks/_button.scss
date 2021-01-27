@@ -20,7 +20,7 @@ $btn-colors-all: (
   'white': 'light'
 );
 
-.button {
+.button, #c-submit-button {
   @extend .radius;
 
   display: inline-block;
