@@ -15,12 +15,12 @@
     @include media-query('lg') {
       padding-left: 0;
       display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
       grid-template-rows: min-content min-content;
       gap: var(--flow-space);
       grid-template-areas:
-      "logos social phone"
-      "address nav1 nav2";
+      "logos social social phone"
+      "address nav1 nav2 nav3";
     }
   }
   
@@ -28,7 +28,7 @@
     color: get-color('light-glare');
   }
 
-  background-color: get-color('primary');
+  background-color: get-color('primary-shade');
 
 
   &__logos {
@@ -37,7 +37,6 @@
 
     & img:first-child {
       margin-right: get-size('400');
-      max-width: 200px;
     }
 
     @include media-query('md') {
@@ -106,8 +105,6 @@
     
     @include media-query('md') {
       margin-top: 0!important;
-      display: flex;
-      align-items: flex-end;
     }
 
     br {
@@ -156,7 +153,7 @@
   &__bottom {
     padding: get-size('500') 0;
     margin-top: get-size('600');
-    background-color: get-color('primary-shade');
+    background-color: get-color('primary');
     font-size: get-size('330');
 
     @include media-query('md') {
