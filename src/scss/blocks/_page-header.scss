@@ -4,6 +4,8 @@
 
   margin-bottom: var(--grid-space);
 
+  
+
   @include media-query('md') {
     padding-top: 22rem;
   }
@@ -35,6 +37,13 @@
 
   
   background-image: url('/images/bg/Favorite-Shot-of-the-Water-Park.jpg');
-  
 
+}
+
+.narrow .wrapper {
+  @include media-query('lg') {
+    max-width: 1000px!important;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
