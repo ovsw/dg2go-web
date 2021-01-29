@@ -1,6 +1,9 @@
 .news-grid {
+  margin-bottom: var(--grid-space);
 
   @include media-query('md') {
   --auto-grid-min-size: 400px;
+  --auto-grid-gap: var(--grid-space);
   }
+  
 }
