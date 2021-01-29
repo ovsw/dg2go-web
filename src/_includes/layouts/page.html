@@ -4,6 +4,19 @@
 {% from 'components/page-header.html' import pageHeader %}
 {% from 'components/content-sections.html' import contentSections %}
 
+{# generate excerpt from body portable text field if there's no seo description entered #}
+{% if sitePage.content.seoDescription == 'not set' %}
+  {% set seoDescription = helpers.truncateString(sitePage.content.body | blocksToMarkdown | markdownToText | safe , 160) %}
+{% else %}
+  {% set seoDescription = sitePage.content.seoDescription %}
+{% endif %}
+
+{# provide seo tags to base template #}
+{% block seo %}
+      <title>{{sitePage.content.seoTitle}}</title>
+      <meta name="description" content="{{seoDescription}}">
+{% endblock %}
+
 {% block content %}
 
 {# <script>console.log({{sitePage.content | dump | safe}})</script> #}
@@ -11,8 +24,6 @@
 <div class="narrow">
 {{pageHeader(title=sitePage.content.title, image=sitePage.content.image)}}
 </div>
-
-{# {{contentSections(sitePage.content.sections)}} #}
 
 <section class="[ gap-top-600 gap-bottom-600 md:gap-top-xl md:gap-bototm-xl ]">
   <div class="wrapper">

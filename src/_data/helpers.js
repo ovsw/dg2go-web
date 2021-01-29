@@ -70,5 +70,10 @@ module.exports = {
    */
   filterCollectionByKeys(collection, keys) {
     return collection.filter(x => keys.includes(x.data.key));
+  },
+
+  truncateString(str, max=160) {
+    return str.length < max ? str : `${str.substr(0, str.substr(0, max).lastIndexOf(' '))}`
   }
+  
 };

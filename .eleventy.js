@@ -1,10 +1,12 @@
 // following are required for portable text filter:
 const BlocksToMarkdown = require('@sanity/block-content-to-markdown')
+const { markdownToTxt } = require('markdown-to-txt')
+
 const client = require('./src/utils/sanityClient.js')
 const serializers = require('./src/utils/serializers')
 const urlFor = require('./src/utils/imageUrl')
 
-// Filters
+// FILTERS
 const dateFilter = require('./src/filters/date-filter.js');
 const dateFilterMeals = require('./src/filters/date-filter-meals.js');
 const dateFilterYear = require('./src/filters/date-filter-year.js');
@@ -49,6 +51,12 @@ module.exports = config => {
     return BlocksToMarkdown(sanityBlockContent, { serializers, ...client.config() })
   })
   // end portable text filter
+
+  // fiter to convert markdown to plain text, mainly used for creating excerpts for SEO descriptions
+  config.addFilter("markdownToText", function(markdownContent) {
+    return markdownToTxt(markdownContent)
+  })
+
   // ////////////////////////////////////
 
   // add date filters
