@@ -18,6 +18,8 @@ module.exports = config => {
   config.addPassthroughCopy('./src/images/');
   // Copy `./src/js/` to the dist folder
   config.addPassthroughCopy("./src/js/");
+  // Copy favicons
+  config.addPassthroughCopy({ "./src/favicons/": "/" });
 
   // ////////////////////////////////////
   // process markdown from Sanity
