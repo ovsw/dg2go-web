@@ -12,7 +12,7 @@
           {% endif %}
 
           {# RTE CONTENT #}
-          {% if section.text  != '' %}
+          {% if section.text %}
             <div class="ctaSection__rteWrapper [ flow ]">
               {{section.text | blocksToMarkdown | markdownify | safe}} 
             </div>
