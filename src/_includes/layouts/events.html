@@ -36,7 +36,8 @@
 
     {% set eventSubTitle %}
       <strong>When:</strong> {{event.content.date | dateFilterYear}}, {{event.content.time}} <br />
-      <strong>Where:</strong> {{event.content.location}}
+      <strong>Where:</strong> {{event.content.location}} <br />
+      <strong class="color-accent">Orders due by:</strong> {{event.content.ordersDue}}
     {% endset %}
 
     {% set eventDescription %}
