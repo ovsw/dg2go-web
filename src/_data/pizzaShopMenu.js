@@ -2,24 +2,26 @@ const groq = require('groq')
 const client = require('../utils/sanityClient')
 module.exports =  async function() {
   const sanityResponse = await client.fetch(groq`
-    *[_id == "menuPizzaShop"]{
+  *[_id == "menuPizzaShop"]{
+    ...,
+    content {
       ...,
-      content {
-        ...,
-        deepDishPizzaMenu[]->{
-          ...
-        },
-        frozenPastaMenu[]->{
-          ...
-        },
-        juniorHoagieMenu[]->{
-          ...
-        },
-        originalPizzaMenu[]->{
-          ...
-        }
+      'seoTitle': coalesce( seo.title ,'not set'),
+      'seoDescription': coalesce( seo.description ,'not set'),
+      deepDishPizzaMenu[]->{
+        ...
+      },
+      frozenPastaMenu[]->{
+        ...
+      },
+      juniorHoagieMenu[]->{
+        ...
+      },
+      originalPizzaMenu[]->{
+        ...
       }
-    }[0]
+    }
+  }[0]
   `).catch(err => console.error(err))
 
   return sanityResponse

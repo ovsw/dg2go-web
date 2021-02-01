@@ -1,0 +1,28 @@
+{% macro seoData(
+    pageSeoTitle,
+    pageSeoDescription,
+    defaultSeoTitle,
+    defaultSeoDescription
+   ) %}
+
+  {%- set seoTitle -%}
+    {%- if pageSeoTitle != 'not set' -%}
+      {{-pageSeoTitle-}}
+    {%-else-%}
+      {{-defaultSeoTitle-}}
+    {%- endif -%}
+  {%- endset-%}
+
+  {%- set seoDescription -%}
+    {%- if pageSeoDescription != 'not set' -%}
+      {{-pageSeoDescription-}}
+    {%-else-%}
+      {{-defaultSeoDescription-}}
+    {%- endif -%}
+  {%- endset -%}
+
+
+  <title>{{seoTitle}}</title>
+  <meta name="description" content="{{seoDescription}}">
+
+{% endmacro %}

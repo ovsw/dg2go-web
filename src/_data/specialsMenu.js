@@ -7,6 +7,8 @@ module.exports =  async function() {
     ...,
      content {
       ...,
+      'seoTitle': coalesce( seo.title ,'not set'),
+      'seoDescription': coalesce( seo.description ,'not set'),
        specials[]->{
         ...,
         content {

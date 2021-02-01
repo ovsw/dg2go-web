@@ -9,6 +9,8 @@ module.exports =  async function() {
     ...,
      content {
       ...,
+      'seoTitle': coalesce( seo.title , name),
+      'seoDescription': coalesce( seo.description , shortDescription),
           dishes[] {
             ...,
             dish->{

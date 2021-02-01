@@ -4,6 +4,17 @@
 {% from 'components/page-header.html' import pageHeader %}
 {% from 'components/content-sections.html' import contentSections %}
 
+{% from 'components/seo-data.html' import seoData %}
+
+{% block seo %}
+    {{seoData(
+      pizzaShopMenu.content.seoTitle,
+      pizzaShopMenu.content.seoDescription,
+      siteSettings.title,
+      siteSettings.description
+      )}}
+{% endblock %}
+
 {% block content %}
 
 {# <script>console.log('debug', {{pizzaShopMenu.content | dump | safe}})</script> #}

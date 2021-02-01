@@ -4,6 +4,19 @@
 {% from 'components/page-header.html' import pageHeader %}
 {% from 'components/content-sections.html' import contentSections %}
 
+
+{% from 'components/seo-data.html' import seoData %}
+
+{% block seo %}
+    {{seoData(
+      mealsMenu.content.seoTitle,
+      mealsMenu.content.seoDescription,
+      siteSettings.title,
+      siteSettings.description
+      )}}
+{% endblock %}
+
+
 {% block content %}
 
 {# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}

@@ -5,9 +5,21 @@
 {% from 'components/content-sections.html' import contentSections %}
 {% from 'components/grid-card.html' import gridCard %}
 
-{% block content %}
+{% from 'components/seo-data.html' import seoData %}
+
+{% block seo %}
+    {{seoData(
+      specialsMenu.content.seoTitle,
+      specialsMenu.content.seoDescription,
+      siteSettings.title,
+      siteSettings.description
+      )}}
+{% endblock %}
 
 {# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}
+
+{% block content %}
+
 
 {{pageHeader(title=title, image=specialsMenu.content.image)}}
 
@@ -43,5 +55,7 @@
     )}}
   {% endfor %}
   </div>
+
+  {{contentSections(specialsMenu.content.bottomSections)}}
 
 {% endblock %}
