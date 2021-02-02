@@ -24,8 +24,28 @@
         {{- item.dish.description -}}
       </div>
       <div class="mealsMenu__buttons">
-        <a class="[ button ] [ button--colored-bg button--color-green button--small ]" href="https://dg2go.foxycart.com/cart?name={{item.dish.name | encodeUri}}&price={{item.dish.price}}&pickup={{item.date | dateFilterYear }}&meal=lunch">Order <span class="visually-hidden">{{ dish.name }}</span> for lunch <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span></a>
-        <a class="[ button ] [ button--colored-bg button--color-red button--small ]" href="https://dg2go.foxycart.com/cart?name={{item.dish.name | encodeUri}}&price={{item.dish.price}}&pickup={{item.date | dateFilterYear }}&meal=dinner">Order <span class="visually-hidden">{{ dish.name }}</span> for dinner <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span></a>
+
+        {% set mealNameEncoded = item.dish.name | encodeUri %}
+        {# {% set mealId = item.dish.name | makeId %} #}
+        {% set mealId = global.random() %}
+        {% set mealDateFormatted = item.date | dateFilterYear %}
+        {% set mealDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
+
+        {% set mealName %}{% foxyEncrypt 'name', item.dish.name, mealId %}{% endset %}
+        {% set mealCode %}{% foxyEncrypt 'code', mealId, mealId %}{% endset %}
+        {% set mealPrice %}{% foxyEncrypt 'price', item.dish.price, mealId %}{% endset %}
+        {% set mealPickup %}{% foxyEncrypt 'pickup', mealDateFormatted, mealId %}{% endset %}
+        {% set mealTimeLunch %}{% foxyEncrypt 'meal', 'lunch', mealId %}{% endset %}
+        {% set mealTimeDinner %}{% foxyEncrypt 'meal', 'dinner', mealId %}{% endset %}
+        
+        <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
+          href="https://dg2go.foxycart.com/cart?{{ mealName }}={{ mealNameEncoded }}&{{ mealCode }}={{ mealId }}&{{ mealPrice }}={{ item.dish.price }}&{{ mealPickup }}={{ mealDateFormattedEncoded }}&{{ mealTimeLunch }}=lunch">
+          Order {{prodname}}<span class="visually-hidden">{{ dish.name }}</span> for lunch <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span>
+        </a>
+
+        <a class="[ button ] [ button--colored-bg button--color-red button--small ]" 
+        href="https://dg2go.foxycart.com/cart?{{ mealName }}={{ mealNameEncoded }}&{{ mealCode }}={{ mealId }}&{{ mealPrice }}={{ item.dish.price }}&{{ mealPickup }}={{ mealDateFormattedEncoded }}&{{ mealTimeDinner }}=dinner">Order <span class="visually-hidden">{{ dish.name }}</span> for dinner <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span></a>
+        
       </div>
     </li>
     {% endfor %}

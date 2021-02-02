@@ -1,3 +1,3 @@
 module.exports = value => {
-  return encodeURI(value);
+  return encodeURIComponent(value);
 };

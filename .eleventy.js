@@ -12,6 +12,7 @@ const dateFilterMeals = require('./src/filters/date-filter-meals.js');
 const dateFilterYear = require('./src/filters/date-filter-year.js');
 const w3DateFilter = require('./src/filters/w3-date-filter.js');
 const encodeUri = require('./src/filters/encode-uri.js');
+var CryptoJS = require("crypto-js");
 
 module.exports = config => {
   // Set directories to pass through to the dist folder
@@ -141,6 +142,14 @@ module.exports = config => {
     )
   })
 
+  config.addShortcode('foxyEncrypt', (attrName, attrValue, productCode) => {
+    const apiKey = process.env.FOXYCART_API_KEY
+    const encodingval = encodeURIComponent(productCode + attrName + attrValue)
+    const concatval = productCode + attrName + attrValue
+    return attrName + '||' + CryptoJS.HmacSHA256(concatval, apiKey)
+    // let out = CryptoJS.HmacSHA256(string, apiKey)
+    // return encodingval
+  })
 
   // ////////////////////////////////////
 
