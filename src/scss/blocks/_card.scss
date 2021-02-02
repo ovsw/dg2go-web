@@ -111,7 +111,7 @@ $padding-h-large: get-size('900');
   @each $name, $color in $card-themes {
     &.card--color-#{$name} {
       >div:nth-of-type(1) {
-        color: get-color(light);
+        color: get-color(light-glare);
         background-color: get-color($color);
       }
       >div:nth-of-type(2) {
