@@ -2,13 +2,25 @@
     pageSeoTitle,
     pageSeoDescription,
     defaultSeoTitle,
-    defaultSeoDescription
+    defaultSeoDescription,
+    defaultSeoImage,
+    seoImage
    ) %}
 
-  {%- set seoTitle = pageSeoTitle or defaultSeoTitle  -%}
-  {%- set seoDescription = pageSeoDescription or defaultSeoDescription -%}
+  {% set seoTitle = pageSeoTitle or defaultSeoTitle  %}
+  {% set seoDescription = pageSeoDescription or defaultSeoDescription %}
+  {% set ogImageUrll = seoImage or defaultSeoImage %}
+  
+  
 
   <title>{{seoTitle}} | DelGrosso's DG2GO</title>
   <meta name="description" content="{{seoDescription}}">
+
+  <meta property="og:title" content="{{seoTitle}}"/>
+  <meta property="og:url" content="{{page.url}}" />
+  <meta property="og:description" content="{{seoDescription}}" />
+  <meta property="og:image" content="{% croppedUrlFor ogImageUrll, '1200', '627' %}" />
+  <meta property="og:type" content="website" />
+  
 
 {% endmacro %}

@@ -10,11 +10,18 @@
 {% else %}
   {% set seoDescription = sitePage.content.seoDescription %}
 {% endif %}
+{% set ogImage = sitePage.content.image or siteSettings.image %}
 
 {# provide seo tags to base template #}
 {% block seo %}
       <title>{{sitePage.content.seoTitle}} | DG2GO</title>
       <meta name="description" content="{{seoDescription}}">
+
+      <meta property="og:title" content="{{sitePage.content.seoTitle}}"/>
+      <meta property="og:url" content="{{page.url}}" />
+      <meta property="og:description" content="{{seoDescription}}" />
+      <meta property="og:image" content="{% croppedUrlFor ogImage, '1200', '627' %}" />
+      <meta property="og:type" content="website" />
 {% endblock %}
 
 {% block content %}
