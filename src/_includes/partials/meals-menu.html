@@ -27,7 +27,7 @@
 
         {% set mealNameEncoded = item.dish.name | encodeUri %}
         {# {% set mealId = item.dish.name | makeId %} #}
-        {% set mealId = global.random() %}
+        {% set mealId = item.dish.dishId.current + loop.index %}
         {% set mealDateFormatted = item.date | dateFilterYear %}
         {% set mealDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
 
