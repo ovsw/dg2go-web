@@ -9,7 +9,7 @@ const blocksToHtml = require('@sanity/block-content-to-html')
 
 function generatePageWithSeo (page) {
 
-  const deoDescription = page.content.seoDescription != 'not set' ? page.content.seo.seoDescription :  'excerpt'
+  const deoDescription = page.content.seoDescription != '' ? page.content.seo.seoDescription :  'excerpt'
   // const seoDescription = page.content.seo.description || pageBOdyTextTruncated
 
   return {
@@ -26,7 +26,7 @@ module.exports =  async function() {
     content {
       ...,
   		'seoTitle': coalesce(seo.title, title),
-			'seoDescription': coalesce(seo.description, 'not set'),
+			'seoDescription': coalesce(seo.description, ''),
 			sections[] {
         ...,
         reusableSection->{

@@ -5,7 +5,7 @@
 {% from 'components/content-sections.html' import contentSections %}
 
 {# generate excerpt from body portable text field if there's no seo description entered #}
-{% if sitePage.content.seoDescription == 'not set' %}
+{% if sitePage.content.seoDescription == '' %}
   {% set seoDescription = helpers.truncateString(sitePage.content.body | blocksToMarkdown | markdownToText | safe , 160) %}
 {% else %}
   {% set seoDescription = sitePage.content.seoDescription %}

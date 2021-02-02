@@ -6,8 +6,8 @@ module.exports =  async function() {
     ...,
     content {
       ...,
-      'seoTitle': coalesce( seo.title ,'not set'),
-      'seoDescription': coalesce( seo.description ,'not set'),
+      'seoTitle': coalesce( seo.title ,''),
+      'seoDescription': coalesce( seo.description ,''),
       deepDishPizzaMenu[]->{
         ...
       },

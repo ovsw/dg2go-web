@@ -5,22 +5,8 @@
     defaultSeoDescription
    ) %}
 
-  {%- set seoTitle -%}
-    {%- if pageSeoTitle != 'not set' -%}
-      {{-pageSeoTitle-}}
-    {%-else-%}
-      {{-defaultSeoTitle-}}
-    {%- endif -%}
-  {%- endset-%}
-
-  {%- set seoDescription -%}
-    {%- if pageSeoDescription != 'not set' -%}
-      {{-pageSeoDescription-}}
-    {%-else-%}
-      {{-defaultSeoDescription-}}
-    {%- endif -%}
-  {%- endset -%}
-
+  {%- set seoTitle = pageSeoTitle or defaultSeoTitle  -%}
+  {%- set seoDescription = pageSeoDescription or defaultSeoDescription -%}
 
   <title>{{seoTitle}} | DelGrosso's DG2GO</title>
   <meta name="description" content="{{seoDescription}}">
