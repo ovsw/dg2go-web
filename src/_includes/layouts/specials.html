@@ -44,13 +44,18 @@
       <strong>Where:</strong> {{special.content.location}}
     {% endset %}
 
+    {% if (special.content.storeComingSoon) %}
+      {% set cardDescription = special.content.shortDescription + '<br/><br/> <span class="color-accent">' + special.content.storeComingSoon + '</span>'%}
+    {% else %}
+      {% set cardDescription = special.content.shortDescription %}
+    {% endif %}
+
     
     {{ gridCard(
       titile=special.content.name,
       image=special.content.image,
       alt=special.content.image.alt,
-      
-      description = special.content.shortDescription,
+      description = cardDescription,
       titleHeadingLvl=3,
       buttonText='See Details <span class="visually-hidden"> on the '+ special.content.name + '</span>',
       buttonLink=special.content.slug.current,
