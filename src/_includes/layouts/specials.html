@@ -53,7 +53,9 @@
       description = special.content.shortDescription,
       titleHeadingLvl=3,
       buttonText='See Details <span class="visually-hidden"> on the '+ special.content.name + '</span>',
-      buttonLink=special.content.slug.current
+      buttonLink=special.content.slug.current,
+      button2Text='Order <span class="visually-hidden">'+ special.content.name + '</span> now',
+      button2Link=special.content.storeUrl
     )}}
   {% endfor %}
   </div>
