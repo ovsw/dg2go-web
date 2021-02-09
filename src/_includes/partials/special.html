@@ -36,6 +36,9 @@
     {% endfor %}
     {% if special.content.storeUrl %}
     <a target="_blank" class="[ button ] [ button--colored-bg button--color-red ]" href="{{special.content.storeUrl}}">Preorder <span class="visually-hidden">{{special.content.name}}</span> Online Now</span></a>
+    {% elif (special.content.storeComingSoon) %}
+    <h2>{{special.content.storeComingSoon}}</h2>
+    <p>Please check back then!</p>
     {% else %}
     <h2>Coming Soon!</h2>
     <p>Please check back soon here for a store link where you'll be able to pre-order this special.</p>
