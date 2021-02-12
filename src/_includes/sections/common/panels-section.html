@@ -19,19 +19,6 @@
   
   {# SET VARS TO RENDER SECTION BASED ON SELECTED THEME #}
 
-  {# set the theme of the section and button (frame or solid bg) #}
-  {% if 'fill' in section.theme %}
-    {% set theme = 'fill' %}
-    {# exeption for yellow color, which should be considered light #}
-    {% if ('yellowTheme' in section.theme) or ('yellowBtn' in section.theme) %}
-      {% set buttonStyle = 'colored-bg' %}
-    {% else %}
-    {# for all colors, set buttons to light bg (colored text) #}
-      {% set buttonStyle = 'colored-text' %}
-    {% endif %}
-  {% endif %}
-
-
   {# theme color #}
   {# set available themes #}
   {% set magSectionThemes = [
@@ -46,6 +33,26 @@
       {% set themeColor = item.color %}
     {% endif %}
   {% endfor %}
+
+  {# set the theme of the section and button (frame or solid bg) #}
+  {% if 'fill' in section.theme %}
+    {% set theme = 'fill' %}
+    {# exeption for yellow color, which should be considered light #}
+    {% if ('yellowTheme' in section.theme) or ('yellowBtn' in section.theme) %}
+      {% set buttonStyle = 'colored-bg' %}
+      {% if themeColor == 'yellow' %}
+        {% set eyebrowStyle = '-dark' %}
+      {% else %}
+        {% set eyebrowStyle = '' %}
+      {% endif %}
+    {% else %}
+    {# for all colors, set buttons to light bg (colored text) #}
+      {% set buttonStyle = 'colored-text' %}
+    {% endif %}
+  {% endif %}
+
+
+
   
   {# button color #}
   {# set available button colors (also used for the eyebrow color) #}

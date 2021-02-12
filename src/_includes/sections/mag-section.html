@@ -33,7 +33,7 @@
 
 {% block sectionCopy %}
   {% if section.eyebrow %}
-        <p class="[ eyebrow eyebrow--{{buttonColor}} ]">{{section.eyebrow}}</p>
+        <p class="[ eyebrow eyebrow--{{buttonColor}}{{eyebrowStyle}} ]">{{section.eyebrow}}</p>
       {% endif %}
 
       <h2>{{section.title | safe}}</h2>
