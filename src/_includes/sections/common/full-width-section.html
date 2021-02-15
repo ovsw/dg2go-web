@@ -42,12 +42,14 @@
 
   <section class="[ ctaSection ]" data-theme-color="{{themeColor}}" data-theme="{{theme}}">
     
-    {% responsiveImage section.image, 
+    {% if section.image.asset %}
+      {% responsiveImage section.image, 
       "500, 1200, 1600", 
       "(min-width: 40em) 70vw, 100vw",
       "[ bgImage bgImage--gray bgImage--withOverlay ]",
       imageAlt
     %}
+    {% endif %}
     {# <img class="[ bgImage bgImage--gray bgImage--withOverlay ]" src="/images/bg/Pappy-Freds-Pizzeria.jpg" alt="MISSING ALT" /> #}
     
     <div class="[ ctaSection__color-overlay ] [ pinned ]"></div>
