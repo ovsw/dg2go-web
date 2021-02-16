@@ -13,7 +13,6 @@
     {% endblock %}
     <link rel="canonical" href="https://www.dg2gofood.com{{page.url}}"/>
 
-
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -21,19 +20,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#fffbfb">
     <meta name="theme-color" content="#ffffff">
-
-    {# <script src="https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
-    <script>
-      WebFont.load({
-        google: {
-          families: ['Overpass:400,700', 'Raleway:900']
-        }
-      });
-    </script> #}
-
-    {# <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&family=Raleway:wght@900&display=swap" rel="stylesheet"> #}
-
+    
 
     <style>
       /* latin-ext */
@@ -129,17 +116,6 @@
       {% endfor %}
     {% endif %}
 
-    {# General stylesheets #}
-    {# <link rel="stylesheet" media="print" href="/fonts/fonts.css?{{ assetHash }}" onload="this.media='all'" /> #}
-    {# <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" onload="this.media='all'" /> #}
-
-    {# <link rel="preload" href="/fonts/Overpass-400-latin2.woff2" as="font" crossOrigin="anonymous"/>
-    <link rel="preload" href="/fonts/Overpass-400-latin4.woff2" as="font" crossOrigin="anonymous"/>
-    <link rel="preload" href="/fonts/Overpass-700-latin8.woff2" as="font" crossOrigin="anonymous"/>
-    <link rel="preload" href="/fonts/Raleway-800-latin13.woff2" as="font" crossOrigin="anonymous"/>
-    <link rel="preload" href="/fonts/Raleway-900-latin18.woff2" as="font" crossOrigin="anonymous"/> #}
-
-
     {# Add facility for pages to declare an array of stylesheet paths #}
     {% if pageStylesheets %}
       {% for item in pageStylesheets %}
@@ -152,6 +128,16 @@
     <script data-cfasync="false" src="https://cdn.foxycart.com/dg2go/loader.js" async defer></script>
     <!-- /FOXYCART -->
     {% endif %}
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-349HHEHL2T"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-349HHEHL2T');
+    </script>
 
   </head>
 
