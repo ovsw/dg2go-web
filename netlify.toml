@@ -3,7 +3,7 @@
   publish = "dist"
 
 [[redirects]]
-  from = "https://dg2go.netlify.app"
-  to = "https://www.dg2gofood.com"
+  from = "https://dg2go.netlify.app/*"
+  to = "https://www.dg2gofood.com/:splat"
   status = 301
   force = true
