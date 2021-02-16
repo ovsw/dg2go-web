@@ -1,6 +1,8 @@
 // following are required for portable text filter:
 const BlocksToMarkdown = require('@sanity/block-content-to-markdown')
 const { markdownToTxt } = require('markdown-to-txt')
+const CryptoJS = require("crypto-js")
+const sitemap = require("@quasibit/eleventy-plugin-sitemap")
 
 const client = require('./src/utils/sanityClient.js')
 const serializers = require('./src/utils/serializers')
@@ -12,7 +14,7 @@ const dateFilterMeals = require('./src/filters/date-filter-meals.js');
 const dateFilterYear = require('./src/filters/date-filter-year.js');
 const w3DateFilter = require('./src/filters/w3-date-filter.js');
 const encodeUri = require('./src/filters/encode-uri.js');
-var CryptoJS = require("crypto-js");
+
 
 module.exports = config => {
   // Set directories to pass through to the dist folder
@@ -156,6 +158,12 @@ module.exports = config => {
   // Nunjucks Filter for converting sring to kebab-case
   config.addNunjucksFilter("makeId", function(value) {
      return value.replace(/\s+/g, '-').toLowerCase()
+  });
+
+  config.addPlugin(sitemap, {
+    sitemap: {
+      hostname: "https://www.dg2gofoods.com",
+    },
   });
 
   // Tell 11ty to use the .eleventyignore and ignore our .gitignore file
