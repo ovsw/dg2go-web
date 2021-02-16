@@ -60,12 +60,13 @@
       {% else %}
       {% set linkTarget ='' %}
       {% endif %}
+      {# use {{ linkTarget  }} to open in a new window #}
 
       {% if (buttonText) %}
       <div class="gridCard__buttonWrapper">
-          <a href="{{buttonLink}}" {{ linkTarget  }} class="[ button button--colored-bg button--color-green button--small ]">{{buttonText | safe}}</a>
+          <a href="{{buttonLink}}" class="[ button button--colored-bg button--color-green button--small ]">{{buttonText | safe}}</a>
           {% if (button2Text and button2Link) %}
-          <a href="{{button2Link}}" target="_blank" class="[ button button--colored-bg button--color-red button--small ]">{{button2Text | safe}}</a>
+          <a href="{{button2Link}}" class="[ button button--colored-bg button--color-red button--small ]">{{button2Text | safe}}</a>
           {% endif %}
       </div>
       {% endif %}
