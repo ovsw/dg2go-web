@@ -9,12 +9,15 @@ const serializers = require('./src/utils/serializers')
 const urlFor = require('./src/utils/imageUrl')
 
 // FILTERS
-const dateFilter = require('./src/filters/date-filter.js');
-const dateFilterMeals = require('./src/filters/date-filter-meals.js');
-const dateFilterYear = require('./src/filters/date-filter-year.js');
-const w3DateFilter = require('./src/filters/w3-date-filter.js');
-const encodeUri = require('./src/filters/encode-uri.js');
+const dateFilter = require('./src/filters/date-filter.js')
+const dateFilterMeals = require('./src/filters/date-filter-meals.js')
+const dateFilterYear = require('./src/filters/date-filter-year.js')
+const w3DateFilter = require('./src/filters/w3-date-filter.js')
+const encodeUri = require('./src/filters/encode-uri.js')
 
+// Transforms
+const htmlMinTransform = require('./src/transforms/html-min-transform.js')
+const isProduction = process.env.NODE_ENV === 'production'
 
 module.exports = config => {
   // Set directories to pass through to the dist folder
@@ -168,6 +171,11 @@ module.exports = config => {
 
   // Tell 11ty to use the .eleventyignore and ignore our .gitignore file
   config.setUseGitIgnore(false);
+
+  // Only minify HTML if we are in production because it slows builds _right_ down
+  if (isProduction) {
+    config.addTransform('htmlmin', htmlMinTransform);
+  }
 
   return {
     markdownTemplateEngine: 'njk',
