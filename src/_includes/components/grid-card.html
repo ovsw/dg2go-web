@@ -20,14 +20,16 @@
 
     <div class="gridCard__image">
         {% if image %}
+          <a href="{{buttonLink}}">
+          <span class="visually-hidden">{{buttonText | safe}}</span>
           <img 
-            onclick="window.location = '{{buttonLink}}'"
+            {# onclick="window.location = '{{buttonLink}}'" #}
             src="{% croppedUrlFor image, '500', '400' %}" 
             srcset="{% croppedUrlFor image, '600', '400' %} 500w,
             {% croppedUrlFor image, '900', '600' %}  960w"
             sizes="(min-width: 40em) 50vw, 100vw"
             alt="{{ alt }}"
-          >
+          ></a>
         {% endif %}
     </div>
 

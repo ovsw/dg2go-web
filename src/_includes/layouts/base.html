@@ -11,6 +11,8 @@
       <title>{{ siteSettings.title }} | DelGrosso's DG2GO</title>
       <meta name="description" content="{{siteSettings.description}}">
     {% endblock %}
+    <link rel="canonical" href="https://www.dg2gofood.com{{page.url}}"/>
+
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -158,10 +160,6 @@
       
       {% include "partials/site-head.html" %}
 
-      {# <script type="text/javascript">
-        console.log({{metadata | dump | safe}});
-      </script> #}
-      {# <h1>{{metadata.title}} </h1> #}
       <main tabindex="-1" id="main-content">
         {% block content %}{% endblock %}
       </main>

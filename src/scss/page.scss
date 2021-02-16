@@ -15,6 +15,7 @@ $outputTokenCSS: false;
 @import 'blocks/grid-card';
 @import 'blocks/meals-menu';
 @import 'blocks/menu-section';
+@import 'blocks/preloader';
 @import 'blocks/news-grid';
 
 // Pull in utilities
@@ -22,3 +23,4 @@ $outputTokenCSS: false;
 @import 'utilities/pannel';
 @import 'utilities/table';
 @import 'utilities/tag';
+

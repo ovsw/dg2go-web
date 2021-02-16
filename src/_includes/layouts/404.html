@@ -1,0 +1,47 @@
+{% extends "layouts/base.html" %}
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/page-header.html' import pageHeader %}
+{% from 'components/content-sections.html' import contentSections %}
+
+{# generate excerpt from body portable text field if there's no seo description entered #}
+{% if sitePage.content.seoDescription == '' %}
+  {% set seoDescription = helpers.truncateString(sitePage.content.body | blocksToMarkdown | markdownToText | safe , 160) %}
+{% else %}
+  {% set seoDescription = sitePage.content.seoDescription %}
+{% endif %}
+{% set ogImage = sitePage.content.image or siteSettings.image %}
+
+{# provide seo tags to base template #}
+{% block seo %}
+      <title>{{sitePage.content.seoTitle}} | DG2GO</title>
+      <meta name="description" content="{{seoDescription}}">
+
+      <meta property="og:title" content="{{sitePage.content.seoTitle}}"/>
+      <meta property="og:url" content="{{page.url}}" />
+      <meta property="og:description" content="{{seoDescription}}" />
+      <meta property="og:image" content="{% croppedUrlFor ogImage, '1200', '627' %}" />
+      <meta property="og:type" content="website" />
+{% endblock %}
+
+{% block content %}
+
+{# <script>console.log({{sitePage.content | dump | safe}})</script> #}
+
+<div class="narrow">
+{{pageHeader(title='404 - Page not found')}}
+</div>
+
+<section class="[ gap-top-600 gap-bottom-600 md:gap-top-xl md:gap-bototm-xl ]">
+  <div class="wrapper">
+    <div class="[ mx-auto lg:measure-long flow ]">
+      <h2>Sorry, we couldn't find the page you're looking for.</h2>
+      <p>For some reason, the URL you're tring to access is not available on our website.</p>
+      <p>If you think something's broken, please <a href="/contact/">contact us and let us know</a>.
+      <p>Otherwise, maybe <a href="/">our homepage</a> might be a good place to go!</p>
+    </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
