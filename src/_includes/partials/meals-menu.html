@@ -6,48 +6,53 @@
   <h2>DG2GO Meals Menu</h2>
   <ul class="mealsMenu">
     {% for item in meals %}
-    <li class="">
-      <h3>{{- item.date | dateFilterMeals -}}</h3>
+    {# only print meals which are not hidden, unless we're on the internal page #}
+    {% if internalListing or (not item.hideFromCustomers) %}
+      
+    
+      <li class="">
+        <h3>{{- item.date | dateFilterMeals -}}</h3>
 
-      <div class="mealsMenu__wrapper">
-        <div class="mealsMenu__itemName">
-          {{item.dish.name}}
+        <div class="mealsMenu__wrapper">
+          <div class="mealsMenu__itemName">
+            {{item.dish.name}}
+          </div>
+          <div class="mealsMenu__dots"></div>
+          <div class="mealsMenu__price">
+            ${{- item.dish.price -}}
+          </div>
         </div>
-        <div class="mealsMenu__dots"></div>
-        <div class="mealsMenu__price">
-          ${{- item.dish.price -}}
+
+
+        <div class="mealsMenu__desc">
+          {{- item.dish.description -}}
         </div>
-      </div>
+        <div class="mealsMenu__buttons">
 
+          {% set mealNameEncoded = item.dish.name | encodeUri %}
+          {# {% set mealId = item.dish.name | makeId %} #}
+          {% set mealId = item.dish.dishId.current + loop.index %}
+          {% set mealDateFormatted = item.date | dateFilterYear %}
+          {% set mealDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
 
-      <div class="mealsMenu__desc">
-        {{- item.dish.description -}}
-      </div>
-      <div class="mealsMenu__buttons">
+          {% set mealName %}{% foxyEncrypt 'name', item.dish.name, mealId %}{% endset %}
+          {% set mealCode %}{% foxyEncrypt 'code', mealId, mealId %}{% endset %}
+          {% set mealPrice %}{% foxyEncrypt 'price', item.dish.price, mealId %}{% endset %}
+          {% set mealPickup %}{% foxyEncrypt 'pickup', mealDateFormatted, mealId %}{% endset %}
+          {% set mealTimeLunch %}{% foxyEncrypt 'meal', 'lunch', mealId %}{% endset %}
+          {% set mealTimeDinner %}{% foxyEncrypt 'meal', 'dinner', mealId %}{% endset %}
+          
+          <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
+            href="https://dg2go.foxycart.com/cart?{{ mealName }}={{ mealNameEncoded }}&{{ mealCode }}={{ mealId }}&{{ mealPrice }}={{ item.dish.price }}&{{ mealPickup }}={{ mealDateFormattedEncoded }}&{{ mealTimeLunch }}=lunch">
+            Order {{prodname}}<span class="visually-hidden">{{ dish.name }}</span> for lunch <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span>
+          </a> &nbsp;
 
-        {% set mealNameEncoded = item.dish.name | encodeUri %}
-        {# {% set mealId = item.dish.name | makeId %} #}
-        {% set mealId = item.dish.dishId.current + loop.index %}
-        {% set mealDateFormatted = item.date | dateFilterYear %}
-        {% set mealDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
-
-        {% set mealName %}{% foxyEncrypt 'name', item.dish.name, mealId %}{% endset %}
-        {% set mealCode %}{% foxyEncrypt 'code', mealId, mealId %}{% endset %}
-        {% set mealPrice %}{% foxyEncrypt 'price', item.dish.price, mealId %}{% endset %}
-        {% set mealPickup %}{% foxyEncrypt 'pickup', mealDateFormatted, mealId %}{% endset %}
-        {% set mealTimeLunch %}{% foxyEncrypt 'meal', 'lunch', mealId %}{% endset %}
-        {% set mealTimeDinner %}{% foxyEncrypt 'meal', 'dinner', mealId %}{% endset %}
-        
-        <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
-          href="https://dg2go.foxycart.com/cart?{{ mealName }}={{ mealNameEncoded }}&{{ mealCode }}={{ mealId }}&{{ mealPrice }}={{ item.dish.price }}&{{ mealPickup }}={{ mealDateFormattedEncoded }}&{{ mealTimeLunch }}=lunch">
-          Order {{prodname}}<span class="visually-hidden">{{ dish.name }}</span> for lunch <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span>
-        </a> &nbsp;
-
-        <a class="[ button ] [ button--colored-bg button--color-red button--small ]" 
-        href="https://dg2go.foxycart.com/cart?{{ mealName }}={{ mealNameEncoded }}&{{ mealCode }}={{ mealId }}&{{ mealPrice }}={{ item.dish.price }}&{{ mealPickup }}={{ mealDateFormattedEncoded }}&{{ mealTimeDinner }}=dinner">Order <span class="visually-hidden">{{ dish.name }}</span> for dinner <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span></a>
-        
-      </div>
-    </li>
+          <a class="[ button ] [ button--colored-bg button--color-red button--small ]" 
+          href="https://dg2go.foxycart.com/cart?{{ mealName }}={{ mealNameEncoded }}&{{ mealCode }}={{ mealId }}&{{ mealPrice }}={{ item.dish.price }}&{{ mealPickup }}={{ mealDateFormattedEncoded }}&{{ mealTimeDinner }}=dinner">Order <span class="visually-hidden">{{ dish.name }}</span> for dinner <span class="visually-hidden">on {{ dish.date | dateFilterYear }}</span></a>
+          
+        </div>
+      </li>
+    {% endif %}
     {% endfor %}
   </ul>
 {% endblock %}

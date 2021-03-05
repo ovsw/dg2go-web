@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %}
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/page-header.html' import pageHeader %}
+{% from 'components/content-sections.html' import contentSections %}
+
+
+{% from 'components/seo-data.html' import seoData %}
+
+{% block seo %}
+    {{seoData(
+      mealsMenu.content.seoTitle,
+      mealsMenu.content.seoDescription,
+      siteSettings.title,
+      siteSettings.description,
+      siteSettings.image,
+      mealsMenu.content.image
+      )}}
+{% endblock %}
+
+
+{% block content %}
+
+{# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}
+
+{{pageHeader(title=title, image=mealsMenu.content.image)}}
+
+{{contentSections(mealsMenu.content.topSections)}}
+
+
+{% set meals = mealsMenu.content.mealSchedule %}
+{% set internalListing = true %}
+{% include "partials/meals-menu.html" %}
+
+{{contentSections(mealsMenu.content.bottomSections)}}
+
+{% endblock %}
