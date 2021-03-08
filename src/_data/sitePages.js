@@ -3,9 +3,6 @@ const client = require('../utils/sanityClient')
 const overlayDrafts = require('../utils/overlayDrafts')
 const hasToken = !!client.config().token
 
-const serializers = require('../utils/serializers')
-const blocksToHtml = require('@sanity/block-content-to-html')
-
 
 function generatePageWithSeo (page) {
 
