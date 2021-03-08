@@ -1,0 +1,25 @@
+.cluster-l {
+  --cluster-space: 1rem;
+  // overflow: hidden;
+}
+
+.cluster-l > * {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  margin: calc(var(--cluster-space) / 2 * -1);
+}
+
+.cluster-l > * > * {
+  margin: calc(var(--cluster-space) / 2);
+}
+
+.cluster-l {
+  &--separated > * {
+    justify-content: space-between;
+  }
+  &--right > * {
+    justify-content: flex-end;
+  }
+}

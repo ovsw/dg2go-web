@@ -10,28 +10,54 @@
     {{special.content.description | blocksToMarkdown | markdownify | safe }}
   </div>
 
-  <ul class="mealsMenu [ flow ]" style="margin-top: 3rem;">
+  <ul class="mealsMenu [ flow flow-space-900 ]" style="margin-top: 3rem;">
     {% for item in special.content.dishes %}
-    <li>
+    <li class="">
       {# <h3>{{- item.date | dateFilter -}}</h3> #}
+      <div class="flow flow-space-400">
+      
+        <div class="mealsMenu__wrapper">
+          <div class="mealsMenu__itemName">
+            {{item.dish.name}}
+          </div>
+          <div class="mealsMenu__dots"></div>
+          <div class="cluster-l">
+            <div>
+              <div class="mealsMenu__price color-accent">
+                ${{- item.dish.priceNo }} {{ item.dish.priceMeasure -}}
+              </div>
 
-      <div class="mealsMenu__wrapper">
-        <div class="mealsMenu__itemName">
-          {{item.dish.name}}
+              <div>
+                {% set dishNameEncoded = item.dish.name | encodeUri %}
+                {% set dishId = item.dish.dishId.current %}
+                {% set dishDateFormatted = item.date | dateFilterYear %}
+                {% set dishDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
+
+                {% set dishName %}{% foxyEncrypt 'name', item.dish.name, dishId %}{% endset %}
+                {% set dishCode %}{% foxyEncrypt 'code', dishId, dishId %}{% endset %}
+                {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
+                {# {% set dishPickup %}{% foxyEncrypt 'pickup', mealDateFormatted, dishId %}{% endset %} #}
+
+                <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
+                  href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}">
+                  Order {{prodname}}<span class="visually-hidden">one {{item.dish.name}} for {{ item.dish.price }}</span></span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="mealsMenu__dots"></div>
-        <div class="mealsMenu__price color-accent">
-          {{- item.dish.price -}}
+
+        
+
+        <div class="mealsMenu__desc">
+          <p><strong class="color-accent">Pickup Date:</strong> {{item.pickUpDate}}</p>
+          <p><strong  class="color-accent">Preorder Deadline:</strong> {{item.preOrderDeadline}}</p>
+          <br/>
+          {{ item.dish.description | blocksToMarkdown | markdownify | safe }}
         </div>
-      </div>
 
-      <div class="mealsMenu__desc">
-        <p><strong class="color-accent">Pickup Date:</strong> {{item.pickUpDate}}</p>
-        <p><strong  class="color-accent">Preorder Deadline:</strong> {{item.preOrderDeadline}}</p>
-        <br/>
-        {{ item.dish.description | blocksToMarkdown | markdownify | safe }}
+        
       </div>
-
     </li>
     {% endfor %}
     {% if special.content.storeUrl %}
