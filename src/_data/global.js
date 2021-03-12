@@ -9,5 +9,9 @@ module.exports = {
   getCurrentLanguage(pageUrl) {
     const language =  pageUrl == "/" ? "en" : pageUrl.substring(1, 3);
     return language;
+  },
+
+  formatFloatTwoDecimals(num) {
+    return (Math.round(num * 100) / 100).toFixed(2);
   }
 };

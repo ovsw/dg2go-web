@@ -24,22 +24,29 @@
           <div class="cluster-l">
             <div>
               <div class="mealsMenu__price color-accent">
-                ${{- item.dish.priceNo }} {{ item.dish.priceMeasure -}}
+                {% set formattedPriceNo = global.formatFloatTwoDecimals(item.dish.priceNo) %}
+                ${{- formattedPriceNo }} {{ item.dish.priceMeasure -}}
               </div>
 
               <div>
+                {# foxy attribute values #}
+                {% set eventNameEncoded = special.content.name | encodeUri %}
                 {% set dishNameEncoded = item.dish.name | encodeUri %}
                 {% set dishId = item.dish.dishId.current %}
                 {% set dishDateFormatted = item.date | dateFilterYear %}
                 {% set dishDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
 
+                {# foxy attribute keys #}
                 {% set dishName %}{% foxyEncrypt 'name', item.dish.name, dishId %}{% endset %}
                 {% set dishCode %}{% foxyEncrypt 'code', dishId, dishId %}{% endset %}
                 {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
-                {# {% set dishPickup %}{% foxyEncrypt 'pickup', mealDateFormatted, dishId %}{% endset %} #}
+                {% set dishPickup %}{% foxyEncrypt 'pickup', dishDateFormatted, dishId %}{% endset %}
+                {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %}
+                {% set specialEvent %}{% foxyEncrypt 'event', special.content.name, dishId %}{% endset %}
+
 
                 <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
-                  href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}">
+                  href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch&{{specialEvent}}={{eventNameEncoded}}">
                   Order {{prodname}}<span class="visually-hidden">one {{item.dish.name}} for {{ item.dish.price }}</span></span>
                 </a>
               </div>
