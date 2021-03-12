@@ -29,7 +29,6 @@
 
 
 <div class=" [ wrapper auto-grid news-grid ]">
-
   {% set tagValues = {
     'food': '<span class="tag food">food</span>',
     'music': '<span class="tag music">music</span>',
@@ -39,29 +38,33 @@
 
   {% for special in specialsMenu.content.specials %}
 
-    {% set eventSubTitle %}
-      <strong>When:</strong> {{special.content.date | dateFilterYear}}, {{special.content.time}} <br />
-      <strong>Where:</strong> {{special.content.location}}
-    {% endset %}
+    {# exclude hidden specials from appearing on the public page #}
+    {% if showHiddenItems or (not special.content.hideFromCustomers) %}
+      
+      {% set eventSubTitle %}
+        <strong>When:</strong> {{special.content.date | dateFilterYear}}, {{special.content.time}} <br />
+        <strong>Where:</strong> {{special.content.location}}
+      {% endset %}
 
-    {% if (special.content.storeComingSoon) %}
-      {% set cardDescription = special.content.shortDescription + '<br/><br/> <span class="color-accent">' + special.content.storeComingSoon + '</span>'%}
-    {% else %}
-      {% set cardDescription = special.content.shortDescription %}
-    {% endif %}
+      {% if (special.content.storeComingSoon) %}
+        {% set cardDescription = special.content.shortDescription + '<br/><br/> <span class="color-accent">' + special.content.storeComingSoon + '</span>'%}
+      {% else %}
+        {% set cardDescription = special.content.shortDescription %}
+      {% endif %}
 
-    
-    {{ gridCard(
-      titile=special.content.name,
-      image=special.content.image,
-      alt=special.content.image.alt,
-      description = cardDescription,
-      titleHeadingLvl=3,
-      buttonText='See Details <span class="visually-hidden"> on the '+ special.content.name + '</span>',
-      buttonLink=special.content.slug.current,
-      button2Text='Order <span class="visually-hidden">'+ special.content.name + '</span> now',
-      button2Link=special.content.storeUrl
-    )}}
+      
+      {{ gridCard(
+        titile=special.content.name,
+        image=special.content.image,
+        alt=special.content.image.alt,
+        description = cardDescription,
+        titleHeadingLvl=3,
+        buttonText='See Details <span class="visually-hidden"> on the '+ special.content.name + '</span>',
+        buttonLink=special.content.slug.current,
+        button2Text='Order <span class="visually-hidden">'+ special.content.name + '</span> now',
+        button2Link=special.content.storeUrl
+      )}}
+    {% endif %} 
   {% endfor %}
   </div>
 

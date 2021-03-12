@@ -8,12 +8,13 @@
 
 {% block seo %}
     {{seoData(
-      special.content.seoTitle,
-      special.content.seoDescription,
-      siteSettings.title,
-      siteSettings.description,
-      siteSettings.image,
-      special.content.image
+      pageSeoTitle=special.content.seoTitle,
+      pageSeoDescription=special.content.seoDescription,
+      defaultSeoTitle=siteSettings.title,
+      defaultSeoDescription=siteSettings.description,
+      defaultSeoImage=siteSettings.image,
+      seoImage=special.content.image,
+      noindex=noindex
       )}}
 {% endblock %}
 

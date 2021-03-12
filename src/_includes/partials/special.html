@@ -12,70 +12,74 @@
 
   <ul class="mealsMenu [ flow flow-space-900 ]" style="margin-top: 3rem;">
     {% for item in special.content.dishes %}
-    <li class="">
-      {# <h3>{{- item.date | dateFilter -}}</h3> #}
-      <div class="flow flow-space-400">
-      
-        <div class="mealsMenu__wrapper">
-          <div class="mealsMenu__itemName">
-            {{item.dish.name}}
-          </div>
-          <div class="mealsMenu__dots"></div>
-          <div class="cluster-l">
-            <div>
-              <div class="mealsMenu__price color-accent">
-                {% set formattedPriceNo = global.formatFloatTwoDecimals(item.dish.priceNo) %}
-                ${{- formattedPriceNo }} {{ item.dish.priceMeasure -}}
-              </div>
 
+      <li class="">
+        {# <h3>{{- item.date | dateFilter -}}</h3> #}
+        <div class="flow flow-space-400">
+        
+          <div class="mealsMenu__wrapper">
+            <div class="mealsMenu__itemName">
+              {{item.dish.name}}
+            </div>
+            <div class="mealsMenu__dots"></div>
+            <div class="cluster-l">
               <div>
-                {# foxy attribute values #}
-                {% set eventNameEncoded = special.content.name | encodeUri %}
-                {% set dishNameEncoded = item.dish.name | encodeUri %}
-                {% set dishId = item.dish.dishId.current %}
-                {% set dishDateFormatted = item.date | dateFilterYear %}
-                {% set dishDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
+                <div class="mealsMenu__price color-accent">
+                  {% set formattedPriceNo = global.formatFloatTwoDecimals(item.dish.priceNo) %}
+                  ${{- formattedPriceNo }} {{ item.dish.priceMeasure -}}
+                </div>
 
-                {# foxy attribute keys #}
-                {% set dishName %}{% foxyEncrypt 'name', item.dish.name, dishId %}{% endset %}
-                {% set dishCode %}{% foxyEncrypt 'code', dishId, dishId %}{% endset %}
-                {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
-                {% set dishPickup %}{% foxyEncrypt 'pickup', dishDateFormatted, dishId %}{% endset %}
-                {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %}
-                {% set specialEvent %}{% foxyEncrypt 'event', special.content.name, dishId %}{% endset %}
+                <div>
+                  {# foxy attribute values #}
+                  {% set eventNameEncoded = special.content.name | encodeUri %}
+                  {% set dishNameEncoded = item.dish.name | encodeUri %}
+                  {% set dishId = item.dish.dishId.current %}
+                  {% set dishDateFormatted = item.date | dateFilterYear %}
+                  {% set dishDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
+
+                  {# foxy attribute keys #}
+                  {% set dishName %}{% foxyEncrypt 'name', item.dish.name, dishId %}{% endset %}
+                  {% set dishCode %}{% foxyEncrypt 'code', dishId, dishId %}{% endset %}
+                  {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
+                  {% set dishPickup %}{% foxyEncrypt 'pickup', dishDateFormatted, dishId %}{% endset %}
+                  {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %}
+                  {% set specialEvent %}{% foxyEncrypt 'event', special.content.name, dishId %}{% endset %}
 
 
-                <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
-                  href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch&{{specialEvent}}={{eventNameEncoded}}">
-                  Order {{prodname}}<span class="visually-hidden">one {{item.dish.name}} for {{ item.dish.price }}</span></span>
-                </a>
+                  <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
+                    href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch&{{specialEvent}}={{eventNameEncoded}}">
+                    Order {{prodname}}<span class="visually-hidden">one {{item.dish.name}} for {{ item.dish.price }}</span></span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
+
+          
+
+          <div class="mealsMenu__desc">
+            <p><strong class="color-accent">Pickup Date:</strong> {{item.pickUpDate}}</p>
+            <p><strong  class="color-accent">Preorder Deadline:</strong> {{item.preOrderDeadline}}</p>
+            <br/>
+            {{ item.dish.description | blocksToMarkdown | markdownify | safe }}
+          </div>
+
+          
         </div>
-
-        
-
-        <div class="mealsMenu__desc">
-          <p><strong class="color-accent">Pickup Date:</strong> {{item.pickUpDate}}</p>
-          <p><strong  class="color-accent">Preorder Deadline:</strong> {{item.preOrderDeadline}}</p>
-          <br/>
-          {{ item.dish.description | blocksToMarkdown | markdownify | safe }}
-        </div>
-
-        
-      </div>
-    </li>
+      </li>
     {% endfor %}
+
+    {# old store (center edge) link #}
     {% if special.content.storeUrl %}
-    <a target="_blank" class="[ button ] [ button--colored-bg button--color-red ]" href="{{special.content.storeUrl}}">Preorder <span class="visually-hidden">{{special.content.name}}</span> Online Now</span></a>
+      <a target="_blank" class="[ button ] [ button--colored-bg button--color-red ]" href="{{special.content.storeUrl}}">Preorder <span class="visually-hidden">{{special.content.name}}</span> Online Now</span></a>
     {% elif (special.content.storeComingSoon) %}
-    <h2>{{special.content.storeComingSoon}}</h2>
-    <p>Please check back then!</p>
+      <h2>{{special.content.storeComingSoon}}</h2>
+      <p>Please check back then!</p>
     {% else %}
-    <h2>Coming Soon!</h2>
-    <p>Please check back soon here for a store link where you'll be able to pre-order this special.</p>
+      <h2>Coming Soon!</h2>
+      <p>Please check back soon here for a store link where you'll be able to pre-order this special.</p>
     {% endif %}
+
   </ul>
 
 {% endblock %}

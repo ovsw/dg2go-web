@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+#hidden pages used internally for placing late orders
+Disallow: /meals-internal-98y3u089u4he3p2uidd9-08jediqw
+Disallow: /specials-83290eh87d3e9023hu9d/*
+
 Sitemap: https://www.dg2gofood.com/sitemap.xml
