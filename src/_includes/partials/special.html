@@ -14,7 +14,6 @@
     {% for item in special.content.dishes %}
 
       <li class="">
-        {# <h3>{{- item.date | dateFilter -}}</h3> #}
         <div class="flow flow-space-400">
         
           <div class="mealsMenu__wrapper">
@@ -34,8 +33,8 @@
                   {% set eventNameEncoded = special.content.name | encodeUri %}
                   {% set dishNameEncoded = item.dish.name | encodeUri %}
                   {% set dishId = item.dish.dishId.current %}
-                  {% set dishDateFormatted = item.date | dateFilterYear %}
-                  {% set dishDateFormattedEncoded = item.date | dateFilterYear | encodeUri %}
+                  {% set dishDateFormatted = special.content.date | dateFilterYear %}
+                  {% set dishDateFormattedEncoded = special.content.date | dateFilterYear | encodeUri %}
 
                   {# foxy attribute keys #}
                   {% set dishName %}{% foxyEncrypt 'name', item.dish.name, dishId %}{% endset %}
