@@ -20,7 +20,11 @@ $btn-colors-all: (
   'white': 'light'
 );
 
-.button, #c-submit-button {
+.button {
+  font-size: get-size('350');
+  @include media-query('md') {
+    font-size: get-size('400');
+   } 
   @extend .radius;
 
   display: inline-block;
@@ -119,10 +123,5 @@ $btn-colors-all: (
   &[data-variant='ghost'] {
     background: transparent;
     color: get-color('primary');
-  }
-
-  &--small {
-    font-size: get-size('350');
-    padding: 12px 18px 9px 18px;
   }
 }
