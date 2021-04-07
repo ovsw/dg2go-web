@@ -2,7 +2,7 @@ const groq = require('groq')
 const client = require('../utils/sanityClient')
 module.exports =  async function() {
   const sanityResponse = await client.fetch(groq`
-  *[_id == "drafts.events"] {
+  *[_id == "events"] {
 	'events': content.eventsList[]->{
 			...,
         content {
