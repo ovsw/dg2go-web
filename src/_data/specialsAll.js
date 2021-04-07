@@ -5,7 +5,7 @@ const hasToken = !!client.config().token
 
 module.exports =  async function() {
   const sanityResponse = await client.fetch(groq`
-  *[_type == "special" && content.hideFromCustomers != true ]{
+  *[_type == "special"]{
     ...,
      content {
       ...,
