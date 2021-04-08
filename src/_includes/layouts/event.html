@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/page-header.html' import pageHeader %}
+{% from 'components/content-sections.html' import contentSections %}
+
+{% from 'components/seo-data.html' import seoData %}
+
+{% block seo %}
+    {{seoData(
+      pageSeoTitle=special.content.seoTitle,
+      pageSeoDescription=special.content.seoDescription,
+      defaultSeoTitle=siteSettings.title,
+      defaultSeoDescription=siteSettings.description,
+      defaultSeoImage=siteSettings.image,
+      seoImage=special.content.image,
+      noindex=noindex
+      )}}
+{% endblock %}
+
+{% block content %}
+
+{# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}
+
+{{pageHeader(title=roadEvent.content.name, image=roadEvent.content.image)}}
+
+<div class="specials">
+  {% include "partials/event.html" %}
+</div>
+
+{% endblock %}

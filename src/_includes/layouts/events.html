@@ -9,23 +9,25 @@
 
 {% block seo %}
     {{seoData(
-      roadEvents.content.seoTitle,
-      roadEvents.content.seoDescription,
+      roadEventsPage.content.seoTitle,
+      roadEventsPage.content.seoDescription,
       siteSettings.title,
       siteSettings.description,
       siteSettings.image,
-      roadEvents.content.image
+      roadEventsPage.content.image
       )}}
 {% endblock %}
 
-{# <script>console.log('debug', {{mealsMenu.content | dump | safe}})</script> #}
 
 {% block content %}
+{# <script>console.log('debug', {{roadEvents | dump | safe}})</script> #}
 
-  {{pageHeader(title=title, image=roadEvents.content.image)}}
 
-  {{contentSections(roadEvents.content.topSections)}}
 
+  {{pageHeader(title=title, image=roadEventsPage.content.image)}}
+
+  {{contentSections(roadEventsPage.content.topSections)}}
+  
   <div class=" [ wrapper auto-grid news-grid ]">
 
   {% set tagValues = {
@@ -35,42 +37,45 @@
     'hiring': '<span class="tag hiring">hiring</span>'
   }%}
 
-  {% for event in roadEvents.content.eventsList %}
+  {% for event in roadEventsPage.content.eventsList %}
 
-    {# {% set tags = [] %}
+    {% if showHiddenItems or (not event.content.hideFromCustomers) %}
 
-    {% for tagName, tagValue in tagValues %}
-      {% if tagName in event.content.tags %}
-        {% set tags = (tags.push(tagValue),tags) %}
-      {% endif %}
-    {% endfor %} #}
+      {% set eventSubTitle %}
+        <strong>When:</strong> {{event.content.date | dateFilterYear}}, {{event.content.time}} <br />
+        <strong>Where:</strong> {{event.content.location}} <br />
+        <strong class="color-accent">Orders due by:</strong> {{event.content.ordersDue}}
+      {% endset %}
 
-      {# eyebrow=tags | join('<span class="visually-hidden">, </span> '), #}
+      {% set eventDescription %}
+        {{event.content.menu | blocksToMarkdown | markdownify | safe}}
+      {% endset %}
 
-    {% set eventSubTitle %}
-      <strong>When:</strong> {{event.content.date | dateFilterYear}}, {{event.content.time}} <br />
-      <strong>Where:</strong> {{event.content.location}} <br />
-      <strong class="color-accent">Orders due by:</strong> {{event.content.ordersDue}}
-    {% endset %}
+      {% set cardURL %}
+      {% if event.content.foxyCart -%}
+        /on-the-road/{{event.content.slug.current}}/
+      {%- else -%}
+      {{event.content.storeUrl}}
+      {%- endif %}
+      {% endset%}
 
-    {% set eventDescription %}
-      {{event.content.menu | blocksToMarkdown | markdownify | safe}}
-    {% endset %}
-    
-    {{ gridCard(
-      titile=event.content.name,
-      image=event.content.image,
-      subtitle=eventSubTitle,
-      description = eventDescription,
-      alt=event.content.image.alt,
-      titleHeadingLvl=3,
-      buttonText='<span class="visually-hidden">place</span> Order online <span class="visually-hidden"> for pickup at'+ event.content.name + '</span>',
-      buttonLink=event.content.storeUrl,
-      newWindow=true
-    )}}
+
+      {{ gridCard(
+        titile=event.content.name,
+        image=event.content.image,
+        subtitle=eventSubTitle,
+        description = eventDescription,
+        alt=event.content.image.alt,
+        titleHeadingLvl=3,
+        buttonText='<span class="visually-hidden">place</span> Order online <span class="visually-hidden"> for pickup at'+ event.content.name + '</span>',
+        buttonLink=cardURL,
+        newWindow=true
+      )}}
+
+    {% endif %}
   {% endfor %}
   </div>
 
-  {{contentSections(roadEvents.content.bottomSections)}}
+  {{contentSections(roadEventsPage.content.bottomSections)}}
 
 {% endblock %}

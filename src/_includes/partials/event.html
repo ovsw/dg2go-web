@@ -4,22 +4,27 @@
 {% block content %}
 
  
-  <h3 class="subtitle">{{special.content.shortDescription}}</h3>
+  <h2 class="gap-bottom-600">Event Details</h2>
+
+  <strong>When:</strong> {{roadEvent.content.date | dateFilterYear}}, {{roadEvent.content.time}} <br />
+  <strong>Where:</strong> {{roadEvent.content.location}} <br />
+  <strong class="color-accent">Orders due by:</strong> {{roadEvent.content.ordersDue}}
 
   <div class="[ flow text-400 ]">
-    {{special.content.description | blocksToMarkdown | markdownify | safe }}
+    {{roadEvent.content.description | blocksToMarkdown | markdownify | safe }}
   </div>
 
   <ul class="mealsMenu [ flow flow-space-900 ]" style="margin-top: 3rem;">
-    {% for item in special.content.dishes %}
-
-      {% set dishName = item.dish.name | trim %}
+    {% for item in roadEvent.content.menuFoxy %}
 
       <li class="">
         <div class="flow flow-space-400">
+
+        {% set dishName = item.dish.name | trim %}
+        {% set eventName = roadEvent.content.name| trim %}
         
           <div class="mealsMenu__wrapper">
-            <div class="mealsMenu__itemName"  style="padding-top: 0.5rem;">
+            <div class="mealsMenu__itemName" style="padding-top: 0.5rem;">
               {{dishName}}
             </div>
             <div class="mealsMenu__dots"></div>
@@ -32,11 +37,11 @@
 
                 <div>
                   {# foxy attribute values #}
-                  {% set eventNameEncoded = special.content.name | encodeUri %}
+                  {% set eventNameEncoded = eventName | encodeUri %}
                   {% set dishNameEncoded = dishName | encodeUri %}
                   {% set dishId = item.dish.dishId.current %}
-                  {% set dishDateFormatted = special.content.date | dateFilterYear %}
-                  {% set dishDateFormattedEncoded = special.content.date | dateFilterYear | encodeUri %}
+                  {% set dishDateFormatted = roadEvent.content.date | dateFilterYear %}
+                  {% set dishDateFormattedEncoded = roadEvent.content.date | dateFilterYear | encodeUri %}
 
                   {# foxy attribute keys #}
                   {% set dishName %}{% foxyEncrypt 'name', dishName, dishId %}{% endset %}
@@ -44,11 +49,11 @@
                   {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
                   {% set dishPickup %}{% foxyEncrypt 'pickup', dishDateFormatted, dishId %}{% endset %}
                   {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %}
-                  {# {% set specialEvent %}{% foxyEncrypt 'event', special.content.name, dishId %}{% endset %} #}
+                  {% set dishEvent %}{% foxyEncrypt 'event', eventName, dishId %}{% endset %}
 
 
                   <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
-                    href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch">
+                    href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch&{{ dishEvent }}={{ eventNameEncoded }}">
                     Order {{prodname}}<span class="visually-hidden">one {{dishName}} for {{ item.dish.price }}</span></span>
                   </a>
                 </div>
@@ -59,9 +64,9 @@
           
 
           <div class="mealsMenu__desc">
-            <p><strong class="color-accent">Pickup Date:</strong> {{item.pickUpDate}}</p>
+            {# <p><strong class="color-accent">Pickup Date:</strong> {{item.pickUpDate}}</p>
             <p><strong  class="color-accent">Preorder Deadline:</strong> {{item.preOrderDeadline}}</p>
-            <br/>
+            <br/> #}
             {{ item.dish.description | blocksToMarkdown | markdownify | safe }}
           </div>
 
