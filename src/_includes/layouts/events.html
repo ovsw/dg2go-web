@@ -42,6 +42,7 @@
     {% if showHiddenItems or (not event.content.hideFromCustomers) %}
 
       {% set eventSubTitle %}
+        {# <strong>hide:</strong>: {{event.hideFromCustomers}} #}
         <strong>When:</strong> {{event.content.date | dateFilterYear}}, {{event.content.time}} <br />
         <strong>Where:</strong> {{event.content.location}} <br />
         <strong class="color-accent">Orders due by:</strong> {{event.content.ordersDue}}
