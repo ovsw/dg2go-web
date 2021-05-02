@@ -4,6 +4,17 @@
 
 {% from 'components/card.html' import card %}
 
+{# provide seo tags to base template #}
+{% block seo %}
+      <title>DelGrosso's DG2GO</title>
+      <meta name="description" content="{{seoDescription}}">
+
+      <meta property="og:title" content="DG2Go allows customers to enjoy some of their favorite DelGrosso’s Park Food even when the Park is not open."/>
+      <meta property="og:url" content="https://www.dg2gofood.com/" />
+      <meta property="og:description" content="DG2Go allows customers to enjoy some of their favorite DelGrosso’s Park Food even when the Park is not open." />
+      <meta property="og:type" content="website" />
+{% endblock %}
+
 {% block content %}
 
   {% include "partials/hero.html" %}
