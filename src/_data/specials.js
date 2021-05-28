@@ -11,13 +11,13 @@ module.exports =  async function() {
       ...,
       'seoTitle': coalesce( seo.title , name),
       'seoDescription': coalesce( seo.description , shortDescription),
-          dishes[] {
-            ...,
-            dish->{
-              ...
-            }
-          }
-     }
+      dishes[] {
+        ...,
+        dish->{
+          ...
+        }
+      }
+    }
   }
   `).catch(err => console.error(err))
 
