@@ -3,6 +3,7 @@
 
 {% block content %}
 
+<script>console.log({{ special | dump | safe }})</script>
  
   <h3 class="subtitle">{{special.content.shortDescription}}</h3>
 
@@ -11,6 +12,7 @@
   </div>
 
   <ul class="mealsMenu [ flow flow-space-900 ]" style="margin-top: 3rem;">
+  
     {% for item in special.content.dishes %}
 
       {% set dishName = item.dish.name | trim %}
@@ -47,10 +49,12 @@
                   {# {% set specialEvent %}{% foxyEncrypt 'event', special.content.name, dishId %}{% endset %} #}
 
 
+                  {% if special.content.salesStarted %}
                   <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
                     href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch">
                     Order {{prodname}}<span class="visually-hidden">one {{dishName}} for {{ item.dish.price }}</span></span>
                   </a>
+                  {% endif %}
                 </div>
               </div>
             </div>

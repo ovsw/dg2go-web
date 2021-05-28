@@ -46,24 +46,31 @@
         <strong>Where:</strong> {{special.content.location}}
       {% endset %}
 
-      {% if (special.content.storeComingSoon) %}
+      {# {% if (special.content.storeComingSoon) %}
         {% set cardDescription = special.content.shortDescription + '<br/><br/> <span class="color-accent">' + special.content.storeComingSoon + '</span>'%}
       {% else %}
         {% set cardDescription = special.content.shortDescription %}
+      {% endif %} #}
+    
+     {% if (special.content.salesStarted and special.content.dishes and special.content.dishes.length > 0) %}
+        {% set buttonTextCustom = 'Order' %}
+      {% elseif (special.content.dishes and special.content.dishes.length > 0) %}
+        {% set buttonTextCustom = 'See Menu' %}
+      {% else %}
+        {% set buttonTextCustom = 'See Details' %}
       {% endif %}
-
-      
+ 
       {{ gridCard(
         titile=special.content.name,
         image=special.content.image,
         alt=special.content.image.alt,
-        description = cardDescription,
+        description = special.content.shortDescription,
         titleHeadingLvl=3,
-        buttonText='See Details <span class="visually-hidden"> on the '+ special.content.name + '</span>',
-        buttonLink=special.content.slug.current,
-        button2Text='Order <span class="visually-hidden">'+ special.content.name + '</span> now',
-        button2Link=special.content.storeUrl
+        buttonText= buttonTextCustom + ' <span class="visually-hidden">the '+ special.content.name + '</span>',
+        buttonLink=special.content.slug.current
+       
       )}}
+      
     {% endif %} 
   {% endfor %}
   </div>
