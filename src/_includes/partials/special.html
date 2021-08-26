@@ -37,8 +37,8 @@
                   {% set eventNameEncoded = special.content.name | encodeUri %}
                   {% set dishNameEncoded = dishName | encodeUri %}
                   {% set dishId = item.dish.dishId.current %}
-                  {% set dishDateFormatted = special.content.date | dateFilterYear %}
-                  {% set dishDateFormattedEncoded = special.content.date | dateFilterYear | encodeUri %}
+                  {% set dishDateFormatted = item.pickUpDate | trim %}
+                  {% set dishDateFormattedEncoded = dishDateFormatted | encodeUri %}
 
                   {# foxy attribute keys #}
                   {% set dishName %}{% foxyEncrypt 'name', dishName, dishId %}{% endset %}
