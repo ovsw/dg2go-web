@@ -45,14 +45,15 @@
                   {% set dishCode %}{% foxyEncrypt 'code', dishId, dishId %}{% endset %}
                   {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
                   {% set dishPickup %}{% foxyEncrypt 'pickup', dishDateFormatted, dishId %}{% endset %}
-                  {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %}
+                  {# {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %} #}
+                  {% set dishTimeLunch %}{% foxyEncrypt 'meal', special.content.pickupTimeOfDay, dishId %}{% endset %}
                   {# {% set specialEvent %}{% foxyEncrypt 'event', special.content.name, dishId %}{% endset %} #}
 
 
                   {% if special.content.salesStarted %}
                   <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
-                    href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch">
-                    Order {{prodname}}<span class="visually-hidden">one {{dishName}} for {{ item.dish.price }}</span></span>
+                    href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}={{special.content.pickupTimeOfDay}}">
+                    Order <span class="visually-hidden">one {{dishName}} for {{ item.dish.price }}</span></span>
                   </a>
                   {% endif %}
                 </div>
