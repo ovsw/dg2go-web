@@ -14,8 +14,8 @@
   <ul class="mealsMenu [ flow flow-space-900 ]" style="margin-top: 3rem;">
   
     {% for item in special.content.dishes %}
-    
-      {% if item.dish.hidden != true %}
+
+      {% if item.hidden != true %}
       {% set dishName = item.dish.name | trim %}
 
       <li class="">
