@@ -16,7 +16,6 @@ module.exports =  async function() {
         "hidden": coalesce(hidden, false),
         dish->{
           ...,
-          hidden: 
         }
       }
     }
