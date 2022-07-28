@@ -13,8 +13,10 @@ module.exports =  async function() {
       'seoDescription': coalesce( seo.description , shortDescription),
       dishes[] {
         ...,
+        "hidden": coalesce(hidden, false),
         dish->{
-          ...
+          ...,
+          hidden: 
         }
       }
     }
