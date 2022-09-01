@@ -1,5 +1,5 @@
 ---
-layout: layouts/special
+layout: 'layouts/special-internal-nohide.html'
 tags:
   - mySpecials
 pagination:

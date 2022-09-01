@@ -1,5 +1,5 @@
 ---
-layout: layouts/special
+layout: 'layouts/special.html'
 tags:
   - mySpecials
 pagination:
