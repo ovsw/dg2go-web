@@ -15,7 +15,7 @@
   
     {% for item in special.content.dishes %}
 
-      {% if item.hidden != true %}
+      {% if item.hidden != true or internal == true %}
       {% set dishName = item.dish.name | trim %}
 
       <li class="">
