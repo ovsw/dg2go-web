@@ -9,6 +9,7 @@
   <strong>When:</strong> {{roadEvent.content.date | dateFilterYear}}, {{roadEvent.content.time}} <br />
   <strong>Where:</strong> {{roadEvent.content.location}} <br />
   <strong class="color-accent">Orders due by:</strong> {{roadEvent.content.ordersDue}}
+aaaaaaaaaaaaa{{  roadEvent.content.pickupTimeOfDay }} aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
   <div class="[ flow text-400 ]">
     {{roadEvent.content.description | blocksToMarkdown | markdownify | safe }}
@@ -48,12 +49,13 @@
                   {% set dishCode %}{% foxyEncrypt 'code', dishId, dishId %}{% endset %}
                   {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
                   {% set dishPickup %}{% foxyEncrypt 'pickup', dishDateFormatted, dishId %}{% endset %}
-                  {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %}
+                  {# {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %} #}
+                  {% set dishTime %}{% foxyEncrypt 'meal', roadEvent.content.pickupTimeOfDay, dishId %}{% endset %}
                   {% set dishEvent %}{% foxyEncrypt 'event', eventName, dishId %}{% endset %}
 
 
                   <a class="[ button ] [ button--colored-bg button--color-green button--small ]" 
-                    href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTimeLunch }}=lunch&{{ dishEvent }}={{ eventNameEncoded }}">
+                    href="https://dg2go.foxycart.com/cart?{{ dishName }}={{ dishNameEncoded }}&{{ dishCode }}={{ dishId }}&{{ dishPrice }}={{ item.dish.priceNo }}&{{ dishPickup }}={{ dishDateFormattedEncoded }}&{{ dishTime }}={{roadEvent.content.pickupTimeOfDay}}&{{ dishEvent }}={{ eventNameEncoded }}">
                     Order {{prodname}}<span class="visually-hidden">one {{dishName}} for {{ item.dish.price }}</span></span>
                   </a>
                 </div>
