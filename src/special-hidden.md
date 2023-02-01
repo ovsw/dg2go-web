@@ -1,5 +1,5 @@
 ---
-layout: layouts/special
+layout: 'layouts/special.html'
 tags:
   - mySpecials
 pagination:
@@ -10,4 +10,5 @@ pagination:
 permalink: "/specials-83290eh87d3e9023hu9d/{{ special.content.slug.current }}/index.html"
 eleventyExcludeFromCollections: true
 noindex: true
+internal: true
 ---
