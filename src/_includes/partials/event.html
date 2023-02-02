@@ -9,7 +9,6 @@
   <strong>When:</strong> {{roadEvent.content.date | dateFilterYear}}, {{roadEvent.content.time}} <br />
   <strong>Where:</strong> {{roadEvent.content.location}} <br />
   <strong class="color-accent">Orders due by:</strong> {{roadEvent.content.ordersDue}}
-aaaaaaaaaaaaa{{  roadEvent.content.pickupTimeOfDay }} aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
   <div class="[ flow text-400 ]">
     {{roadEvent.content.description | blocksToMarkdown | markdownify | safe }}
@@ -50,6 +49,7 @@ aaaaaaaaaaaaa{{  roadEvent.content.pickupTimeOfDay }} aaaaaaaaaaaaaaaaaaaaaaaaaa
                   {% set dishPrice %}{% foxyEncrypt 'price', item.dish.priceNo, dishId %}{% endset %}
                   {% set dishPickup %}{% foxyEncrypt 'pickup', dishDateFormatted, dishId %}{% endset %}
                   {# {% set dishTimeLunch %}{% foxyEncrypt 'meal', 'lunch', dishId %}{% endset %} #}
+
                   {% set dishTime %}{% foxyEncrypt 'meal', roadEvent.content.pickupTimeOfDay, dishId %}{% endset %}
                   {% set dishEvent %}{% foxyEncrypt 'event', eventName, dishId %}{% endset %}
 
