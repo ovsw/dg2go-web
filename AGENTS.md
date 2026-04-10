@@ -1,0 +1,20 @@
+# DG2GO Web
+
+- This is an Eleventy 0.11 + Nunjucks + Gulp static site, not a React/Next app. Most page behavior is build-time, driven by `src/*.md`, `src/_data/*.js`, and `src/_includes/**`.
+- Source of truth is `src/**`. Treat `dist/` and `src/_includes/css/` as generated output. `gulp` compiles root SCSS files from `src/scss/*.scss`; Eleventy then reads the generated critical CSS from `src/_includes/css/`.
+- If you add a new stylesheet that must be inlined, update `criticalStyles` in [`gulp-tasks/sass.js`](/Users/ovs/Work/Dev/dg2go/dg2go-web/gulp-tasks/sass.js). Otherwise it will go to `dist/css` and not be available to `{% include "css/*.css" %}` in layouts.
+- Main workflows:
+  - `npm start`: runs `gulp` once, then `gulp watch` and `eleventy --serve`.
+  - `npm run production`: production Gulp build plus Eleventy output.
+- Current release workflow: `main` is production, `staging` is the temporary pre-release integration branch tied to Netlify QA. For this initiative, branch feature work from `staging`, merge back into `staging`, and merge `staging` into `main` only after client QA passes.
+- Sanity data is fetched at build time from `src/_data/*.js`. Project/dataset come from [`client-config.js`](/Users/ovs/Work/Dev/dg2go/dg2go-web/client-config.js), which currently falls back to hard-coded defaults (`y6e2eewm` / `production`) when env vars are missing. Env is loaded from `.env.${NODE_ENV || "development"}` in [`src/utils/sanityClient.js`](/Users/ovs/Work/Dev/dg2go/dg2go-web/src/utils/sanityClient.js).
+- `SANITY_READ_TOKEN` changes behavior: when present, several collections run `overlayDrafts(...)`, so draft docs replace published ones in builds. If a content discrepancy only happens locally, check whether a token is loaded.
+- Netlify currently only needs `FOXYCART_API_KEY` to build production behavior. Sanity env vars are optional in this repo unless you want to override the fallback project/dataset or enable authenticated reads.
+- Public vs internal content is split intentionally:
+  - Public specials/events use filtered data sources like `specials.js`.
+  - Internal/hidden listings use special routes such as `/specials-83290eh87d3e9023hu9d/`, `/on-the-road-43985436457/`, and the meals internal page. Do not rename these permalinks casually; they are likely shared operational URLs.
+- Dynamic pages are created by Eleventy pagination files, not by app routing:
+  - [`src/page.md`](/Users/ovs/Work/Dev/dg2go/dg2go-web/src/page.md) for generic Sanity pages.
+  - [`src/special.md`](/Users/ovs/Work/Dev/dg2go/dg2go-web/src/special.md) for individual specials.
+  - [`src/on-the-road-event.md`](/Users/ovs/Work/Dev/dg2go/dg2go-web/src/on-the-road-event.md) for individual events.
+- Ordering links are fragile. FoxyCart URLs in templates depend on the `foxyEncrypt` shortcode in [`.eleventy.js`](/Users/ovs/Work/Dev/dg2go/dg2go-web/.eleventy.js) and `FOXYCART_API_KEY`. Changes to item IDs, encoded attributes, or meal/event date formatting can silently break checkout.
