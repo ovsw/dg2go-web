@@ -2,6 +2,9 @@
   command = "npm run production"
   publish = "dist"
 
+[build.environment]
+  PYTHON_VERSION = "3.12.11"
+
 [[redirects]]
   from = "https://dg2go.netlify.app/*"
   to = "https://www.dg2gofood.com/:splat"
