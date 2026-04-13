@@ -16,3 +16,5 @@ src/_includes/css
 
 # credentials and tokens
 .env.development
+.env.production
+.env.local

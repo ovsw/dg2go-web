@@ -149,7 +149,9 @@ module.exports = config => {
 
   config.addShortcode('foxyEncrypt', (attrName, attrValue, productCode) => {
     const apiKey = process.env.FOXYCART_API_KEY
-    const encodingval = encodeURIComponent(productCode + attrName + attrValue)
+    if (!apiKey) {
+      throw new Error('FOXYCART_API_KEY is required to generate signed ordering links.')
+    }
     const concatval = productCode + attrName + attrValue
     return attrName + '||' + CryptoJS.HmacSHA256(concatval, apiKey)
     // let out = CryptoJS.HmacSHA256(string, apiKey)
