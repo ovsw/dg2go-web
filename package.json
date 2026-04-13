@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": ".eleventy.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
-    "start": "npx gulp && concurrently \"npx gulp watch\" \"npx eleventy --serve\"",
-    "production": "NODE_ENV=production npx gulp && NODE_ENV=production npx eleventy",
-    "production-win": "SET NODE_ENV=production & npx gulp && SET NODE_ENV=production & npx eleventy"
+    "start": "gulp && concurrently \"gulp watch\" \"eleventy --serve\"",
+    "build": "NODE_ENV=production gulp && NODE_ENV=production eleventy",
+    "production": "npm run build",
+    "production-win": "SET NODE_ENV=production & gulp && SET NODE_ENV=production & eleventy",
+    "lint": "eslint --no-ignore .eleventy.js client-config.js gulpfile.js \"gulp-tasks/**/*.js\" \"src/_data/**/*.js\" \"src/js/**/*.js\" \"src/utils/**/*.js\"",
+    "check": "npm run lint && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +32,7 @@
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-imagemin": "^7.1.0",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^5.1.0",
     "html-minifier": "^4.0.0",
     "markdown-it": "^11.0.1",
     "markdown-it-anchor": "^6.0.0",

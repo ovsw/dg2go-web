@@ -1,7 +1,14 @@
 {
   "env": {
-      "browser": true,
-      "es6": true
+    "browser": true,
+    "es2021": true,
+    "node": true
   },
-  "plugins": [ "html" ]
+  "extends": ["eslint:recommended"],
+  "plugins": ["html"],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "script"
+  },
+  "ignorePatterns": ["dist/", "node_modules/", "src/_includes/css/"]
 }
