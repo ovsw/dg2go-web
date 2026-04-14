@@ -1,0 +1,314 @@
+{% extends "layouts/base.html" %}
+{% set pageCriticalStyles = ['css/page.css'] %}
+
+{% from 'components/page-header.html' import pageHeader %}
+{% from 'components/seo-data.html' import seoData %}
+{% from 'components/content-sections.html' import contentSections %}
+
+{% set shirtConfig = shirtConfig or summerThunderShirts %}
+{% set productImages = shirtConfig.images or [] %}
+{% set hasImages = productImages.length %}
+{% set initialImage = hasImages and productImages[0] or null %}
+{% set shirtConfigClientData = {
+  closeAt: shirtConfig.closeAt,
+  initialClosed: shirtConfig.isClosed,
+  employeeLocations: shirtConfig.employeeLocations,
+  showEmployeeLocation: shirtConfig.showEmployeeLocation,
+  sizeGroups: shirtConfig.sizeGroups,
+  quantity: shirtConfig.quantity,
+  variants: shirtConfig.variants,
+  galleryImages: productImages
+} %}
+
+{% block seo %}
+  {{ seoData(
+    shirtConfig.seo.title or shirtConfig.title,
+    shirtConfig.seo.description or shirtConfig.productName ~ ' employee ordering page.',
+    siteSettings.title,
+    siteSettings.description,
+    siteSettings.image,
+    shirtConfig.seo.image or shirtConfig.image,
+    noindex=noindex
+  ) }}
+{% endblock %}
+
+{% block content %}
+<div class="narrow">
+  {{ pageHeader(title=shirtConfig.title, image=shirtConfig.image) }}
+</div>
+
+<section class="tShirtProductSection [ gap-top-600 md:gap-top-xl ]">
+  <div class="wrapper">
+    <script id="summer-thunder-t-shirt-config" type="application/json">{{ shirtConfigClientData | dump | safe }}</script>
+    <div
+      class="tShirtProduct flow flow-space-700"
+      x-data="summerThunderTShirtProduct()"
+      x-init="init()"
+    >
+      <div class="tShirtProduct__top">
+        {% if hasImages %}
+        <div class="tShirtProduct__gallery">
+          <figure class="tShirtProduct__galleryFrame">
+            <img
+              class="tShirtProduct__galleryImage"
+              src="{{ initialImage.src }}"
+              alt="{{ initialImage.alt }}"
+              x-bind:class="{ 'tShirtProduct__galleryImage--cover': activeImage.cover }"
+              x-bind:src="activeImage.src"
+              x-bind:alt="activeImage.alt"
+              loading="eager"
+            >
+          </figure>
+
+          {% if productImages.length > 1 %}
+          <div class="tShirtProduct__thumbList" role="list" aria-label="Product image gallery">
+            {% for image in productImages %}
+            <button
+              class="tShirtProduct__thumb"
+              type="button"
+              @click="setActiveImage({{ loop.index0 }})"
+              x-bind:class="{ 'tShirtProduct__thumb--active': activeImageIndex === {{ loop.index0 }} }"
+              x-bind:aria-current="activeImageIndex === {{ loop.index0 }} ? 'true' : null"
+              x-bind:aria-pressed="activeImageIndex === {{ loop.index0 }}"
+              aria-label="Show {{ image.label }}"
+            >
+              <img
+                src="{{ image.thumbSrc }}"
+                alt=""
+                loading="lazy"
+              >
+              <span>{{ image.label }}</span>
+            </button>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="tShirtProduct__details flow flow-space-700">
+          <div class="tShirtProduct__summary flow flow-space-300">
+            <h2>{{ shirtConfig.productName }}</h2>
+            <p class="tShirtProduct__price">${{ shirtConfig.price }}</p>
+            <p>{{ shirtConfig.pickupCopy }}</p>
+            <p class="tShirtProduct__deadline">Orders close {{ shirtConfig.closeAtDisplay }}.</p>
+          </div>
+
+          <div class="tShirtProduct__card flow flow-space-500">
+            <div
+              class="tShirtProduct__status tShirtProduct__status--closed"
+              x-cloak
+              x-show="isClosed"
+            >
+              <strong>Orders closed.</strong> Shirt details remain here for reference, but new employee orders are no longer being accepted online.
+            </div>
+
+            <div
+              class="tShirtProduct__status tShirtProduct__status--open"
+              x-cloak
+              x-show="!isClosed"
+            >
+              Need multiple shirts? Add one combination to the cart, then return here and select another location or size.
+            </div>
+
+            {% if shirtConfig.showEmployeeLocation != false %}
+            <div class="tShirtProduct__field">
+              <label for="employee-location">Employee location</label>
+              <select
+                id="employee-location"
+                x-model="selectedLocation"
+                @change="markInteracted()"
+              >
+                <option value="">Select your location</option>
+                <template x-for="location in employeeLocations" :key="location">
+                  <option :value="location" x-text="location"></option>
+                </template>
+              </select>
+            </div>
+            {% endif %}
+
+            <fieldset class="tShirtProduct__sizeRow">
+              <legend>Size</legend>
+              <div class="tShirtProduct__field">
+                <label for="shirt-category">Size</label>
+                <select
+                  id="shirt-category"
+                  x-model="selectedSizeGroup"
+                  @change="markInteracted()"
+                  @change="resetSize()"
+                >
+                  <option value="">Category</option>
+                  <option value="adult">Adult</option>
+                  <option value="child">Child</option>
+                  <option value="youth">Youth</option>
+                </select>
+              </div>
+
+              <div class="tShirtProduct__field">
+                <label class="visually-hidden" for="shirt-size">Specific size</label>
+                <select
+                  id="shirt-size"
+                  x-model="selectedSize"
+                  @change="markInteracted()"
+                  :disabled="!selectedSizeGroup"
+                >
+                  <option value="">Select a size</option>
+                  <template x-for="size in availableSizes" :key="size">
+                    <option :value="size" x-text="size"></option>
+                  </template>
+                </select>
+              </div>
+            </fieldset>
+
+            <div class="tShirtProduct__actionRow">
+              <div class="tShirtProduct__field tShirtProduct__field--quantity">
+                <label for="shirt-quantity">Quantity</label>
+                <input
+                  id="shirt-quantity"
+                  type="number"
+                  min="{{ shirtConfig.quantity.min }}"
+                  max="{{ shirtConfig.quantity.max }}"
+                  step="1"
+                  inputmode="numeric"
+                  x-model.number="quantity"
+                  @input="markInteracted()"
+                >
+              </div>
+
+              <a
+                class="[ button ] [ button--colored-bg button--color-green ] tShirtProduct__cta"
+                x-bind:class="{ 'tShirtProduct__cta--disabled': !canOrder }"
+                x-bind:href="canOrder ? cartUrl : null"
+                x-bind:aria-disabled="!canOrder"
+                x-bind:tabindex="canOrder ? 0 : -1"
+                @click.prevent="handleClick($event)"
+              >
+                <span x-show="!isClosed">Add T-Shirt To Cart</span>
+                <span x-show="isClosed">Ordering Closed</span>
+              </a>
+            </div>
+
+            <p
+              class="tShirtProduct__helper tShirtProduct__helper--alert"
+              x-cloak
+              x-show="!isClosed && hasInteracted && !selectionComplete"
+            >
+              Complete all required selections to enable ordering.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if shirtConfig.pageBuilder and shirtConfig.pageBuilder.length %}
+  {{ contentSections(shirtConfig.pageBuilder) }}
+{% endif %}
+
+<script>
+  function summerThunderTShirtProduct() {
+    var configElement = document.getElementById('summer-thunder-t-shirt-config');
+    var config = configElement ? JSON.parse(configElement.textContent) : {
+      closeAt: '',
+      initialClosed: true,
+      employeeLocations: [],
+      showEmployeeLocation: true,
+      sizeGroups: {},
+      quantity: { min: 1, max: 1, params: {} },
+      variants: {},
+      galleryImages: []
+    };
+
+    return {
+      closeAt: config.closeAt,
+      isClosed: config.initialClosed,
+      employeeLocations: config.employeeLocations,
+      showEmployeeLocation: config.showEmployeeLocation !== false,
+      sizeGroups: config.sizeGroups,
+      quantityConfig: config.quantity,
+      variants: config.variants,
+      galleryImages: config.galleryImages || [],
+      activeImageIndex: 0,
+      selectedLocation: '',
+      selectedSizeGroup: '',
+      selectedSize: '',
+      quantity: config.quantity.min,
+      hasInteracted: false,
+      init() {
+        this.syncClosedState();
+      },
+      markInteracted() {
+        this.hasInteracted = true;
+      },
+      syncClosedState() {
+        this.isClosed = Date.now() >= Date.parse(this.closeAt);
+      },
+      resetSize() {
+        this.selectedSize = '';
+      },
+      setActiveImage(index) {
+        if (index < 0 || index >= this.galleryImages.length) {
+          return;
+        }
+
+        this.activeImageIndex = index;
+      },
+      get activeImage() {
+        return this.galleryImages[this.activeImageIndex] || {
+          src: '',
+          alt: '',
+          cover: false
+        };
+      },
+      get availableSizes() {
+        return this.sizeGroups[this.selectedSizeGroup] || [];
+      },
+      get selectionComplete() {
+        return Boolean(
+          (!this.showEmployeeLocation || this.selectedLocation) &&
+          this.selectedSizeGroup &&
+          this.selectedSize &&
+          Number.isInteger(this.quantity) &&
+          this.quantity >= this.quantityConfig.min &&
+          this.quantity <= this.quantityConfig.max
+        );
+      },
+      get selectedVariant() {
+        if (!this.selectionComplete) {
+          return null;
+        }
+
+        if (this.showEmployeeLocation) {
+          return this.variants[[this.selectedLocation, this.selectedSizeGroup, this.selectedSize].join('::')] || null;
+        }
+
+        return this.variants[[this.selectedSizeGroup, this.selectedSize].join('::')] || null;
+      },
+      get canOrder() {
+        return !this.isClosed && Boolean(this.selectedVariant);
+      },
+      get cartUrl() {
+        if (!this.selectedVariant) {
+          return null;
+        }
+
+        var quantityParam = this.quantityConfig.params[String(this.quantity)];
+
+        if (!quantityParam) {
+          return null;
+        }
+
+        return this.selectedVariant.cartUrl + '&' + quantityParam;
+      },
+      handleClick(event) {
+        this.syncClosedState();
+        this.markInteracted();
+
+        if (!this.canOrder) {
+          event.preventDefault();
+        }
+      }
+    };
+  }
+</script>
+{% endblock %}
