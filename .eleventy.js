@@ -1,7 +1,6 @@
 // following are required for portable text filter:
 const BlocksToMarkdown = require('@sanity/block-content-to-markdown')
 const { markdownToTxt } = require('markdown-to-txt')
-const CryptoJS = require("crypto-js")
 const sitemap = require("@quasibit/eleventy-plugin-sitemap")
 
 const client = require('./src/utils/sanityClient.js')
@@ -14,6 +13,7 @@ const dateFilterMeals = require('./src/filters/date-filter-meals.js')
 const dateFilterYear = require('./src/filters/date-filter-year.js')
 const w3DateFilter = require('./src/filters/w3-date-filter.js')
 const encodeUri = require('./src/filters/encode-uri.js')
+const { encryptFoxyAttribute } = require('./src/utils/foxy.js')
 
 // Transforms
 const htmlMinTransform = require('./src/transforms/html-min-transform.js')
@@ -148,14 +148,7 @@ module.exports = config => {
   })
 
   config.addShortcode('foxyEncrypt', (attrName, attrValue, productCode) => {
-    const apiKey = process.env.FOXYCART_API_KEY
-    if (!apiKey) {
-      throw new Error('FOXYCART_API_KEY is required to generate signed ordering links.')
-    }
-    const concatval = productCode + attrName + attrValue
-    return attrName + '||' + CryptoJS.HmacSHA256(concatval, apiKey)
-    // let out = CryptoJS.HmacSHA256(string, apiKey)
-    // return encodingval
+    return encryptFoxyAttribute(attrName, attrValue, productCode)
   })
 
   // ////////////////////////////////////
