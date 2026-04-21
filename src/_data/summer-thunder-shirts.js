@@ -68,13 +68,27 @@ function normalizePickUpDate(pickUpDate) {
   if (isoDateMatch) {
     const [, year, month, day] = isoDateMatch
     const normalizedDate = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 12))
-
-    return new Intl.DateTimeFormat('en-US', {
+    const dayOfMonth = Number(
+      new Intl.DateTimeFormat('en-US', {
+        day: 'numeric',
+        timeZone: 'America/New_York',
+      }).format(normalizedDate)
+    )
+    const monthYear = new Intl.DateTimeFormat('en-US', {
       month: 'long',
-      day: 'numeric',
       year: 'numeric',
       timeZone: 'America/New_York',
     }).format(normalizedDate)
+
+    let ordinalSuffix = 'th'
+
+    if (dayOfMonth % 100 < 11 || dayOfMonth % 100 > 13) {
+      if (dayOfMonth % 10 === 1) ordinalSuffix = 'st'
+      if (dayOfMonth % 10 === 2) ordinalSuffix = 'nd'
+      if (dayOfMonth % 10 === 3) ordinalSuffix = 'rd'
+    }
+
+    return `${dayOfMonth}${ordinalSuffix} of ${monthYear}`
   }
 
   return trimmedDate

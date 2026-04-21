@@ -49,12 +49,12 @@ function run() {
     showEmployeeLocation: false,
   })
 
-  assert.equal(configuredConfig.pickUpDate, 'June 10, 2026')
+  assert.equal(configuredConfig.pickUpDate, '10th of June 2026')
 
   const configuredVariant = configuredConfig.variants[Object.keys(configuredConfig.variants)[0]]
   const configuredParams = getQueryParams(configuredVariant.cartUrl)
 
-  assert.equal(findDecodedParamValue(configuredParams, 'June 10, 2026'), true)
+  assert.equal(findDecodedParamValue(configuredParams, '10th of June 2026'), true)
 
   console.log('buildTshirtProductConfig tests passed')
 }
