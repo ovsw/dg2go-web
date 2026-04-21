@@ -4,7 +4,7 @@ const overlayDrafts = require('./overlayDrafts')
 const urlFor = require('./imageUrl')
 const { buildFoxyCartUrl } = require('./foxy')
 const localShirtConfig = require('../_data/summer-thunder-shirts')
-const { buildSummerThunderShirtConfig } = require('../_data/summer-thunder-shirts')
+const { buildSummerThunderShirtConfig, normalizePickUpDate } = require('../_data/summer-thunder-shirts')
 
 const hasToken = !!client.config().token
 
@@ -52,21 +52,25 @@ function composeSizeValue(sizeGroup, size) {
   return `${sizeGroup}-${String(size).toLowerCase().replace(/[^a-z0-9]+/g, '')}`
 }
 
-function buildPublicVariants(variants) {
+function buildPublicVariants(variants, shirtConfig) {
   return Object.values(variants).reduce((acc, variant) => {
     const key = [variant.sizeGroup, variant.size].join('::')
 
     if (!acc[key]) {
       const attributes = {
-        name: localShirtConfig.productName,
-        code: localShirtConfig.productCode,
-        price: localShirtConfig.price,
+        name: shirtConfig.productName,
+        code: shirtConfig.productCode,
+        price: shirtConfig.price,
         size: composeSizeValue(variant.sizeGroup, variant.size),
+      }
+
+      if (shirtConfig.pickUpDate) {
+        attributes.pickup = shirtConfig.pickUpDate
       }
 
       acc[key] = {
         ...variant,
-        cartUrl: buildFoxyCartUrl(localShirtConfig.productCode, attributes),
+        cartUrl: buildFoxyCartUrl(shirtConfig.productCode, attributes),
       }
     }
 
@@ -87,6 +91,15 @@ function buildShirtConfig(content = null, options = {}) {
     ? content.price.toFixed(2)
     : localShirtConfig.price
   const dynamicProductName = (content && content.productName) || localShirtConfig.productName
+  const hasSanityContent = Boolean(content)
+  const pickUpDate = hasSanityContent
+    ? normalizePickUpDate(content.pickUpDate)
+    : localShirtConfig.pickUpDate
+
+  if (hasSanityContent && !pickUpDate) {
+    throw new Error('Summer Thunder t-shirt pages require pickUpDate to build Foxy cart URLs.')
+  }
+
   const baseOrderConfig = buildSummerThunderShirtConfig({
     title: pageTitle || localShirtConfig.title,
     productName: dynamicProductName,
@@ -94,11 +107,13 @@ function buildShirtConfig(content = null, options = {}) {
     price: dynamicPrice,
     closeAt,
     closeAtDisplay: formatCloseAt(closeAt) || localShirtConfig.closeAtDisplay,
+    pickUpDate,
     pickupCopy: (content && content.pickupCopy) || localShirtConfig.pickupCopy,
+    validatePickUpDate: hasSanityContent,
   })
   const variants = showEmployeeLocation
     ? baseOrderConfig.variants
-    : buildPublicVariants(baseOrderConfig.variants)
+    : buildPublicVariants(baseOrderConfig.variants, baseOrderConfig)
 
   return {
     ...baseOrderConfig,
@@ -108,6 +123,7 @@ function buildShirtConfig(content = null, options = {}) {
     closeAt,
     closeAtDisplay: baseOrderConfig.closeAtDisplay,
     isClosed: closeAt ? Date.now() >= Date.parse(closeAt) : baseOrderConfig.isClosed,
+    pickUpDate,
     images: buildGalleryImages((content && content.productImages) || []),
     pageBuilder,
     image: (content && content.image) || null,
@@ -143,3 +159,4 @@ async function getSanityShirtConfig(options = {}) {
 }
 
 module.exports = getSanityShirtConfig
+module.exports.buildShirtConfig = buildShirtConfig

@@ -29,6 +29,7 @@ const PRODUCT_CODE = 'summer-thunder-2026-employee'
 const DEFAULT_PRODUCT_NAME = '2026 Summer Thunder T-Shirt'
 const DEFAULT_PRICE = '18.00'
 const CLOSE_AT = '2026-06-04T23:59:59-04:00'
+const DEFAULT_PICKUP_DATE = null
 const VARIANT_KEY_SEPARATOR = '::'
 const MAX_QUANTITY = 99
 
@@ -51,6 +52,34 @@ const quantityParams = Object.fromEntries(
   })
 )
 
+function normalizePickUpDate(pickUpDate) {
+  if (typeof pickUpDate !== 'string') {
+    return null
+  }
+
+  const trimmedDate = pickUpDate.trim()
+
+  if (!trimmedDate) {
+    return null
+  }
+
+  const isoDateMatch = trimmedDate.match(/^(\d{4})-(\d{2})-(\d{2})(?:$|T)/)
+
+  if (isoDateMatch) {
+    const [, year, month, day] = isoDateMatch
+    const normalizedDate = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 12))
+
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'America/New_York',
+    }).format(normalizedDate)
+  }
+
+  return trimmedDate
+}
+
 function buildSummerThunderShirtConfig({
   title = '2026 Summer Thunder T-Shirts',
   productName = DEFAULT_PRODUCT_NAME,
@@ -58,9 +87,17 @@ function buildSummerThunderShirtConfig({
   price = DEFAULT_PRICE,
   closeAt = CLOSE_AT,
   closeAtDisplay = 'June 4, 2026 at 11:59 PM ET',
+  pickUpDate = DEFAULT_PICKUP_DATE,
   pickupCopy = 'Delivery method: Drive-through Pick Up',
+  validatePickUpDate = true,
 } = {}) {
   const normalizedPrice = String(price)
+  const normalizedPickUpDate = normalizePickUpDate(pickUpDate)
+
+  if (validatePickUpDate && !normalizedPickUpDate) {
+    throw new Error('Summer Thunder t-shirt configuration requires pickUpDate to build Foxy cart URLs.')
+  }
+
   const variantEntries = EMPLOYEE_LOCATIONS.flatMap(({ label, department }) =>
     Object.entries(SIZE_GROUPS).flatMap(([sizeGroup, sizes]) =>
       sizes.map(size => {
@@ -70,6 +107,10 @@ function buildSummerThunderShirtConfig({
           price: normalizedPrice,
           department,
           size: composeSizeValue(sizeGroup, size),
+        }
+
+        if (normalizedPickUpDate) {
+          attributes.pickup = normalizedPickUpDate
         }
 
         return [
@@ -94,6 +135,7 @@ function buildSummerThunderShirtConfig({
     closeAt,
     closeAtDisplay,
     isClosed: Date.now() >= Date.parse(closeAt),
+    pickUpDate: normalizedPickUpDate,
     pickupCopy,
     employeeLocations: EMPLOYEE_LOCATIONS.map(({ label }) => label),
     sizeGroups: SIZE_GROUPS,
@@ -110,5 +152,6 @@ function buildSummerThunderShirtConfig({
   }
 }
 
-module.exports = buildSummerThunderShirtConfig()
+module.exports = buildSummerThunderShirtConfig({ validatePickUpDate: false })
 module.exports.buildSummerThunderShirtConfig = buildSummerThunderShirtConfig
+module.exports.normalizePickUpDate = normalizePickUpDate
