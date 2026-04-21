@@ -4,7 +4,7 @@ const overlayDrafts = require('./overlayDrafts')
 const urlFor = require('./imageUrl')
 const { buildFoxyCartUrl } = require('./foxy')
 const localShirtConfig = require('../_data/summer-thunder-shirts')
-const { buildSummerThunderShirtConfig, normalizePickUpDate } = require('../_data/summer-thunder-shirts')
+const { buildSummerThunderShirtConfig, getPickUpDateValue } = require('../_data/summer-thunder-shirts')
 
 const hasToken = !!client.config().token
 
@@ -92,11 +92,11 @@ function buildShirtConfig(content = null, options = {}) {
     : localShirtConfig.price
   const dynamicProductName = (content && content.productName) || localShirtConfig.productName
   const hasSanityContent = Boolean(content)
-  const pickUpDate = hasSanityContent
-    ? normalizePickUpDate(content.pickUpDate)
-    : localShirtConfig.pickUpDate
+  const contentPickUpDate = hasSanityContent
+    ? getPickUpDateValue(content.pickUpDate)
+    : null
 
-  if (hasSanityContent && !pickUpDate) {
+  if (hasSanityContent && !contentPickUpDate) {
     throw new Error('Summer Thunder t-shirt pages require pickUpDate to build Foxy cart URLs.')
   }
 
@@ -107,7 +107,7 @@ function buildShirtConfig(content = null, options = {}) {
     price: dynamicPrice,
     closeAt,
     closeAtDisplay: formatCloseAt(closeAt) || localShirtConfig.closeAtDisplay,
-    pickUpDate,
+    pickUpDate: hasSanityContent ? contentPickUpDate : undefined,
     pickupCopy: (content && content.pickupCopy) || localShirtConfig.pickupCopy,
     validatePickUpDate: hasSanityContent,
   })
@@ -123,7 +123,7 @@ function buildShirtConfig(content = null, options = {}) {
     closeAt,
     closeAtDisplay: baseOrderConfig.closeAtDisplay,
     isClosed: closeAt ? Date.now() >= Date.parse(closeAt) : baseOrderConfig.isClosed,
-    pickUpDate,
+    pickUpDate: baseOrderConfig.pickUpDate,
     images: buildGalleryImages((content && content.productImages) || []),
     pageBuilder,
     image: (content && content.image) || null,

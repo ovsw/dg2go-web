@@ -1,4 +1,5 @@
 const { buildFoxyCartUrl, encryptFoxyAttribute } = require('../utils/foxy')
+const formatPickupDate = require('../utils/formatPickupDate')
 
 const EMPLOYEE_LOCATIONS = [
   {
@@ -52,7 +53,7 @@ const quantityParams = Object.fromEntries(
   })
 )
 
-function normalizePickUpDate(pickUpDate) {
+function getPickUpDateValue(pickUpDate) {
   if (typeof pickUpDate !== 'string') {
     return null
   }
@@ -61,34 +62,6 @@ function normalizePickUpDate(pickUpDate) {
 
   if (!trimmedDate) {
     return null
-  }
-
-  const isoDateMatch = trimmedDate.match(/^(\d{4})-(\d{2})-(\d{2})(?:$|T)/)
-
-  if (isoDateMatch) {
-    const [, year, month, day] = isoDateMatch
-    const normalizedDate = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 12))
-    const dayOfMonth = Number(
-      new Intl.DateTimeFormat('en-US', {
-        day: 'numeric',
-        timeZone: 'America/New_York',
-      }).format(normalizedDate)
-    )
-    const monthYear = new Intl.DateTimeFormat('en-US', {
-      month: 'long',
-      year: 'numeric',
-      timeZone: 'America/New_York',
-    }).format(normalizedDate)
-
-    let ordinalSuffix = 'th'
-
-    if (dayOfMonth % 100 < 11 || dayOfMonth % 100 > 13) {
-      if (dayOfMonth % 10 === 1) ordinalSuffix = 'st'
-      if (dayOfMonth % 10 === 2) ordinalSuffix = 'nd'
-      if (dayOfMonth % 10 === 3) ordinalSuffix = 'rd'
-    }
-
-    return `${dayOfMonth}${ordinalSuffix} of ${monthYear}`
   }
 
   return trimmedDate
@@ -106,9 +79,12 @@ function buildSummerThunderShirtConfig({
   validatePickUpDate = true,
 } = {}) {
   const normalizedPrice = String(price)
-  const normalizedPickUpDate = normalizePickUpDate(pickUpDate)
+  const configuredPickUpDate = getPickUpDateValue(pickUpDate)
+  const formattedPickUpDate = configuredPickUpDate
+    ? formatPickupDate(configuredPickUpDate)
+    : null
 
-  if (validatePickUpDate && !normalizedPickUpDate) {
+  if (validatePickUpDate && !formattedPickUpDate) {
     throw new Error('Summer Thunder t-shirt configuration requires pickUpDate to build Foxy cart URLs.')
   }
 
@@ -123,8 +99,8 @@ function buildSummerThunderShirtConfig({
           size: composeSizeValue(sizeGroup, size),
         }
 
-        if (normalizedPickUpDate) {
-          attributes.pickup = normalizedPickUpDate
+        if (formattedPickUpDate) {
+          attributes.pickup = formattedPickUpDate
         }
 
         return [
@@ -149,7 +125,7 @@ function buildSummerThunderShirtConfig({
     closeAt,
     closeAtDisplay,
     isClosed: Date.now() >= Date.parse(closeAt),
-    pickUpDate: normalizedPickUpDate,
+    pickUpDate: formattedPickUpDate,
     pickupCopy,
     employeeLocations: EMPLOYEE_LOCATIONS.map(({ label }) => label),
     sizeGroups: SIZE_GROUPS,
@@ -168,4 +144,4 @@ function buildSummerThunderShirtConfig({
 
 module.exports = buildSummerThunderShirtConfig({ validatePickUpDate: false })
 module.exports.buildSummerThunderShirtConfig = buildSummerThunderShirtConfig
-module.exports.normalizePickUpDate = normalizePickUpDate
+module.exports.getPickUpDateValue = getPickUpDateValue
