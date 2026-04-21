@@ -68,6 +68,8 @@ function buildPublicVariants(variants, shirtConfig) {
         attributes.pickup = shirtConfig.pickUpDate
       }
 
+      attributes.meal = 'lunch'
+
       acc[key] = {
         ...variant,
         cartUrl: buildFoxyCartUrl(shirtConfig.productCode, attributes),

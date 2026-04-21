@@ -77,6 +77,7 @@ function buildSummerThunderShirtConfig({
   pickUpDate = DEFAULT_PICKUP_DATE,
   pickupCopy = 'Delivery method: Drive-through Pick Up',
   validatePickUpDate = true,
+  meal = 'dinner',
 } = {}) {
   const normalizedPrice = String(price)
   const configuredPickUpDate = getPickUpDateValue(pickUpDate)
@@ -102,6 +103,8 @@ function buildSummerThunderShirtConfig({
         if (formattedPickUpDate) {
           attributes.pickup = formattedPickUpDate
         }
+
+        attributes.meal = meal
 
         return [
           getVariantKey(label, sizeGroup, size),

@@ -10,6 +10,10 @@ function getQueryParams(url) {
   return new URL(url).searchParams
 }
 
+function getDecodedEntryNames(searchParams) {
+  return Array.from(searchParams.keys()).map(key => key.split('||')[0])
+}
+
 function findDecodedParamValue(searchParams, expectedValue) {
   for (const [, value] of searchParams.entries()) {
     if (value === expectedValue) {
@@ -34,6 +38,7 @@ function run() {
 
   assert.equal(findDecodedParamValue(fallbackParams, 'null'), false)
   assert.equal(findDecodedParamValue(fallbackParams, ''), false)
+  assert.equal(findDecodedParamValue(fallbackParams, 'lunch'), true)
 
   assert.throws(() => buildShirtConfig({
     productName: 'Configured Shirt',
@@ -56,6 +61,30 @@ function run() {
   const configuredParams = getQueryParams(configuredVariant.cartUrl)
 
   assert.equal(findDecodedParamValue(configuredParams, formatPickupDate('2026-06-10')), true)
+  assert.equal(findDecodedParamValue(configuredParams, 'lunch'), true)
+  assert.deepEqual(
+    getDecodedEntryNames(configuredParams).slice(0, 6),
+    ['name', 'code', 'price', 'size', 'pickup', 'meal']
+  )
+
+  const privateConfig = buildShirtConfig({
+    productName: 'Configured Shirt',
+    pickUpDate: '2026-06-10',
+    pickupCopy: 'Pickup available onsite',
+  }, {
+    pageTitleField: 'privatePageTitle',
+    pageBuilderField: 'privatePageBuilder',
+    showEmployeeLocation: true,
+  })
+
+  const privateVariant = privateConfig.variants[Object.keys(privateConfig.variants)[0]]
+  const privateParams = getQueryParams(privateVariant.cartUrl)
+
+  assert.equal(findDecodedParamValue(privateParams, 'dinner'), true)
+  assert.deepEqual(
+    getDecodedEntryNames(privateParams).slice(0, 7),
+    ['name', 'code', 'price', 'department', 'size', 'pickup', 'meal']
+  )
 
   console.log('buildTshirtProductConfig tests passed')
 }
