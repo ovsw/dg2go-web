@@ -61,8 +61,11 @@ function buildPublicVariants(variants, shirtConfig) {
         name: shirtConfig.productName,
         code: shirtConfig.productCode,
         price: shirtConfig.price,
-        pickup: shirtConfig.pickUpDate,
         size: composeSizeValue(variant.sizeGroup, variant.size),
+      }
+
+      if (shirtConfig.pickUpDate) {
+        attributes.pickup = shirtConfig.pickUpDate
       }
 
       acc[key] = {
@@ -88,9 +91,12 @@ function buildShirtConfig(content = null, options = {}) {
     ? content.price.toFixed(2)
     : localShirtConfig.price
   const dynamicProductName = (content && content.productName) || localShirtConfig.productName
-  const pickUpDate = normalizePickUpDate((content && content.pickUpDate) || localShirtConfig.pickUpDate)
+  const hasSanityContent = Boolean(content)
+  const pickUpDate = hasSanityContent
+    ? normalizePickUpDate(content.pickUpDate)
+    : localShirtConfig.pickUpDate
 
-  if (!pickUpDate) {
+  if (hasSanityContent && !pickUpDate) {
     throw new Error('Summer Thunder t-shirt pages require pickUpDate to build Foxy cart URLs.')
   }
 
@@ -103,6 +109,7 @@ function buildShirtConfig(content = null, options = {}) {
     closeAtDisplay: formatCloseAt(closeAt) || localShirtConfig.closeAtDisplay,
     pickUpDate,
     pickupCopy: (content && content.pickupCopy) || localShirtConfig.pickupCopy,
+    validatePickUpDate: hasSanityContent,
   })
   const variants = showEmployeeLocation
     ? baseOrderConfig.variants
@@ -152,3 +159,4 @@ async function getSanityShirtConfig(options = {}) {
 }
 
 module.exports = getSanityShirtConfig
+module.exports.buildShirtConfig = buildShirtConfig

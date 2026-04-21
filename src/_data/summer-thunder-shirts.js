@@ -105,9 +105,12 @@ function buildSummerThunderShirtConfig({
           name: productName,
           code: productCode,
           price: normalizedPrice,
-          pickup: normalizedPickUpDate,
           department,
           size: composeSizeValue(sizeGroup, size),
+        }
+
+        if (normalizedPickUpDate) {
+          attributes.pickup = normalizedPickUpDate
         }
 
         return [
