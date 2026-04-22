@@ -34,6 +34,85 @@ const DEFAULT_PICKUP_DATE = null
 const VARIANT_KEY_SEPARATOR = '::'
 const MAX_QUANTITY = 99
 
+function getSizeSkuKey(sizeGroup, size) {
+  return [sizeGroup, size].join(VARIANT_KEY_SEPARATOR)
+}
+
+const SIZE_SKU_MAP = Object.freeze({
+  [getSizeSkuKey('adult', 'Small')]: {
+    displaySize: 'Adult Small',
+    productName: '2026 Summer Thunder T-Shirt - Adult Small',
+    productCode: 'summer-thunder-2026-adult-small',
+  },
+  [getSizeSkuKey('adult', 'Medium')]: {
+    displaySize: 'Adult Medium',
+    productName: '2026 Summer Thunder T-Shirt - Adult Medium',
+    productCode: 'summer-thunder-2026-adult-medium',
+  },
+  [getSizeSkuKey('adult', 'Large')]: {
+    displaySize: 'Adult Large',
+    productName: '2026 Summer Thunder T-Shirt - Adult Large',
+    productCode: 'summer-thunder-2026-adult-large',
+  },
+  [getSizeSkuKey('adult', 'X-Large')]: {
+    displaySize: 'Adult X-Large',
+    productName: '2026 Summer Thunder T-Shirt - Adult X-Large',
+    productCode: 'summer-thunder-2026-adult-x-large',
+  },
+  [getSizeSkuKey('adult', '2XL')]: {
+    displaySize: 'Adult 2XL',
+    productName: '2026 Summer Thunder T-Shirt - Adult 2XL',
+    productCode: 'summer-thunder-2026-adult-2xl',
+  },
+  [getSizeSkuKey('adult', '3XL')]: {
+    displaySize: 'Adult 3XL',
+    productName: '2026 Summer Thunder T-Shirt - Adult 3XL',
+    productCode: 'summer-thunder-2026-adult-3xl',
+  },
+  [getSizeSkuKey('adult', '4XL')]: {
+    displaySize: 'Adult 4XL',
+    productName: '2026 Summer Thunder T-Shirt - Adult 4XL',
+    productCode: 'summer-thunder-2026-adult-4xl',
+  },
+  [getSizeSkuKey('child', '3T')]: {
+    displaySize: 'Child 3T',
+    productName: '2026 Summer Thunder T-Shirt - Child 3T',
+    productCode: 'summer-thunder-2026-child-3t',
+  },
+  [getSizeSkuKey('child', '4T')]: {
+    displaySize: 'Child 4T',
+    productName: '2026 Summer Thunder T-Shirt - Child 4T',
+    productCode: 'summer-thunder-2026-child-4t',
+  },
+  [getSizeSkuKey('child', '5-6')]: {
+    displaySize: 'Child 5-6',
+    productName: '2026 Summer Thunder T-Shirt - Child 5-6',
+    productCode: 'summer-thunder-2026-child-5-6',
+  },
+  [getSizeSkuKey('child', '7')]: {
+    displaySize: 'Child 7',
+    productName: '2026 Summer Thunder T-Shirt - Child 7',
+    productCode: 'summer-thunder-2026-child-7',
+  },
+  [getSizeSkuKey('youth', 'S(6-8)')]: {
+    displaySize: 'Youth S(6-8)',
+    productName: '2026 Summer Thunder T-Shirt - Youth S(6-8)',
+    productCode: 'summer-thunder-2026-youth-s-6-8',
+  },
+  [getSizeSkuKey('youth', 'M(10-12)')]: {
+    displaySize: 'Youth M(10-12)',
+    productName: '2026 Summer Thunder T-Shirt - Youth M(10-12)',
+    productCode: 'summer-thunder-2026-youth-m-10-12',
+  },
+  [getSizeSkuKey('youth', 'L(14-16)')]: {
+    displaySize: 'Youth L(14-16)',
+    productName: '2026 Summer Thunder T-Shirt - Youth L(14-16)',
+    productCode: 'summer-thunder-2026-youth-l-14-16',
+  },
+})
+
+const UNIQUE_PRODUCT_CODES = [...new Set(Object.values(SIZE_SKU_MAP).map(({ productCode }) => productCode))]
+
 function getVariantKey(employeeLocation, sizeGroup, size) {
   return [employeeLocation, sizeGroup, size].join(VARIANT_KEY_SEPARATOR)
 }
@@ -42,15 +121,31 @@ function composeSizeValue(sizeGroup, size) {
   return `${sizeGroup}-${String(size).toLowerCase().replace(/[^a-z0-9]+/g, '')}`
 }
 
-const quantityParams = Object.fromEntries(
-  Array.from({ length: MAX_QUANTITY }, (_, index) => {
-    const quantity = String(index + 1)
+function getSizeProductDefinition(sizeGroup, size) {
+  const sizeProduct = SIZE_SKU_MAP[getSizeSkuKey(sizeGroup, size)]
 
-    return [
-      quantity,
-      `${encryptFoxyAttribute('quantity', quantity, PRODUCT_CODE)}=${encodeURIComponent(quantity)}`,
-    ]
-  })
+  if (!sizeProduct) {
+    throw new Error(`Missing Summer Thunder t-shirt SKU definition for ${sizeGroup} / ${size}.`)
+  }
+
+  return sizeProduct
+}
+
+function buildQuantityParams(productCode) {
+  return Object.fromEntries(
+    Array.from({ length: MAX_QUANTITY }, (_, index) => {
+      const quantity = String(index + 1)
+
+      return [
+        quantity,
+        `${encryptFoxyAttribute('quantity', quantity, productCode)}=${encodeURIComponent(quantity)}`,
+      ]
+    })
+  )
+}
+
+const quantityParamsByProductCode = Object.fromEntries(
+  UNIQUE_PRODUCT_CODES.map(productCode => [productCode, buildQuantityParams(productCode)])
 )
 
 function getPickUpDateValue(pickUpDate) {
@@ -65,6 +160,38 @@ function getPickUpDateValue(pickUpDate) {
   }
 
   return trimmedDate
+}
+
+function buildShirtCartUrl({
+  productName,
+  productCode,
+  price,
+  sizeGroup,
+  size,
+  department,
+  pickUpDate,
+  meal,
+}) {
+  const attributes = {
+    name: productName,
+    code: productCode,
+    price: String(price),
+    size: composeSizeValue(sizeGroup, size),
+  }
+
+  if (department) {
+    attributes.department = department
+  }
+
+  if (pickUpDate) {
+    attributes.pickup = pickUpDate
+  }
+
+  if (meal) {
+    attributes.meal = meal
+  }
+
+  return buildFoxyCartUrl(productCode, attributes)
 }
 
 function buildSummerThunderShirtConfig({
@@ -92,19 +219,7 @@ function buildSummerThunderShirtConfig({
   const variantEntries = EMPLOYEE_LOCATIONS.flatMap(({ label, department }) =>
     Object.entries(SIZE_GROUPS).flatMap(([sizeGroup, sizes]) =>
       sizes.map(size => {
-        const attributes = {
-          name: productName,
-          code: productCode,
-          price: normalizedPrice,
-          department,
-          size: composeSizeValue(sizeGroup, size),
-        }
-
-        if (formattedPickUpDate) {
-          attributes.pickup = formattedPickUpDate
-        }
-
-        attributes.meal = meal
+        const sizeProduct = getSizeProductDefinition(sizeGroup, size)
 
         return [
           getVariantKey(label, sizeGroup, size),
@@ -113,7 +228,19 @@ function buildSummerThunderShirtConfig({
             department,
             sizeGroup,
             size,
-            cartUrl: buildFoxyCartUrl(productCode, attributes),
+            displaySize: sizeProduct.displaySize,
+            productName: sizeProduct.productName,
+            productCode: sizeProduct.productCode,
+            cartUrl: buildShirtCartUrl({
+              productName: sizeProduct.productName,
+              productCode: sizeProduct.productCode,
+              price: normalizedPrice,
+              department,
+              sizeGroup,
+              size,
+              pickUpDate: formattedPickUpDate,
+              meal,
+            }),
           },
         ]
       })
@@ -135,7 +262,7 @@ function buildSummerThunderShirtConfig({
     quantity: {
       min: 1,
       max: MAX_QUANTITY,
-      params: quantityParams,
+      paramsByProductCode: quantityParamsByProductCode,
     },
     images: {
       front: null,
@@ -147,4 +274,8 @@ function buildSummerThunderShirtConfig({
 
 module.exports = buildSummerThunderShirtConfig({ validatePickUpDate: false })
 module.exports.buildSummerThunderShirtConfig = buildSummerThunderShirtConfig
+module.exports.buildShirtCartUrl = buildShirtCartUrl
 module.exports.getPickUpDateValue = getPickUpDateValue
+module.exports.getSizeSkuKey = getSizeSkuKey
+module.exports.getSizeProductDefinition = getSizeProductDefinition
+module.exports.sizeSkuMap = SIZE_SKU_MAP

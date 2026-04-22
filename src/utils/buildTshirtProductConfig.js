@@ -2,9 +2,12 @@ const groq = require('groq')
 const client = require('./sanityClient')
 const overlayDrafts = require('./overlayDrafts')
 const urlFor = require('./imageUrl')
-const { buildFoxyCartUrl } = require('./foxy')
 const localShirtConfig = require('../_data/summer-thunder-shirts')
-const { buildSummerThunderShirtConfig, getPickUpDateValue } = require('../_data/summer-thunder-shirts')
+const {
+  buildSummerThunderShirtConfig,
+  buildShirtCartUrl,
+  getPickUpDateValue,
+} = require('../_data/summer-thunder-shirts')
 
 const hasToken = !!client.config().token
 
@@ -48,31 +51,22 @@ function buildGalleryImages(productImages = []) {
     }))
 }
 
-function composeSizeValue(sizeGroup, size) {
-  return `${sizeGroup}-${String(size).toLowerCase().replace(/[^a-z0-9]+/g, '')}`
-}
-
 function buildPublicVariants(variants, shirtConfig) {
   return Object.values(variants).reduce((acc, variant) => {
     const key = [variant.sizeGroup, variant.size].join('::')
 
     if (!acc[key]) {
-      const attributes = {
-        name: shirtConfig.productName,
-        code: shirtConfig.productCode,
-        price: shirtConfig.price,
-        size: composeSizeValue(variant.sizeGroup, variant.size),
-      }
-
-      if (shirtConfig.pickUpDate) {
-        attributes.pickup = shirtConfig.pickUpDate
-      }
-
-      attributes.meal = 'lunch'
-
       acc[key] = {
         ...variant,
-        cartUrl: buildFoxyCartUrl(shirtConfig.productCode, attributes),
+        cartUrl: buildShirtCartUrl({
+          productName: variant.productName,
+          productCode: variant.productCode,
+          price: shirtConfig.price,
+          sizeGroup: variant.sizeGroup,
+          size: variant.size,
+          pickUpDate: shirtConfig.pickUpDate,
+          meal: 'lunch',
+        }),
       }
     }
 
