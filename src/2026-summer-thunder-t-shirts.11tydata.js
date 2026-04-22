@@ -5,6 +5,7 @@ module.exports = async function() {
     shirtConfig: await getSanityShirtConfig({
       pageTitleField: 'publicPageTitle',
       pageBuilderField: 'publicPageBuilder',
+      meal: 'lunch',
     }),
   }
 }

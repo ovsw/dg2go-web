@@ -29,6 +29,7 @@ function run() {
     pageTitleField: 'publicPageTitle',
     pageBuilderField: 'publicPageBuilder',
     showEmployeeLocation: false,
+    meal: 'lunch',
   })
 
   assert.equal(fallbackConfig.pickUpDate, null)
@@ -53,6 +54,7 @@ function run() {
     pageTitleField: 'publicPageTitle',
     pageBuilderField: 'publicPageBuilder',
     showEmployeeLocation: false,
+    meal: 'lunch',
   })
 
   assert.equal(configuredConfig.pickUpDate, formatPickupDate('2026-06-10'))
@@ -75,6 +77,7 @@ function run() {
     pageTitleField: 'privatePageTitle',
     pageBuilderField: 'privatePageBuilder',
     showEmployeeLocation: true,
+    meal: 'dinner',
   })
 
   const privateVariant = privateConfig.variants[Object.keys(privateConfig.variants)[0]]
@@ -82,8 +85,8 @@ function run() {
 
   assert.equal(findDecodedParamValue(privateParams, 'dinner'), true)
   assert.deepEqual(
-    getDecodedEntryNames(privateParams).slice(0, 7),
-    ['name', 'code', 'price', 'department', 'size', 'pickup', 'meal']
+    getDecodedEntryNames(privateParams).slice(0, 6),
+    ['name', 'code', 'price', 'size', 'pickup', 'meal']
   )
 
   console.log('buildTshirtProductConfig tests passed')

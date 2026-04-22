@@ -55,6 +55,7 @@ function buildShirtConfig(content = null, options = {}) {
   const {
     pageTitleField = 'privatePageTitle',
     pageBuilderField = 'privatePageBuilder',
+    meal,
   } = options
   const closeAt = (content && content.closeAt) || localShirtConfig.closeAt
   const pageTitle = content && content[pageTitleField]
@@ -82,6 +83,7 @@ function buildShirtConfig(content = null, options = {}) {
     pickUpDate: hasSanityContent ? contentPickUpDate : undefined,
     pickupCopy: (content && content.pickupCopy) || localShirtConfig.pickupCopy,
     validatePickUpDate: hasSanityContent,
+    meal,
   })
   return {
     ...baseOrderConfig,
