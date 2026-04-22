@@ -12,8 +12,6 @@
 {% set shirtConfigClientData = {
   closeAt: shirtConfig.closeAt,
   initialClosed: shirtConfig.isClosed,
-  employeeLocations: shirtConfig.employeeLocations,
-  showEmployeeLocation: shirtConfig.showEmployeeLocation,
   sizeGroups: shirtConfig.sizeGroups,
   quantity: shirtConfig.quantity,
   variants: shirtConfig.variants,
@@ -108,24 +106,8 @@
               x-cloak
               x-show="!isClosed"
             >
-              Need multiple shirts? Add one combination to the cart, then return here and select another location or size.
+              Need multiple shirts? Add one combination to the cart, then return here and select another size.
             </div>
-
-            {% if shirtConfig.showEmployeeLocation != false %}
-            <div class="tShirtProduct__field">
-              <label for="employee-location">Employee location</label>
-              <select
-                id="employee-location"
-                x-model="selectedLocation"
-                @change="markInteracted()"
-              >
-                <option value="">Select your location</option>
-                <template x-for="location in employeeLocations" :key="location">
-                  <option :value="location" x-text="location"></option>
-                </template>
-              </select>
-            </div>
-            {% endif %}
 
             <fieldset class="tShirtProduct__sizeRow">
               <legend>Size</legend>
@@ -212,8 +194,6 @@
     var config = configElement ? JSON.parse(configElement.textContent) : {
       closeAt: '',
       initialClosed: true,
-      employeeLocations: [],
-      showEmployeeLocation: true,
       sizeGroups: {},
       quantity: { min: 1, max: 1, paramsByProductCode: {} },
       variants: {},
@@ -223,14 +203,11 @@
     return {
       closeAt: config.closeAt,
       isClosed: config.initialClosed,
-      employeeLocations: config.employeeLocations,
-      showEmployeeLocation: config.showEmployeeLocation !== false,
       sizeGroups: config.sizeGroups,
       quantityConfig: config.quantity,
       variants: config.variants,
       galleryImages: config.galleryImages || [],
       activeImageIndex: 0,
-      selectedLocation: '',
       selectedSizeGroup: '',
       selectedSize: '',
       quantity: config.quantity.min,
@@ -266,7 +243,6 @@
       },
       get selectionComplete() {
         return Boolean(
-          (!this.showEmployeeLocation || this.selectedLocation) &&
           this.selectedSizeGroup &&
           this.selectedSize &&
           Number.isInteger(this.quantity) &&
@@ -277,10 +253,6 @@
       get selectedVariant() {
         if (!this.selectionComplete) {
           return null;
-        }
-
-        if (this.showEmployeeLocation) {
-          return this.variants[[this.selectedLocation, this.selectedSizeGroup, this.selectedSize].join('::')] || null;
         }
 
         return this.variants[[this.selectedSizeGroup, this.selectedSize].join('::')] || null;

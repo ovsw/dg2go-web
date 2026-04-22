@@ -5,7 +5,6 @@ module.exports = async function() {
     shirtConfig: await getSanityShirtConfig({
       pageTitleField: 'privatePageTitle',
       pageBuilderField: 'privatePageBuilder',
-      showEmployeeLocation: true,
     }),
   }
 }

@@ -1,25 +1,6 @@
 const { buildFoxyCartUrl, encryptFoxyAttribute } = require('../utils/foxy')
 const formatPickupDate = require('../utils/formatPickupDate')
 
-const EMPLOYEE_LOCATIONS = [
-  {
-    label: 'DelGrosso Amusement Park',
-    department: 'DAP',
-  },
-  {
-    label: "Marianna's Fundraisers",
-    department: 'MFR',
-  },
-  {
-    label: 'DGF Red Sauce Plant',
-    department: 'DGF Red',
-  },
-  {
-    label: 'DGF White Sauce Plant',
-    department: 'DGF White',
-  },
-]
-
 const SIZE_GROUPS = {
   adult: ['Small', 'Medium', 'Large', 'X-Large', '2XL', '3XL', '4XL'],
   child: ['3T', '4T', '5-6', '7'],
@@ -113,8 +94,8 @@ const SIZE_SKU_MAP = Object.freeze({
 
 const UNIQUE_PRODUCT_CODES = [...new Set(Object.values(SIZE_SKU_MAP).map(({ productCode }) => productCode))]
 
-function getVariantKey(employeeLocation, sizeGroup, size) {
-  return [employeeLocation, sizeGroup, size].join(VARIANT_KEY_SEPARATOR)
+function getVariantKey(sizeGroup, size) {
+  return [sizeGroup, size].join(VARIANT_KEY_SEPARATOR)
 }
 
 function composeSizeValue(sizeGroup, size) {
@@ -168,7 +149,6 @@ function buildShirtCartUrl({
   price,
   sizeGroup,
   size,
-  department,
   pickUpDate,
   meal,
 }) {
@@ -177,10 +157,6 @@ function buildShirtCartUrl({
     code: productCode,
     price: String(price),
     size: composeSizeValue(sizeGroup, size),
-  }
-
-  if (department) {
-    attributes.department = department
   }
 
   if (pickUpDate) {
@@ -216,35 +192,30 @@ function buildSummerThunderShirtConfig({
     throw new Error('Summer Thunder t-shirt configuration requires pickUpDate to build Foxy cart URLs.')
   }
 
-  const variantEntries = EMPLOYEE_LOCATIONS.flatMap(({ label, department }) =>
-    Object.entries(SIZE_GROUPS).flatMap(([sizeGroup, sizes]) =>
-      sizes.map(size => {
-        const sizeProduct = getSizeProductDefinition(sizeGroup, size)
+  const variantEntries = Object.entries(SIZE_GROUPS).flatMap(([sizeGroup, sizes]) =>
+    sizes.map(size => {
+      const sizeProduct = getSizeProductDefinition(sizeGroup, size)
 
-        return [
-          getVariantKey(label, sizeGroup, size),
-          {
-            employeeLocation: label,
-            department,
-            sizeGroup,
-            size,
-            displaySize: sizeProduct.displaySize,
+      return [
+        getVariantKey(sizeGroup, size),
+        {
+          sizeGroup,
+          size,
+          displaySize: sizeProduct.displaySize,
+          productName: sizeProduct.productName,
+          productCode: sizeProduct.productCode,
+          cartUrl: buildShirtCartUrl({
             productName: sizeProduct.productName,
             productCode: sizeProduct.productCode,
-            cartUrl: buildShirtCartUrl({
-              productName: sizeProduct.productName,
-              productCode: sizeProduct.productCode,
-              price: normalizedPrice,
-              department,
-              sizeGroup,
-              size,
-              pickUpDate: formattedPickUpDate,
-              meal,
-            }),
-          },
-        ]
-      })
-    )
+            price: normalizedPrice,
+            sizeGroup,
+            size,
+            pickUpDate: formattedPickUpDate,
+            meal,
+          }),
+        },
+      ]
+    })
   )
 
   return {
@@ -257,7 +228,6 @@ function buildSummerThunderShirtConfig({
     isClosed: Date.now() >= Date.parse(closeAt),
     pickUpDate: formattedPickUpDate,
     pickupCopy,
-    employeeLocations: EMPLOYEE_LOCATIONS.map(({ label }) => label),
     sizeGroups: SIZE_GROUPS,
     quantity: {
       min: 1,

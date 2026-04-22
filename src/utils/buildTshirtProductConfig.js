@@ -51,34 +51,10 @@ function buildGalleryImages(productImages = []) {
     }))
 }
 
-function buildPublicVariants(variants, shirtConfig) {
-  return Object.values(variants).reduce((acc, variant) => {
-    const key = [variant.sizeGroup, variant.size].join('::')
-
-    if (!acc[key]) {
-      acc[key] = {
-        ...variant,
-        cartUrl: buildShirtCartUrl({
-          productName: variant.productName,
-          productCode: variant.productCode,
-          price: shirtConfig.price,
-          sizeGroup: variant.sizeGroup,
-          size: variant.size,
-          pickUpDate: shirtConfig.pickUpDate,
-          meal: 'lunch',
-        }),
-      }
-    }
-
-    return acc
-  }, {})
-}
-
 function buildShirtConfig(content = null, options = {}) {
   const {
     pageTitleField = 'privatePageTitle',
     pageBuilderField = 'privatePageBuilder',
-    showEmployeeLocation = true,
   } = options
   const closeAt = (content && content.closeAt) || localShirtConfig.closeAt
   const pageTitle = content && content[pageTitleField]
@@ -107,10 +83,6 @@ function buildShirtConfig(content = null, options = {}) {
     pickupCopy: (content && content.pickupCopy) || localShirtConfig.pickupCopy,
     validatePickUpDate: hasSanityContent,
   })
-  const variants = showEmployeeLocation
-    ? baseOrderConfig.variants
-    : buildPublicVariants(baseOrderConfig.variants, baseOrderConfig)
-
   return {
     ...baseOrderConfig,
     title: pageTitle || localShirtConfig.title,
@@ -123,9 +95,6 @@ function buildShirtConfig(content = null, options = {}) {
     images: buildGalleryImages((content && content.productImages) || []),
     pageBuilder,
     image: (content && content.image) || null,
-    employeeLocations: showEmployeeLocation ? baseOrderConfig.employeeLocations : [],
-    variants,
-    showEmployeeLocation,
     seo: {
       title: (content && (content.seoTitle || pageTitle || content.productName)) || localShirtConfig.title,
       description: (content && (content.seoDescription || content.pickupCopy)) || baseOrderConfig.pickupCopy,
