@@ -3,7 +3,10 @@ const assert = require('assert')
 process.env.FOXYCART_API_KEY = process.env.FOXYCART_API_KEY || 'test-key'
 
 const getSanityShirtConfig = require('../src/utils/buildTshirtProductConfig')
-const { buildShirtConfig } = require('../src/utils/buildTshirtProductConfig')
+const {
+  buildShirtConfig,
+  getRequiredProductDoc,
+} = require('../src/utils/buildTshirtProductConfig')
 const formatPickupDate = require('../src/utils/formatPickupDate')
 
 function getQueryParams(url) {
@@ -45,6 +48,19 @@ function run() {
     productName: 'Configured Shirt',
     pickupCopy: 'Pickup available onsite',
   }), /pickUpDate/)
+
+  assert.throws(() => buildShirtConfig({
+    productName: 'Configured Shirt',
+    pickUpDate: '2026-06-10',
+    closeAt: 'not-a-date',
+    pickupCopy: 'Pickup available onsite',
+  }), /closeAt/)
+
+  assert.throws(() => getRequiredProductDoc([]), /tshirtProduct\.content/)
+
+  assert.throws(() => getRequiredProductDoc([{
+    _id: 'tshirtProduct',
+  }]), /tshirtProduct\.content/)
 
   const configuredConfig = buildShirtConfig({
     productName: 'Configured Shirt',

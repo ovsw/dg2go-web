@@ -5,7 +5,6 @@ const urlFor = require('./imageUrl')
 const localShirtConfig = require('../_data/summer-thunder-shirts')
 const {
   buildSummerThunderShirtConfig,
-  buildShirtCartUrl,
   getPickUpDateValue,
 } = require('../_data/summer-thunder-shirts')
 
@@ -68,9 +67,14 @@ function buildShirtConfig(content = null, options = {}) {
   const contentPickUpDate = hasSanityContent
     ? getPickUpDateValue(content.pickUpDate)
     : null
+  const closeAtDisplay = formatCloseAt(closeAt)
 
   if (hasSanityContent && !contentPickUpDate) {
     throw new Error('Summer Thunder t-shirt pages require pickUpDate to build Foxy cart URLs.')
+  }
+
+  if (hasSanityContent && !closeAtDisplay) {
+    throw new Error('Summer Thunder t-shirt pages require a valid closeAt date from Sanity.')
   }
 
   const baseOrderConfig = buildSummerThunderShirtConfig({
@@ -79,7 +83,7 @@ function buildShirtConfig(content = null, options = {}) {
     productCode: localShirtConfig.productCode,
     price: dynamicPrice,
     closeAt,
-    closeAtDisplay: formatCloseAt(closeAt) || localShirtConfig.closeAtDisplay,
+    closeAtDisplay: closeAtDisplay || localShirtConfig.closeAtDisplay,
     pickUpDate: hasSanityContent ? contentPickUpDate : undefined,
     pickupCopy: (content && content.pickupCopy) || localShirtConfig.pickupCopy,
     validatePickUpDate: hasSanityContent,
@@ -105,25 +109,39 @@ function buildShirtConfig(content = null, options = {}) {
   }
 }
 
-async function getSanityShirtConfig(options = {}) {
-  const sanityResponse = await client.fetch(groq`
-    *[_type == "tshirtProduct" && _id in ["tshirtProduct", "drafts.tshirtProduct"]]{
-      ...,
-      content {
-        ...,
-        "seoTitle": coalesce(seo.title, privatePageTitle, publicPageTitle, productName),
-        "seoDescription": coalesce(seo.description, pickupCopy)
-      }
-    }
-  `).catch(err => {
-    console.error(err)
-    return []
-  })
-
+function getRequiredProductDoc(sanityResponse) {
   const [productDoc] = overlayDrafts(hasToken, sanityResponse)
 
-  return buildShirtConfig(productDoc && productDoc.content, options)
+  if (!productDoc || !productDoc.content) {
+    throw new Error('Summer Thunder t-shirt pages require the Sanity document tshirtProduct.content.')
+  }
+
+  return productDoc
+}
+
+async function getSanityShirtConfig(options = {}) {
+  let sanityResponse
+
+  try {
+    sanityResponse = await client.fetch(groq`
+      *[_type == "tshirtProduct" && _id in ["tshirtProduct", "drafts.tshirtProduct"]]{
+        ...,
+        content {
+          ...,
+          "seoTitle": coalesce(seo.title, privatePageTitle, publicPageTitle, productName),
+          "seoDescription": coalesce(seo.description, pickupCopy)
+        }
+      }
+    `)
+  } catch (err) {
+    throw new Error(`Summer Thunder t-shirt pages could not fetch Sanity product data: ${err.message}`)
+  }
+
+  const productDoc = getRequiredProductDoc(sanityResponse)
+
+  return buildShirtConfig(productDoc.content, options)
 }
 
 module.exports = getSanityShirtConfig
 module.exports.buildShirtConfig = buildShirtConfig
+module.exports.getRequiredProductDoc = getRequiredProductDoc
