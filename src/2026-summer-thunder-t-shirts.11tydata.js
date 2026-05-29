@@ -5,6 +5,7 @@ module.exports = async function() {
     shirtConfig: await getSanityShirtConfig({
       pageTitleField: 'publicPageTitle',
       pageBuilderField: 'publicPageBuilder',
+      closedCopy: 'Shirt details remain here for reference, but new orders are no longer being accepted online.',
       meal: 'lunch',
     }),
   }

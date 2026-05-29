@@ -74,6 +74,10 @@ function run() {
   })
 
   assert.equal(configuredConfig.pickUpDate, formatPickupDate('2026-06-10'))
+  assert.equal(
+    configuredConfig.closedCopy,
+    'Shirt details remain here for reference, but new orders are no longer being accepted online.'
+  )
 
   const configuredVariant = configuredConfig.variants[Object.keys(configuredConfig.variants)[0]]
   const configuredParams = getQueryParams(configuredVariant.cartUrl)

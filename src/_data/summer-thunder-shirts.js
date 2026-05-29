@@ -179,6 +179,7 @@ function buildSummerThunderShirtConfig({
   closeAtDisplay = 'May 27, 2026 at 10:00 AM EDT',
   pickUpDate = DEFAULT_PICKUP_DATE,
   pickupCopy = 'Delivery method: Drive-through Pick Up',
+  closedCopy = 'Shirt details remain here for reference, but new orders are no longer being accepted online.',
   validatePickUpDate = true,
   meal = 'dinner',
 } = {}) {
@@ -228,6 +229,7 @@ function buildSummerThunderShirtConfig({
     isClosed: Date.now() >= Date.parse(closeAt),
     pickUpDate: formattedPickUpDate,
     pickupCopy,
+    closedCopy,
     sizeGroups: SIZE_GROUPS,
     quantity: {
       min: 1,

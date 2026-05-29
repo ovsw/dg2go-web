@@ -54,6 +54,7 @@ function buildShirtConfig(content = null, options = {}) {
   const {
     pageTitleField = 'privatePageTitle',
     pageBuilderField = 'privatePageBuilder',
+    closedCopy = 'Shirt details remain here for reference, but new orders are no longer being accepted online.',
     meal,
   } = options
   const closeAt = (content && content.closeAt) || localShirtConfig.closeAt
@@ -86,6 +87,7 @@ function buildShirtConfig(content = null, options = {}) {
     closeAtDisplay: closeAtDisplay || localShirtConfig.closeAtDisplay,
     pickUpDate: hasSanityContent ? contentPickUpDate : undefined,
     pickupCopy: (content && content.pickupCopy) || localShirtConfig.pickupCopy,
+    closedCopy,
     validatePickUpDate: hasSanityContent,
     meal,
   })
