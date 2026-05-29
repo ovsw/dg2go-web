@@ -10,7 +10,7 @@ const SIZE_GROUPS = {
 const PRODUCT_CODE = 'summer-thunder-2026-employee'
 const DEFAULT_PRODUCT_NAME = '2026 Summer Thunder T-Shirt'
 const DEFAULT_PRICE = '18.00'
-const CLOSE_AT = '2026-06-04T23:59:59-04:00'
+const CLOSE_AT = '2026-05-27T14:00:00.000Z'
 const DEFAULT_PICKUP_DATE = null
 const VARIANT_KEY_SEPARATOR = '::'
 const MAX_QUANTITY = 99
@@ -176,7 +176,7 @@ function buildSummerThunderShirtConfig({
   productCode = PRODUCT_CODE,
   price = DEFAULT_PRICE,
   closeAt = CLOSE_AT,
-  closeAtDisplay = 'June 4, 2026 at 11:59 PM ET',
+  closeAtDisplay = 'May 27, 2026 at 10:00 AM EDT',
   pickUpDate = DEFAULT_PICKUP_DATE,
   pickupCopy = 'Delivery method: Drive-through Pick Up',
   validatePickUpDate = true,
