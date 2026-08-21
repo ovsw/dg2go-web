@@ -33,8 +33,8 @@ for (const filePath of htmlFiles) {
     failures.push(`${filePath}: Iubenda must be the first element after <head>`)
   }
 
-  const googleAnalyticsTags = findTags(html, 'script')
-    .filter(tag => tag.includes(GOOGLE_ANALYTICS))
+  const scriptTags = findTags(html, 'script')
+  const googleAnalyticsTags = scriptTags.filter(tag => tag.includes(GOOGLE_ANALYTICS))
   const consentGatedGoogleAnalyticsTags = googleAnalyticsTags.filter(tag => (
     getAttribute(tag, 'type') === 'text/plain' &&
     getAttribute(tag, 'data-suppressedsrc') === GOOGLE_ANALYTICS &&
@@ -52,7 +52,8 @@ for (const filePath of htmlFiles) {
 
   const foxyCartEnabled = findTags(html, 'html')
     .some(tag => getAttribute(tag, 'data-foxy-cart') === 'true')
-  const hasFoxyCartLoader = html.includes(FOXYCART_LOADER)
+  const hasFoxyCartLoader = scriptTags
+    .some(tag => getAttribute(tag, 'src') === FOXYCART_LOADER)
 
   if (foxyCartEnabled && !hasFoxyCartLoader) {
     failures.push(`${filePath}: FoxyCart is missing from an ordering page`)
