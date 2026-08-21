@@ -1,0 +1,92 @@
+const fs = require('fs')
+const path = require('path')
+
+const DIST_DIR = path.join(__dirname, '..', 'dist')
+const IUBENDA_LOADER = 'https://embeds.iubenda.com/widgets/c968a54b-5cfe-4847-90a6-154e6d949efa.js'
+const GOOGLE_ANALYTICS = 'https://www.googletagmanager.com/gtag/js?id=G-349HHEHL2T'
+
+const findHtmlFiles = directory => fs.readdirSync(directory, { withFileTypes: true })
+  .flatMap(entry => {
+    const entryPath = path.join(directory, entry.name)
+    return entry.isDirectory() ? findHtmlFiles(entryPath) : [entryPath]
+  })
+  .filter(filePath => filePath.endsWith('.html'))
+
+const failures = []
+const htmlFiles = findHtmlFiles(DIST_DIR)
+
+for (const filePath of htmlFiles) {
+  const html = fs.readFileSync(filePath, 'utf8')
+  const afterHead = html.slice(html.indexOf('<head>') + '<head>'.length).trimStart()
+
+  if (!afterHead.startsWith(`<script type="text/javascript" src="${IUBENDA_LOADER}"></script>`)) {
+    failures.push(`${filePath}: Iubenda must be the first element after <head>`)
+  }
+
+  if (html.includes(`<script async src="${GOOGLE_ANALYTICS}">`)) {
+    failures.push(`${filePath}: Google Analytics still loads without Iubenda consent`)
+  }
+
+  if (!html.includes(`data-suppressedsrc="${GOOGLE_ANALYTICS}"`)) {
+    failures.push(`${filePath}: consent-gated Google Analytics script is missing`)
+  }
+
+  if (/cookieconsent|iframemanager|\/js\/consent\.js/i.test(html)) {
+    failures.push(`${filePath}: local consent code remains`)
+  }
+}
+
+const homePage = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf8')
+if (homePage.includes('https://cdn.foxycart.com/dg2go/loader.js')) {
+  failures.push('dist/index.html: FoxyCart loads on a page without ordering')
+}
+
+const requiredFooterUrls = [
+  '/privacy-policy/',
+  '/cookie-policy/',
+  '/terms-and-conditions/',
+  '/privacy-choices/'
+]
+
+for (const url of requiredFooterUrls) {
+  if (!homePage.includes(url)) failures.push(`dist/index.html: missing footer link ${url}`)
+}
+
+for (const cssClass of ['iubenda-cs-uspr-link', 'iubenda-cs-preferences-link']) {
+  if (!homePage.includes(cssClass)) failures.push(`dist/index.html: missing ${cssClass}`)
+}
+
+if (!homePage.includes('href="/privacy-choices/">DSAR Form</a>')) {
+  failures.push('dist/index.html: DSAR link is missing or mislabeled')
+}
+
+const embeddedDocuments = {
+  'privacy-policy': 'https://www.iubenda.com/privacy-policy/30869341',
+  'cookie-policy': 'https://www.iubenda.com/privacy-policy/30869341/cookie-policy',
+  'terms-and-conditions': 'https://www.iubenda.com/terms-and-conditions/30869341',
+  'privacy-choices': 'https://www.iubenda.com/dsar-form/en/c968a54b-5cfe-4847-90a6-154e6d949efa'
+}
+
+for (const [route, iubendaUrl] of Object.entries(embeddedDocuments)) {
+  const html = fs.readFileSync(path.join(DIST_DIR, route, 'index.html'), 'utf8')
+
+  if (!html.includes(`href="${iubendaUrl}"`)) {
+    failures.push(`dist/${route}/index.html: missing Iubenda document URL`)
+  }
+
+  if (!html.includes('iub-body-embed') || !html.includes('no-brand')) {
+    failures.push(`dist/${route}/index.html: missing white-label body embed`)
+  }
+}
+
+const netlifyConfig = fs.readFileSync(path.join(__dirname, '..', 'netlify.toml'), 'utf8')
+if (/from = "\/(privacy-policy|cookie-policy|terms-and-conditions|privacy-choices)\/"/.test(netlifyConfig)) {
+  failures.push('netlify.toml: local legal page still has an external redirect')
+}
+
+if (failures.length > 0) {
+  console.error(failures.join('\n'))
+  process.exit(1)
+}
+
+console.log(`Iubenda audit passed for ${htmlFiles.length} HTML files.`)

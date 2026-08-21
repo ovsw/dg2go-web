@@ -2,6 +2,12 @@ const groq = require('groq')
 const client = require('../utils/sanityClient')
 const overlayDrafts = require('../utils/overlayDrafts')
 const hasToken = !!client.config().token
+const locallyManagedSlugs = new Set([
+  'privacy-policy',
+  'cookie-policy',
+  'terms-and-conditions',
+  'privacy-choices'
+])
 
 
 function generatePageWithSeo (page) {
@@ -37,7 +43,9 @@ module.exports =  async function() {
   
   const reducedDocs = overlayDrafts(hasToken, sanityResponse)
   
-  const prepareItems = reducedDocs.map(generatePageWithSeo)
+  const prepareItems = reducedDocs
+    .filter(page => !locallyManagedSlugs.has(page.content.slug.current))
+    .map(generatePageWithSeo)
 
   return prepareItems
 }
