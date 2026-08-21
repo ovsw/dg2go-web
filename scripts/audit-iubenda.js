@@ -4,6 +4,7 @@ const path = require('path')
 const DIST_DIR = path.join(__dirname, '..', 'dist')
 const IUBENDA_LOADER = 'https://embeds.iubenda.com/widgets/c968a54b-5cfe-4847-90a6-154e6d949efa.js'
 const GOOGLE_ANALYTICS = 'https://www.googletagmanager.com/gtag/js?id=G-349HHEHL2T'
+const FOXYCART_LOADER = 'https://cdn.foxycart.com/dg2go/loader.js'
 
 const findHtmlFiles = directory => fs.readdirSync(directory, { withFileTypes: true })
   .flatMap(entry => {
@@ -11,6 +12,15 @@ const findHtmlFiles = directory => fs.readdirSync(directory, { withFileTypes: tr
     return entry.isDirectory() ? findHtmlFiles(entryPath) : [entryPath]
   })
   .filter(filePath => filePath.endsWith('.html'))
+
+const findTags = (html, tagName) => html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) || []
+
+const getAttribute = (tag, attributeName) => {
+  const match = tag.match(new RegExp(`\\s${attributeName}\\s*=\\s*(["'])(.*?)\\1`, 'i'))
+  return match ? match[2] : null
+}
+
+const hasToken = (value, token) => value !== null && value.split(/[\s,]+/).includes(token)
 
 const failures = []
 const htmlFiles = findHtmlFiles(DIST_DIR)
@@ -23,12 +33,34 @@ for (const filePath of htmlFiles) {
     failures.push(`${filePath}: Iubenda must be the first element after <head>`)
   }
 
-  if (html.includes(`<script async src="${GOOGLE_ANALYTICS}">`)) {
+  const scriptTags = findTags(html, 'script')
+  const googleAnalyticsTags = scriptTags.filter(tag => tag.includes(GOOGLE_ANALYTICS))
+  const consentGatedGoogleAnalyticsTags = googleAnalyticsTags.filter(tag => (
+    getAttribute(tag, 'type') === 'text/plain' &&
+    getAttribute(tag, 'data-suppressedsrc') === GOOGLE_ANALYTICS &&
+    hasToken(getAttribute(tag, 'class'), '_iub_cs_activate') &&
+    hasToken(getAttribute(tag, 'data-iub-purposes'), '4')
+  ))
+
+  if (googleAnalyticsTags.some(tag => getAttribute(tag, 'src') === GOOGLE_ANALYTICS)) {
     failures.push(`${filePath}: Google Analytics still loads without Iubenda consent`)
   }
 
-  if (!html.includes(`data-suppressedsrc="${GOOGLE_ANALYTICS}"`)) {
+  if (consentGatedGoogleAnalyticsTags.length === 0) {
     failures.push(`${filePath}: consent-gated Google Analytics script is missing`)
+  }
+
+  const foxyCartEnabled = findTags(html, 'html')
+    .some(tag => getAttribute(tag, 'data-foxy-cart') === 'true')
+  const hasFoxyCartLoader = scriptTags
+    .some(tag => getAttribute(tag, 'src') === FOXYCART_LOADER)
+
+  if (foxyCartEnabled && !hasFoxyCartLoader) {
+    failures.push(`${filePath}: FoxyCart is missing from an ordering page`)
+  }
+
+  if (!foxyCartEnabled && hasFoxyCartLoader) {
+    failures.push(`${filePath}: FoxyCart loads on a page without ordering`)
   }
 
   if (/cookieconsent|iframemanager|\/js\/consent\.js/i.test(html)) {
@@ -37,10 +69,6 @@ for (const filePath of htmlFiles) {
 }
 
 const homePage = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf8')
-if (homePage.includes('https://cdn.foxycart.com/dg2go/loader.js')) {
-  failures.push('dist/index.html: FoxyCart loads on a page without ordering')
-}
-
 const requiredFooterUrls = [
   '/privacy-policy/',
   '/cookie-policy/',
