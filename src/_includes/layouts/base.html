@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script type="text/javascript" src="https://embeds.iubenda.com/widgets/c968a54b-5cfe-4847-90a6-154e6d949efa.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -123,15 +124,15 @@
       {% endfor %}
     {% endif %}
 
-    {# {% if page.fileSlug == 'delgrosso-dinners-to-go' %} #}
-    <!-- FOXYCART -->
-    <script data-cfasync="false" src="https://cdn.foxycart.com/dg2go/loader.js" async defer></script>
-    <!-- /FOXYCART -->
-    {# {% endif %} #}
+    {% if foxyCart %}
+      <!-- FOXYCART -->
+      <script data-cfasync="false" src="https://cdn.foxycart.com/dg2go/loader.js" async defer></script>
+      <!-- /FOXYCART -->
+    {% endif %}
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-349HHEHL2T"></script>
-    <script>
+    <!-- Iubenda activates Google Analytics after analytics consent. -->
+    <script type="text/plain" class="_iub_cs_activate" data-iub-purposes="4" data-suppressedsrc="https://www.googletagmanager.com/gtag/js?id=G-349HHEHL2T"></script>
+    <script type="text/plain" class="_iub_cs_activate" data-iub-purposes="4">
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());

@@ -8,11 +8,13 @@
   },
   "scripts": {
     "start": "gulp && concurrently \"gulp watch\" \"eleventy --serve\"",
-    "build": "NODE_ENV=production gulp && NODE_ENV=production eleventy",
+    "clean": "node scripts/clean-dist.js",
+    "build": "npm run clean && NODE_ENV=production gulp && NODE_ENV=production eleventy",
     "production": "npm run build",
     "production-win": "SET NODE_ENV=production & gulp && SET NODE_ENV=production & eleventy",
     "lint": "eslint --no-ignore .eleventy.js client-config.js gulpfile.js \"gulp-tasks/**/*.js\" \"src/_data/**/*.js\" \"src/js/**/*.js\" \"src/utils/**/*.js\"",
-    "check": "npm run lint && npm run build"
+    "audit:iubenda": "node scripts/audit-iubenda.js",
+    "check": "npm run lint && npm run build && npm run audit:iubenda"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,6 @@
 ---
 layout: layouts/event
+foxyCart: true
 tags:
   - myEvents
 pagination:

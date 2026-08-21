@@ -1,5 +1,6 @@
 ---
 layout: 'layouts/special.html'
+foxyCart: true
 tags:
   - mySpecials
 pagination:
