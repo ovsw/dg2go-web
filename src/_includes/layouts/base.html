@@ -1,7 +1,7 @@
 {% set assetHash = global.random() %}
 {% set lang = global.getCurrentLanguage(page.url) %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"{% if foxyCart %} data-foxy-cart="true"{% endif %}>
   <head>
     <script type="text/javascript" src="https://embeds.iubenda.com/widgets/c968a54b-5cfe-4847-90a6-154e6d949efa.js"></script>
     <meta charset="UTF-8" />
