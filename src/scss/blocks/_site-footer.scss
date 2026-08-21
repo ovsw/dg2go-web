@@ -55,7 +55,7 @@
       border-top: 1px solid get-color('dark');
     }
 
-    @include media-query('lg') {
+    @media (min-width: 72em) {
       flex-direction: row;
 
       a + a {
