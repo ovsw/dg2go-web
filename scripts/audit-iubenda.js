@@ -69,23 +69,40 @@ for (const filePath of htmlFiles) {
 }
 
 const homePage = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf8')
-const requiredFooterUrls = [
-  '/privacy-policy/',
-  '/cookie-policy/',
-  '/terms-and-conditions/',
-  '/privacy-choices/'
+const footerAnchors = findTags(homePage, 'a')
+const footerDocuments = [
+  { url: 'https://www.iubenda.com/privacy-policy/30869341', whiteLabel: true },
+  { url: 'https://www.iubenda.com/privacy-policy/30869341/cookie-policy', whiteLabel: true },
+  { url: 'https://www.iubenda.com/terms-and-conditions/30869341', whiteLabel: true },
+  { url: 'https://www.iubenda.com/dsar-form/en/c968a54b-5cfe-4847-90a6-154e6d949efa', whiteLabel: false }
 ]
 
-for (const url of requiredFooterUrls) {
-  if (!homePage.includes(url)) failures.push(`dist/index.html: missing footer link ${url}`)
+for (const document of footerDocuments) {
+  const anchor = footerAnchors.find(tag => getAttribute(tag, 'href') === document.url)
+
+  if (!anchor) {
+    failures.push(`dist/index.html: missing footer embed ${document.url}`)
+    continue
+  }
+
+  for (const cssClass of ['iubenda-nostyle', 'iubenda-embed', 'iubenda-noiframe']) {
+    if (!hasToken(getAttribute(anchor, 'class'), cssClass)) {
+      failures.push(`dist/index.html: ${document.url} missing ${cssClass}`)
+    }
+  }
+
+  if (document.whiteLabel && !hasToken(getAttribute(anchor, 'class'), 'no-brand')) {
+    failures.push(`dist/index.html: ${document.url} missing no-brand`)
+  }
+}
+
+const footerEmbedLoaderCount = homePage.split('https://cdn.iubenda.com/iubenda.js').length - 1
+if (footerEmbedLoaderCount < footerDocuments.length) {
+  failures.push('dist/index.html: one or more footer embed loaders are missing')
 }
 
 for (const cssClass of ['iubenda-cs-uspr-link', 'iubenda-cs-preferences-link']) {
   if (!homePage.includes(cssClass)) failures.push(`dist/index.html: missing ${cssClass}`)
-}
-
-if (!homePage.includes('href="/privacy-choices/">DSAR Form</a>')) {
-  failures.push('dist/index.html: DSAR link is missing or mislabeled')
 }
 
 const embeddedDocuments = {
