@@ -97,8 +97,8 @@ for (const document of footerDocuments) {
 }
 
 const footerEmbedLoaderCount = homePage.split('https://cdn.iubenda.com/iubenda.js').length - 1
-if (footerEmbedLoaderCount < footerDocuments.length) {
-  failures.push('dist/index.html: one or more footer embed loaders are missing')
+if (footerEmbedLoaderCount !== 1) {
+  failures.push('dist/index.html: footer must load the Iubenda embed script exactly once')
 }
 
 for (const cssClass of ['iubenda-cs-uspr-link', 'iubenda-cs-preferences-link']) {
