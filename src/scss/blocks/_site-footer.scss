@@ -4,6 +4,7 @@
   font-size: get-size('400');
 
   & a {
+    color: get-color('light-glare')!important;
     text-decoration-color: get-color('light')!important;
     &:focus {
       outline: 2px dashed get-color('light')!important;
