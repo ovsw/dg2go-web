@@ -11,3 +11,27 @@
   to = "https://www.dg2gofood.com/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/privacy-policy/"
+  to = "https://www.iubenda.com/privacy-policy/30869341"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cookie-policy/"
+  to = "https://www.iubenda.com/privacy-policy/30869341/cookie-policy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/terms-and-conditions/"
+  to = "https://www.iubenda.com/terms-and-conditions/30869341"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/privacy-choices/"
+  to = "https://www.iubenda.com/dsar-form/en/c968a54b-5cfe-4847-90a6-154e6d949efa"
+  status = 301
+  force = true

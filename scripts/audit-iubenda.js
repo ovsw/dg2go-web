@@ -69,47 +69,57 @@ for (const filePath of htmlFiles) {
 }
 
 const homePage = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf8')
-const requiredFooterUrls = [
-  '/privacy-policy/',
-  '/cookie-policy/',
-  '/terms-and-conditions/',
-  '/privacy-choices/'
+const footerAnchors = findTags(homePage, 'a')
+const footerDocuments = [
+  { route: 'privacy-policy', url: 'https://www.iubenda.com/privacy-policy/30869341', whiteLabel: true },
+  { route: 'cookie-policy', url: 'https://www.iubenda.com/privacy-policy/30869341/cookie-policy', whiteLabel: true },
+  { route: 'terms-and-conditions', url: 'https://www.iubenda.com/terms-and-conditions/30869341', whiteLabel: true },
+  { route: 'privacy-choices', url: 'https://www.iubenda.com/dsar-form/en/c968a54b-5cfe-4847-90a6-154e6d949efa', whiteLabel: false }
 ]
 
-for (const url of requiredFooterUrls) {
-  if (!homePage.includes(url)) failures.push(`dist/index.html: missing footer link ${url}`)
+for (const document of footerDocuments) {
+  const anchor = footerAnchors.find(tag => getAttribute(tag, 'href') === document.url)
+
+  if (!anchor) {
+    failures.push(`dist/index.html: missing footer embed ${document.url}`)
+    continue
+  }
+
+  for (const cssClass of ['iubenda-nostyle', 'iubenda-embed', 'iubenda-noiframe']) {
+    if (!hasToken(getAttribute(anchor, 'class'), cssClass)) {
+      failures.push(`dist/index.html: ${document.url} missing ${cssClass}`)
+    }
+  }
+
+  if (document.whiteLabel && !hasToken(getAttribute(anchor, 'class'), 'no-brand')) {
+    failures.push(`dist/index.html: ${document.url} missing no-brand`)
+  }
+}
+
+const footerEmbedLoaderCount = homePage.split('https://cdn.iubenda.com/iubenda.js').length - 1
+if (footerEmbedLoaderCount !== 1) {
+  failures.push('dist/index.html: footer must load the Iubenda embed script exactly once')
 }
 
 for (const cssClass of ['iubenda-cs-uspr-link', 'iubenda-cs-preferences-link']) {
   if (!homePage.includes(cssClass)) failures.push(`dist/index.html: missing ${cssClass}`)
 }
 
-if (!homePage.includes('href="/privacy-choices/">DSAR Form</a>')) {
-  failures.push('dist/index.html: DSAR link is missing or mislabeled')
-}
-
-const embeddedDocuments = {
-  'privacy-policy': 'https://www.iubenda.com/privacy-policy/30869341',
-  'cookie-policy': 'https://www.iubenda.com/privacy-policy/30869341/cookie-policy',
-  'terms-and-conditions': 'https://www.iubenda.com/terms-and-conditions/30869341',
-  'privacy-choices': 'https://www.iubenda.com/dsar-form/en/c968a54b-5cfe-4847-90a6-154e6d949efa'
-}
-
-for (const [route, iubendaUrl] of Object.entries(embeddedDocuments)) {
-  const html = fs.readFileSync(path.join(DIST_DIR, route, 'index.html'), 'utf8')
-
-  if (!html.includes(`href="${iubendaUrl}"`)) {
-    failures.push(`dist/${route}/index.html: missing Iubenda document URL`)
-  }
-
-  if (!html.includes('iub-body-embed') || !html.includes('no-brand')) {
-    failures.push(`dist/${route}/index.html: missing white-label body embed`)
-  }
-}
-
 const netlifyConfig = fs.readFileSync(path.join(__dirname, '..', 'netlify.toml'), 'utf8')
-if (/from = "\/(privacy-policy|cookie-policy|terms-and-conditions|privacy-choices)\/"/.test(netlifyConfig)) {
-  failures.push('netlify.toml: local legal page still has an external redirect')
+for (const document of footerDocuments) {
+  const routeFile = path.join(DIST_DIR, document.route, 'index.html')
+  if (fs.existsSync(routeFile)) failures.push(`${routeFile}: obsolete local legal page remains`)
+
+  const redirect = [
+    `from = "/${document.route}/"`,
+    `to = "${document.url}"`,
+    'status = 301',
+    'force = true'
+  ].join('\n  ')
+
+  if (!netlifyConfig.includes(redirect)) {
+    failures.push(`netlify.toml: missing permanent redirect for /${document.route}/`)
+  }
 }
 
 if (failures.length > 0) {
